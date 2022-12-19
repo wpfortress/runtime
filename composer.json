@@ -12,6 +12,8 @@
         "php": "^8.0"
     },
     "require-dev": {
+        "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan-strict-rules": "^1.4",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
@@ -25,6 +27,7 @@
         }
     },
     "scripts": {
+        "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/phpunit"
     },
     "config": {
