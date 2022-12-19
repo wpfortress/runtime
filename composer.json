@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Wpfortress\\Runtime\\": "src"
+            "WPFortress\\Runtime\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Wpfortress\\Runtime\\Tests\\": "tests"
+            "WPFortress\\Runtime\\Tests\\": "tests"
         }
     },
     "scripts": {

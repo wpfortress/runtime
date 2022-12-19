@@ -1,6 +1,6 @@
 <?php
 
-namespace Wpfortress\Runtime\Tests;
+namespace WPFortress\Runtime\Tests;
 
 use PHPUnit\Framework\TestCase;
 
