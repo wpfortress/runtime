@@ -23,13 +23,13 @@ final class ContextFactoryTest extends TestCase
     public function it_makes_context_from_response_headers(): void
     {
         $expectedAwsRequestId = '8476a536-e9f4-11e8-9739-2dfe598c3fcd';
-        $expectedDeadlineInMs = (string)(intval(microtime(true) * 1000) + 100);
+        $expectedDeadlineInMs = intval(microtime(true) * 1000) + 100;
         $expectedInvokedFunctionArn = 'arn:aws:lambda:us-east-2:123456789012:function:custom-runtime';
         $expectedTraceId = 'Root=1-5bef4de7-ad49b0e87f6ef6c87fc2e700;Parent=9a9197af755a6419;Sampled=1';
 
         $headers = [
             'lambda-runtime-aws-request-id' => [$expectedAwsRequestId],
-            'lambda-runtime-deadline-ms' => [$expectedDeadlineInMs],
+            'lambda-runtime-deadline-ms' => [(string)$expectedDeadlineInMs],
             'lambda-runtime-invoked-function-arn' => [$expectedInvokedFunctionArn],
             'lambda-runtime-trace-id' => [$expectedTraceId],
         ];
