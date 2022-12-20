@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationEvent;
+use WPFortress\Runtime\Contracts\InvocationEventContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\HttpEvent;
 
 final class HttpEventTest extends TestCase
@@ -17,7 +17,7 @@ final class HttpEventTest extends TestCase
 
         $event = new HttpEvent($expectedData);
 
-        self::assertInstanceOf(InvocationEvent::class, $event);
+        self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertSame($expectedData, $event->getData());
     }
 

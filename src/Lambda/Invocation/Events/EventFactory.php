@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use InvalidArgumentException;
-use WPFortress\Runtime\Contracts\InvocationEvent;
-use WPFortress\Runtime\Contracts\InvocationEventFactory;
+use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
 
-final class EventFactory implements InvocationEventFactory
+final class EventFactory implements InvocationEventFactoryContract
 {
-    public function make(array $data): InvocationEvent
+    public function make(array $data): InvocationEventContract
     {
         return match (true) {
             isset($data['cli']) => new CliEvent($data),

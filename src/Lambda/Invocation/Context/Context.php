@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Context;
 
-use WPFortress\Runtime\Contracts\InvocationContext;
+use WPFortress\Runtime\Contracts\InvocationContextContract;
 
-final class Context implements InvocationContext
+final class Context implements InvocationContextContract
 {
     public function __construct(
         private string $awsRequestId,

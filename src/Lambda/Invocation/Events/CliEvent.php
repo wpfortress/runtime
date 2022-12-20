@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
-use WPFortress\Runtime\Contracts\InvocationEvent;
+use WPFortress\Runtime\Contracts\InvocationEventContract;
 
-final class CliEvent extends Event implements InvocationEvent
+final class CliEvent extends Event implements InvocationEventContract
 {
     public function getCommand(): string
     {

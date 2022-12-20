@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationEvent;
+use WPFortress\Runtime\Contracts\InvocationEventContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
 
 final class CliEventTest extends TestCase
@@ -17,7 +17,7 @@ final class CliEventTest extends TestCase
 
         $event = new CliEvent($expectedData);
 
-        self::assertInstanceOf(InvocationEvent::class, $event);
+        self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertSame($expectedData, $event->getData());
         self::assertSame($expectedCommand, $event->getCommand());
     }

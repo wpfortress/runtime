@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Context;
 
-use WPFortress\Runtime\Contracts\InvocationContext;
-use WPFortress\Runtime\Contracts\InvocationContextFactory;
+use WPFortress\Runtime\Contracts\InvocationContextContract;
+use WPFortress\Runtime\Contracts\InvocationContextFactoryContract;
 
-final class ContextFactory implements InvocationContextFactory
+final class ContextFactory implements InvocationContextFactoryContract
 {
-    public function make(array $headers): InvocationContext
+    public function make(array $headers): InvocationContextContract
     {
         return new Context(
             awsRequestId: $headers['lambda-runtime-aws-request-id'][0] ?? '',

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Context;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContext;
-use WPFortress\Runtime\Contracts\InvocationContextFactory;
+use WPFortress\Runtime\Contracts\InvocationContextContract;
+use WPFortress\Runtime\Contracts\InvocationContextFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\ContextFactory;
 
 final class ContextFactoryTest extends TestCase
@@ -16,7 +16,7 @@ final class ContextFactoryTest extends TestCase
     {
         $contextFactory = new ContextFactory();
 
-        self::assertInstanceOf(InvocationContextFactory::class, $contextFactory);
+        self::assertInstanceOf(InvocationContextFactoryContract::class, $contextFactory);
     }
 
     /** @test */
@@ -37,7 +37,7 @@ final class ContextFactoryTest extends TestCase
         $contextFactory = new ContextFactory();
         $context = $contextFactory->make($headers);
 
-        self::assertInstanceOf(InvocationContext::class, $context);
+        self::assertInstanceOf(InvocationContextContract::class, $context);
         self::assertSame($expectedAwsRequestId, $context->getAwsRequestId());
         self::assertSame($expectedDeadlineInMs, $context->getDeadlineInMs());
         self::assertTrue($context->getRemainingTimeInMs() > 0);
@@ -53,7 +53,7 @@ final class ContextFactoryTest extends TestCase
         $contextFactory = new ContextFactory();
         $context = $contextFactory->make($headers);
 
-        self::assertInstanceOf(InvocationContext::class, $context);
+        self::assertInstanceOf(InvocationContextContract::class, $context);
         self::assertSame('', $context->getAwsRequestId());
         self::assertSame(0, $context->getDeadlineInMs());
         self::assertTrue($context->getRemainingTimeInMs() < 0);
