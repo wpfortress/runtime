@@ -6,6 +6,5 @@ namespace WPFortress\Runtime\Contracts;
 
 interface InvocationEventContract
 {
-    /** @return array<string, mixed> */
-    public function getData(): array;
+    //
 }
