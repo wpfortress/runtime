@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Context;
 
+use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\InvocationContextContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
@@ -28,6 +29,7 @@ final class ContextTest extends TestCase
         );
 
         self::assertInstanceOf(InvocationContextContract::class, $context);
+        self::assertInstanceOf(JsonSerializable::class, $context);
         self::assertSame($expectedAwsRequestId, $context->getAwsRequestId());
         self::assertSame($expectedDeadlineInMs, $context->getDeadlineInMs());
         self::assertSame($expectedRemainingTimeInMs, $context->getRemainingTimeInMs());

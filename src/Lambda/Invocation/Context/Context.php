@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Context;
 
+use JsonSerializable;
 use WPFortress\Runtime\Contracts\InvocationContextContract;
 
-final class Context implements InvocationContextContract
+final class Context implements InvocationContextContract, JsonSerializable
 {
     public function __construct(
         private string $awsRequestId,
@@ -40,5 +41,16 @@ final class Context implements InvocationContextContract
     public function getTraceId(): string
     {
         return $this->traceId;
+    }
+
+    /** @return array<string, int|string> */
+    public function jsonSerialize(): array
+    {
+        return [
+            'aws_request_id' => $this->awsRequestId,
+            'deadline_in_ms' => $this->deadlineInMs,
+            'invoked_function_arn' => $this->invokedFunctionArn,
+            'trace_id' => $this->traceId,
+        ];
     }
 }
