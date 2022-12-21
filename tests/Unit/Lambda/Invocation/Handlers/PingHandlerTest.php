@@ -12,6 +12,7 @@ use WPFortress\Runtime\Lambda\Invocation\Context\Context;
 use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\PingHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
+use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
 
 final class PingHandlerTest extends TestCase
 {
@@ -62,6 +63,6 @@ final class PingHandlerTest extends TestCase
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
-        self::assertSame(['Pong'], $response->toApiGatewayFormat());
+        self::assertInstanceOf(PingResponse::class, $response);
     }
 }
