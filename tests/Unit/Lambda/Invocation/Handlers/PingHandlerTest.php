@@ -9,16 +9,16 @@ use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
-use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
-use WPFortress\Runtime\Lambda\Invocation\Handlers\CliHandler;
+use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
+use WPFortress\Runtime\Lambda\Invocation\Handlers\PingHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 
-final class CliHandlerTest extends TestCase
+final class PingHandlerTest extends TestCase
 {
     /** @test */
     public function it_implements_invocation_handler_contract(): void
     {
-        $handler = new CliHandler();
+        $handler = new PingHandler();
 
         self::assertInstanceOf(InvocationHandlerContract::class, $handler);
     }
@@ -26,7 +26,7 @@ final class CliHandlerTest extends TestCase
     /** @test */
     public function it_should_handle_cli_events(): void
     {
-        $invocationEvent = new CliEvent(['cli' => 'ls -la']);
+        $invocationEvent = new PingEvent([]);
 
         $mockedInvocation = $this->createMock(InvocationContract::class);
         $mockedInvocation
@@ -34,16 +34,17 @@ final class CliHandlerTest extends TestCase
             ->method('getEvent')
             ->willReturn($invocationEvent);
 
-        $handler = new CliHandler();
+        $handler = new PingHandler();
         $shouldHandle = $handler->shouldHandle($mockedInvocation);
 
         self::assertTrue($shouldHandle);
     }
 
     /** @test */
-    public function it_handles_successful_cli_event(): void
+    public function it_handles_ping_event(): void
     {
-        $invocationEvent = new CliEvent(['cli' => 'ls -la']);
+        $invocationEvent = new PingEvent([]);
+
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
             deadlineInMs: intval(microtime(true) * 1000) + 100,
@@ -51,38 +52,16 @@ final class CliHandlerTest extends TestCase
             invokedFunctionArn: 'arn:aws:lambda:us-east-2:123456789012:function:custom-runtime',
             traceId: 'Root=1-5bef4de7-ad49b0e87f6ef6c87fc2e700;Parent=9a9197af755a6419;Sampled=1',
         );
+
         $invocation = new Invocation(
             context: $invocationContext,
             event: $invocationEvent,
         );
 
-        $handler = new CliHandler();
+        $handler = new PingHandler();
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
-        self::assertSame(0, $response->toApiGatewayFormat()['exitCode']);
-    }
-
-    /** @test */
-    public function it_handles_unsuccessful_cli_event(): void
-    {
-        $invocationEvent = new CliEvent(['cli' => 'foo']);
-        $invocationContext = new Context(
-            awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
-            deadlineInMs: intval(microtime(true) * 1000) + 100,
-            remainingTimeInMs: 100,
-            invokedFunctionArn: 'arn:aws:lambda:us-east-2:123456789012:function:custom-runtime',
-            traceId: 'Root=1-5bef4de7-ad49b0e87f6ef6c87fc2e700;Parent=9a9197af755a6419;Sampled=1',
-        );
-        $invocation = new Invocation(
-            context: $invocationContext,
-            event: $invocationEvent,
-        );
-
-        $handler = new CliHandler();
-        $response = $handler->handle($invocation);
-
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
-        self::assertNotSame(0, $response->toApiGatewayFormat()['exitCode']);
+        self::assertSame(['Pong'], $response->toApiGatewayFormat());
     }
 }
