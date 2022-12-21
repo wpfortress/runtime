@@ -14,7 +14,7 @@ final class CliResponse implements InvocationResponseContract
     ) {
     }
 
-    public function toApiGatewayFormat(): array
+    public function toApiGatewayFormat(float $formatVersion = 1.0): array
     {
         return [
             'exitCode' => $this->process->getExitCode(),

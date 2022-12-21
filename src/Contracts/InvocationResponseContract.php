@@ -7,5 +7,5 @@ namespace WPFortress\Runtime\Contracts;
 interface InvocationResponseContract
 {
     /** @return array<string, mixed> */
-    public function toApiGatewayFormat(): array;
+    public function toApiGatewayFormat(float $formatVersion): array;
 }
