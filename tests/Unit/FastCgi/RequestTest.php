@@ -21,6 +21,6 @@ final class RequestTest extends TestCase
 
         self::assertInstanceOf(AbstractRequest::class, $request);
         self::assertSame($expectedMethod, $request->getRequestMethod());
-        self::assertSame('wpfortress', $request->getServerSoftware());
+        self::assertSame('WPFortress', $request->getServerSoftware());
     }
 }

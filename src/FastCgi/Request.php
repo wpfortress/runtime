@@ -23,6 +23,6 @@ final class Request extends AbstractRequest
 
     public function getServerSoftware(): string
     {
-        return 'wpfortress';
+        return 'WPFortress';
     }
 }
