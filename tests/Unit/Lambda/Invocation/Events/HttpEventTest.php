@@ -221,7 +221,7 @@ final class HttpEventTest extends TestCase
 
         $event = new HttpEvent($expectedData);
 
-        self::assertNull($event->getContentType());
+        self::assertSame('', $event->getContentType());
     }
 
     /** @test */
