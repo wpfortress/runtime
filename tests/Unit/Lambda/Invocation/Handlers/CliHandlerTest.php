@@ -26,7 +26,7 @@ final class CliHandlerTest extends TestCase
     /** @test */
     public function it_should_handle_cli_events(): void
     {
-        $invocationEvent = new CliEvent(['cli' => 'ls -la']);
+        $invocationEvent = new CliEvent(command: 'ls -la');
 
         $mockedInvocation = $this->createMock(InvocationContract::class);
         $mockedInvocation
@@ -43,7 +43,8 @@ final class CliHandlerTest extends TestCase
     /** @test */
     public function it_handles_successful_cli_event(): void
     {
-        $invocationEvent = new CliEvent(['cli' => 'ls -la']);
+        $invocationEvent = new CliEvent(command: 'ls -la');
+
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
             deadlineInMs: intval(microtime(true) * 1000) + 100,
@@ -51,6 +52,7 @@ final class CliHandlerTest extends TestCase
             invokedFunctionArn: 'arn:aws:lambda:us-east-2:123456789012:function:custom-runtime',
             traceId: 'Root=1-5bef4de7-ad49b0e87f6ef6c87fc2e700;Parent=9a9197af755a6419;Sampled=1',
         );
+
         $invocation = new Invocation(
             context: $invocationContext,
             event: $invocationEvent,
@@ -66,7 +68,8 @@ final class CliHandlerTest extends TestCase
     /** @test */
     public function it_handles_unsuccessful_cli_event(): void
     {
-        $invocationEvent = new CliEvent(['cli' => 'foo']);
+        $invocationEvent = new CliEvent(command: 'foo');
+
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
             deadlineInMs: intval(microtime(true) * 1000) + 100,
@@ -74,6 +77,7 @@ final class CliHandlerTest extends TestCase
             invokedFunctionArn: 'arn:aws:lambda:us-east-2:123456789012:function:custom-runtime',
             traceId: 'Root=1-5bef4de7-ad49b0e87f6ef6c87fc2e700;Parent=9a9197af755a6419;Sampled=1',
         );
+
         $invocation = new Invocation(
             context: $invocationContext,
             event: $invocationEvent,

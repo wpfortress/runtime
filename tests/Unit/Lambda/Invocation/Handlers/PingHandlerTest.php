@@ -27,7 +27,7 @@ final class PingHandlerTest extends TestCase
     /** @test */
     public function it_should_handle_cli_events(): void
     {
-        $invocationEvent = new PingEvent([]);
+        $invocationEvent = new PingEvent();
 
         $mockedInvocation = $this->createMock(InvocationContract::class);
         $mockedInvocation
@@ -44,7 +44,7 @@ final class PingHandlerTest extends TestCase
     /** @test */
     public function it_handles_ping_event(): void
     {
-        $invocationEvent = new PingEvent([]);
+        $invocationEvent = new PingEvent();
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
