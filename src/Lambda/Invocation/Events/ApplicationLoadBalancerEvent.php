@@ -36,6 +36,34 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
 
     /**
      * @param array{
+     *  queryStringParameters: ?array<string, string>,
+     *  multiValueQueryStringParameters: ?array<string, list<string>>,
+     * } $data
+     */
+    private static function resolveQueryStringFrom(array $data): string
+    {
+        if (isset($data['multiValueQueryStringParameters'])) {
+            $queryStringParameters = $data['multiValueQueryStringParameters'];
+        } else {
+            $queryStringParameters = $data['queryStringParameters'] ?? [];
+            $queryStringParameters = array_map(fn(string $value): array => [$value], $queryStringParameters);
+        }
+
+        $queryString = '';
+
+        foreach ($queryStringParameters as $key => $values) {
+            foreach ($values as $value) {
+                $queryString .= $key . '=' . $value . '&';
+            }
+        }
+
+        parse_str($queryString, $decodedQueryParameters);
+
+        return http_build_query($decodedQueryParameters);
+    }
+
+    /**
+     * @param array{
      *  headers: ?array<string, string>,
      *  multiValueHeaders: ?array<string, list<string>>,
      *  isBase64Encoded: bool,
@@ -65,34 +93,6 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
         }
 
         return $headers;
-    }
-
-    /**
-     * @param array{
-     *  queryStringParameters: ?array<string, string>,
-     *  multiValueQueryStringParameters: ?array<string, list<string>>,
-     * } $data
-     */
-    private static function resolveQueryStringFrom(array $data): string
-    {
-        if (isset($data['multiValueQueryStringParameters'])) {
-            $queryStringParameters = $data['multiValueQueryStringParameters'];
-        } else {
-            $queryStringParameters = $data['queryStringParameters'] ?? [];
-            $queryStringParameters = array_map(fn(string $value): array => [$value], $queryStringParameters);
-        }
-
-        $queryString = '';
-
-        foreach ($queryStringParameters as $key => $values) {
-            foreach ($values as $value) {
-                $queryString .= $key . '=' . $value . '&';
-            }
-        }
-
-        parse_str($queryString, $decodedQueryParameters);
-
-        return http_build_query($decodedQueryParameters);
     }
 
     /**
