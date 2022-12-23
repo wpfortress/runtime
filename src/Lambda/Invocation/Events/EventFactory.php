@@ -13,6 +13,7 @@ final class EventFactory implements InvocationEventFactoryContract
     public function make(array $data): InvocationEventContract
     {
         return match (true) {
+            isset($data['requestContext']['elb']) => ApplicationLoadBalancerEvent::fromResponseData($data),
             isset($data['cli']) => CliEvent::fromResponseData($data),
             isset($data['requestContext']) => new HttpEvent($data),
             isset($data['ping']) => PingEvent::fromResponseData($data),

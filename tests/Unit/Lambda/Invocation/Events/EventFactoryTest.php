@@ -6,6 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\EventFactory;
 use WPFortress\Runtime\Lambda\Invocation\Events\HttpEvent;
@@ -24,6 +25,29 @@ final class EventFactoryTest extends TestCase
 
         $eventFactory = new EventFactory();
         $eventFactory->make($data);
+    }
+
+    /** @test */
+    public function it_makes_application_load_balancer_event_from_response_data(): void
+    {
+        $data = [
+            'requestContext' => [
+                'elb' => [
+                    'targetGroupArn' => 'arn:aws:elasticloadbalancing',
+                ],
+            ],
+            'httpMethod' => 'GET',
+            'path' => '/foo',
+            'queryStringParameters' => [],
+            'headers' => [],
+            'isBase64Encoded' => false,
+            'body' => 'foo',
+        ];
+
+        $eventFactory = new EventFactory();
+        $event = $eventFactory->make($data);
+
+        self::assertInstanceOf(ApplicationLoadBalancerEvent::class, $event);
     }
 
     /** @test */
