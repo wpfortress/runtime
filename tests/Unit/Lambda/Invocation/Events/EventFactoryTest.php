@@ -6,6 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\EventFactory;
@@ -25,6 +26,33 @@ final class EventFactoryTest extends TestCase
 
         $eventFactory = new EventFactory();
         $eventFactory->make($data);
+    }
+
+    /** @test */
+    public function it_makes_api_gateway_version_two_event_from_response_data(): void
+    {
+        $data = [
+            'rawPath' => '/foo',
+            'rawQueryString' => 'foo=bar',
+            'cookies' => [
+                'foo',
+            ],
+            'headers' => [
+                'foo' => 'bar',
+            ],
+            'requestContext' => [
+                'http' => [
+                    'method' => 'GET',
+                ],
+            ],
+            'isBase64Encoded' => false,
+            'body' => 'foo',
+        ];
+
+        $eventFactory = new EventFactory();
+        $event = $eventFactory->make($data);
+
+        self::assertInstanceOf(APIGatewayVersionTwoEvent::class, $event);
     }
 
     /** @test */
