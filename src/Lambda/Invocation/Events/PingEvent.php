@@ -6,7 +6,11 @@ namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use WPFortress\Runtime\Contracts\InvocationEventContract;
 
-final class PingEvent extends Event implements InvocationEventContract
+final class PingEvent implements InvocationEventContract
 {
-    //
+    /** @param array{ping: bool} $data */
+    public static function fromResponseData(array $data): self
+    {
+        return new self();
+    }
 }

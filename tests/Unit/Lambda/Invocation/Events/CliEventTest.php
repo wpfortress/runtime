@@ -15,10 +15,9 @@ final class CliEventTest extends TestCase
     {
         $expectedData = ['cli' => $expectedCommand = 'foo'];
 
-        $event = new CliEvent($expectedData);
+        $event = CliEvent::fromResponseData($expectedData);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
-        self::assertSame($expectedData, $event->getData());
         self::assertSame($expectedCommand, $event->getCommand());
     }
 }

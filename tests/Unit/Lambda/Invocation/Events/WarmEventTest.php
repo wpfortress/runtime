@@ -15,10 +15,9 @@ final class WarmEventTest extends TestCase
     {
         $expectedData = ['warm' => $expectedConcurrency = 10];
 
-        $event = new WarmEvent($expectedData);
+        $event = WarmEvent::fromResponseData($expectedData);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
-        self::assertSame($expectedData, $event->getData());
         self::assertSame($expectedConcurrency, $event->getConcurrency());
     }
 }

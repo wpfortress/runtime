@@ -15,9 +15,8 @@ final class PingEventTest extends TestCase
     {
         $expectedData = ['ping' => true];
 
-        $event = new PingEvent($expectedData);
+        $event = PingEvent::fromResponseData($expectedData);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
-        self::assertSame($expectedData, $event->getData());
     }
 }
