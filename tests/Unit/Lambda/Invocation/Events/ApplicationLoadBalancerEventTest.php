@@ -16,10 +16,10 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         $data = [
             'httpMethod' => 'GET',
             'path' => '/foo',
-            'headers' => [
+            'queryStringParameters' => [
                 'foo' => 'bar',
             ],
-            'queryStringParameters' => [
+            'headers' => [
                 'foo' => 'bar',
             ],
             'isBase64Encoded' => false,
@@ -31,13 +31,13 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
+        self::assertSame('foo=bar', $event->getQueryString());
         self::assertFalse($event->usesMultiValueHeaders());
         self::assertSame([
             'foo' => ['bar'],
             'content-type' => ['application/x-www-form-urlencoded'],
             'content-length' => ['3'],
         ], $event->getHeaders());
-        self::assertSame('foo=bar', $event->getQueryString());
         self::assertFalse($event->isBase64Encoded());
         self::assertSame('foo', $event->getBody());
     }
@@ -48,10 +48,10 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         $data = [
             'httpMethod' => 'GET',
             'path' => '/foo',
-            'multiValueHeaders' => [
+            'multiValueQueryStringParameters' => [
                 'foo' => ['bar', 'baz'],
             ],
-            'multiValueQueryStringParameters' => [
+            'multiValueHeaders' => [
                 'foo' => ['bar', 'baz'],
             ],
             'isBase64Encoded' => false,
@@ -63,13 +63,13 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
+        self::assertSame('foo=baz', $event->getQueryString());
         self::assertTrue($event->usesMultiValueHeaders());
         self::assertSame([
             'foo' => ['bar', 'baz'],
             'content-type' => ['application/x-www-form-urlencoded'],
             'content-length' => ['3'],
         ], $event->getHeaders());
-        self::assertSame('foo=baz', $event->getQueryString());
         self::assertFalse($event->isBase64Encoded());
         self::assertSame('foo', $event->getBody());
     }
@@ -80,10 +80,10 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         $data = [
             'httpMethod' => 'GET',
             'path' => '/foo',
-            'headers' => [
+            'queryStringParameters' => [
                 'foo' => 'bar',
             ],
-            'queryStringParameters' => [
+            'headers' => [
                 'foo' => 'bar',
             ],
             'isBase64Encoded' => true,
@@ -95,13 +95,13 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
+        self::assertSame('foo=bar', $event->getQueryString());
         self::assertFalse($event->usesMultiValueHeaders());
         self::assertSame([
             'foo' => ['bar'],
             'content-type' => ['application/x-www-form-urlencoded'],
             'content-length' => ['3'],
         ], $event->getHeaders());
-        self::assertSame('foo=bar', $event->getQueryString());
         self::assertTrue($event->isBase64Encoded());
         self::assertSame('foo', $event->getBody());
     }

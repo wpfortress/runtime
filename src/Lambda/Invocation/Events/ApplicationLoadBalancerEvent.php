@@ -13,10 +13,10 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
      *  requestContext: array{elb: array{targetGroupArn: string}},
      *  httpMethod: string,
      *  path: string,
-     *  headers: ?array<string, string>,
-     *  multiValueHeaders: ?array<string, list<string>>,
      *  queryStringParameters: ?array<string, string>,
      *  multiValueQueryStringParameters: ?array<string, list<string>>,
+     *  headers: ?array<string, string>,
+     *  multiValueHeaders: ?array<string, list<string>>,
      *  isBase64Encoded: bool,
      *  body: string,
      * } $data
@@ -26,9 +26,9 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
         return new self(
             method: strtoupper($data['httpMethod']),
             path: $data['path'],
+            queryString: self::resolveQueryStringFrom($data),
             usesMultiValueHeaders: isset($data['multiValueHeaders']),
             headers: self::resolveHeadersFrom($data),
-            queryString: self::resolveQueryStringFrom($data),
             isBase64Encoded: $data['isBase64Encoded'],
             body: self::resolveBodyFrom($data),
         );
@@ -116,9 +116,9 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
     public function __construct(
         private string $method,
         private string $path,
+        private string $queryString,
         private bool $usesMultiValueHeaders,
         private array $headers,
-        private string $queryString,
         private bool $isBase64Encoded,
         private string $body,
     ) {
@@ -134,6 +134,11 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
         return $this->path;
     }
 
+    public function getQueryString(): string
+    {
+        return $this->queryString;
+    }
+
     public function usesMultiValueHeaders(): bool
     {
         return $this->usesMultiValueHeaders;
@@ -143,11 +148,6 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
     public function getHeaders(): array
     {
         return $this->headers;
-    }
-
-    public function getQueryString(): string
-    {
-        return $this->queryString;
     }
 
     public function isBase64Encoded(): bool
