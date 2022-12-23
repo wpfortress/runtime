@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\FastCgi;
+namespace WPFortress\Runtime\FastCGI;
 
 use hollodotme\FastCGI\Requests\AbstractRequest;
 
