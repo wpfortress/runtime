@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface FastCGIProcess
+interface FastCGIProcessManagerContract
 {
     public function start(): void;
 
