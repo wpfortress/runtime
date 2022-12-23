@@ -12,7 +12,9 @@
         "php": "^8.0",
         "ext-curl": "*",
         "ext-json": "*",
+        "ext-posix": "*",
         "async-aws/lambda": "^1.8",
+        "hollodotme/fast-cgi-client": "^3.0",
         "symfony/http-client": "^6.0",
         "symfony/process": "^6.0"
     },

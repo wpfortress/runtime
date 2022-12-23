@@ -119,9 +119,9 @@ final class HttpEvent extends Event implements InvocationEventContract
         return $this->headers = $headers;
     }
 
-    public function getContentType(): ?string
+    public function getContentType(): string
     {
-        return $this->getHeaders()['content-type'][0] ?? null;
+        return $this->getHeaders()['content-type'][0] ?? '';
     }
 
     public function getServerPort(): int
