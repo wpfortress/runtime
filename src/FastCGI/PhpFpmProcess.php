@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WPFortress\Runtime\FastCGI;
 
 use Exception;
 use Symfony\Component\Process\Process;
+use WPFortress\Runtime\Contracts\FastCGIProcess;
 
-final class PhpFpmProcess
+final class PhpFpmProcess implements FastCGIProcess
 {
     private const SOCKET_PATH = '/tmp/.wpfortress/php-fpm.sock';
 
