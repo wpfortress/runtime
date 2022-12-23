@@ -13,6 +13,8 @@ final class PhpFpmProcess
 
     private const CONFIG_PATH = '/opt/wpfortress/etc/php-fpm.conf';
 
+    private const SIGTERM = 15;
+
     public static function fromConfig(string $configPath = self::CONFIG_PATH): self
     {
         return new self(
@@ -142,7 +144,7 @@ final class PhpFpmProcess
             return;
         }
 
-        if (posix_kill($pid, SIGTERM) === false) {
+        if (posix_kill($pid, self::SIGTERM) === false) {
             $this->removeProcessFiles();
             return;
         }
