@@ -9,14 +9,14 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Lambda\Invocation\Responses\ApplicationLoadBalancerResponse;
+use WPFortress\Runtime\Lambda\Invocation\Responses\APIGatewayVersionTwoResponse;
 
-final class ApplicationLoadBalancerResponseTest extends TestCase
+final class APIGatewayVersionTwoResponseTest extends TestCase
 {
     /** @test */
     public function it_forms_correct_default_response(): void
     {
-        $response = new ApplicationLoadBalancerResponse(
+        $response = new APIGatewayVersionTwoResponse(
             body: 'foo',
         );
 
@@ -26,15 +26,15 @@ final class ApplicationLoadBalancerResponseTest extends TestCase
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
-        self::assertSame('200 OK', $result['statusDescription']);
-        self::assertEquals(new stdClass(), $result['multiValueHeaders']);
+        self::assertEquals([], $result['cookies']);
+        self::assertEquals(new stdClass(), $result['headers']);
         self::assertSame('foo', $result['body']);
     }
 
     /** @test */
     public function it_forms_correct_response_with_encoded_body(): void
     {
-        $response = new ApplicationLoadBalancerResponse(
+        $response = new APIGatewayVersionTwoResponse(
             body: 'foo',
             isBase64Encoded: true,
         );
@@ -45,17 +45,17 @@ final class ApplicationLoadBalancerResponseTest extends TestCase
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertTrue($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
-        self::assertSame('200 OK', $result['statusDescription']);
-        self::assertEquals(new stdClass(), $result['multiValueHeaders']);
+        self::assertEquals([], $result['cookies']);
+        self::assertEquals(new stdClass(), $result['headers']);
         self::assertSame('Zm9v', $result['body']);
     }
 
     /** @test */
-    public function it_forms_correct_response_with_custom_headers(): void
+    public function it_forms_correct_response_with_custom_cookies(): void
     {
-        $response = new ApplicationLoadBalancerResponse(
+        $response = new APIGatewayVersionTwoResponse(
             body: 'foo',
-            multiValueHeaders: ['content-type' => ['application/json']],
+            cookies: ['foo=bar'],
         );
 
         $result = $response->jsonSerialize();
@@ -64,15 +64,34 @@ final class ApplicationLoadBalancerResponseTest extends TestCase
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
-        self::assertSame('200 OK', $result['statusDescription']);
-        self::assertSame(['content-type' => ['application/json']], $result['multiValueHeaders']);
+        self::assertSame(['foo=bar'], $result['cookies']);
+        self::assertEquals(new stdClass(), $result['headers']);
+        self::assertSame('foo', $result['body']);
+    }
+
+    /** @test */
+    public function it_forms_correct_response_with_custom_headers(): void
+    {
+        $response = new APIGatewayVersionTwoResponse(
+            body: 'foo',
+            headers: ['content-type' => 'application/json'],
+        );
+
+        $result = $response->jsonSerialize();
+
+        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(JsonSerializable::class, $response);
+        self::assertFalse($result['isBase64Encoded']);
+        self::assertSame(HttpStatus::OK, $result['statusCode']);
+        self::assertEquals([], $result['cookies']);
+        self::assertEquals(['content-type' => 'application/json'], $result['headers']);
         self::assertSame('foo', $result['body']);
     }
 
     /** @test */
     public function it_forms_correct_response_with_custom_status(): void
     {
-        $response = new ApplicationLoadBalancerResponse(
+        $response = new APIGatewayVersionTwoResponse(
             body: 'foo',
             status: HttpStatus::ACCEPTED,
         );
@@ -83,8 +102,8 @@ final class ApplicationLoadBalancerResponseTest extends TestCase
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::ACCEPTED, $result['statusCode']);
-        self::assertSame('202 Accepted', $result['statusDescription']);
-        self::assertEquals(new stdClass(), $result['multiValueHeaders']);
+        self::assertEquals([], $result['cookies']);
+        self::assertEquals(new stdClass(), $result['headers']);
         self::assertSame('foo', $result['body']);
     }
 }
