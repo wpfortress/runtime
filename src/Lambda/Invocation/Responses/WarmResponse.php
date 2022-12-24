@@ -2,11 +2,13 @@
 
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
+use JsonSerializable;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 
-final class WarmResponse implements InvocationResponseContract
+final class WarmResponse implements InvocationResponseContract, JsonSerializable
 {
-    public function toApiGatewayFormat(): array
+    /** @return list<string> */
+    public function jsonSerialize(): array
     {
         return ['Lambda is warm'];
     }

@@ -12,6 +12,7 @@ use WPFortress\Runtime\Lambda\Invocation\Context\Context;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\CliHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
+use WPFortress\Runtime\Lambda\Invocation\Responses\CliResponse;
 
 final class CliHandlerTest extends TestCase
 {
@@ -62,7 +63,7 @@ final class CliHandlerTest extends TestCase
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
-        self::assertSame(0, $response->toApiGatewayFormat()['exitCode']);
+        self::assertInstanceOf(CliResponse::class, $response);
     }
 
     /** @test */
@@ -87,6 +88,6 @@ final class CliHandlerTest extends TestCase
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
-        self::assertNotSame(0, $response->toApiGatewayFormat()['exitCode']);
+        self::assertInstanceOf(CliResponse::class, $response);
     }
 }

@@ -30,7 +30,7 @@ final class RuntimeClient
         $this->httpClient->request(
             'POST',
             "/2018-06-01/runtime/invocation/{$invocation->getContext()->getAwsRequestId()}/response",
-            ['json' => $response->toApiGatewayFormat()]
+            ['json' => $response]
         );
     }
 
