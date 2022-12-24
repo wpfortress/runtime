@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
+use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -25,9 +26,10 @@ final class CliResponseTest extends TestCase
             ->willReturn('foo');
 
         $response = new CliResponse($mockedProcess);
-        $result = $response->toApiGatewayFormat();
+        $result = $response->jsonSerialize();
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertSame(0, $result['exitCode']);
         self::assertSame('foo', $result['output']);
     }
