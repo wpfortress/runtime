@@ -32,7 +32,7 @@ final class WarmHandlerTest extends TestCase
     {
         $stubbedLambdaClient = $this->createStub(LambdaClient::class);
 
-        $invocationEvent = new WarmEvent(['concurrency' => 5]);
+        $invocationEvent = new WarmEvent(concurrency: 5);
 
         $mockedInvocation = $this->createMock(InvocationContract::class);
         $mockedInvocation
@@ -54,7 +54,7 @@ final class WarmHandlerTest extends TestCase
             ->expects(self::never())
             ->method('invoke');
 
-        $invocationEvent = new WarmEvent(['warm' => 1]);
+        $invocationEvent = new WarmEvent(concurrency: 1);
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
@@ -86,7 +86,7 @@ final class WarmHandlerTest extends TestCase
             ->expects(self::exactly(5))
             ->method('invoke');
 
-        $invocationEvent = new WarmEvent(['warm' => 5]);
+        $invocationEvent = new WarmEvent(concurrency: 5);
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',

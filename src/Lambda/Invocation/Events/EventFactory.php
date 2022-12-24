@@ -13,10 +13,12 @@ final class EventFactory implements InvocationEventFactoryContract
     public function make(array $data): InvocationEventContract
     {
         return match (true) {
-            isset($data['cli']) => new CliEvent($data),
-            isset($data['requestContext']) => new HttpEvent($data),
-            isset($data['ping']) => new PingEvent($data),
-            isset($data['warm']) => new WarmEvent($data),
+            isset($data['requestContext']['elb']) => ApplicationLoadBalancerEvent::fromResponseData($data),
+            isset($data['httpMethod']) => APIGatewayVersionOneEvent::fromResponseData($data),
+            isset($data['requestContext']['http']['method']) => APIGatewayVersionTwoEvent::fromResponseData($data),
+            isset($data['cli']) => CliEvent::fromResponseData($data),
+            isset($data['ping']) => PingEvent::fromResponseData($data),
+            isset($data['warm']) => WarmEvent::fromResponseData($data),
             default => throw new InvalidArgumentException('Unknown Lambda event type.'),
         };
     }
