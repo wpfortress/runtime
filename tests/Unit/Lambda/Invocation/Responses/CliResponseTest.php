@@ -25,7 +25,7 @@ final class CliResponseTest extends TestCase
             ->method('getOutput')
             ->willReturn('foo');
 
-        $response = new CliResponse($mockedProcess);
+        $response = CliResponse::fromProcess($mockedProcess);
         $result = $response->jsonSerialize();
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);

@@ -33,6 +33,6 @@ final class CliHandler implements InvocationHandlerContract
 
         $process->run();
 
-        return new CliResponse($process);
+        return CliResponse::fromProcess($process);
     }
 }
