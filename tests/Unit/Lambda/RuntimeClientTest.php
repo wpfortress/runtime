@@ -56,11 +56,7 @@ final class RuntimeClientTest extends TestCase
             ->method('getContext')
             ->willReturn($mockedInvocationContext);
 
-        $mockedInvocationResponse = $this->createMock(InvocationResponseContract::class);
-        $mockedInvocationResponse
-            ->expects(self::once())
-            ->method('toApiGatewayFormat')
-            ->willReturn(['foo' => 'bar']);
+        $mockedInvocationResponse = $this->createStub(InvocationResponseContract::class);
 
         $stubbedInvocationFactoryContract = $this->createStub(InvocationFactoryContract::class);
 
@@ -73,7 +69,7 @@ final class RuntimeClientTest extends TestCase
             $mockedResponse->getRequestUrl()
         );
         self::assertContains('Content-Type: application/json', $mockedResponse->getRequestOptions()['headers']);
-        self::assertSame('{"foo":"bar"}', $mockedResponse->getRequestOptions()['body']);
+        self::assertSame('{}', $mockedResponse->getRequestOptions()['body']);
     }
 
     /** @test */
