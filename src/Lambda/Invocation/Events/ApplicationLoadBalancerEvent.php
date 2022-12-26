@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
-final class ApplicationLoadBalancerEvent implements InvocationEventContract
+final class ApplicationLoadBalancerEvent implements InvocationEventContract, InvocationHttpEventContract
 {
     /**
      * @param array{
@@ -144,7 +145,6 @@ final class ApplicationLoadBalancerEvent implements InvocationEventContract
         return $this->usesMultiValueHeaders;
     }
 
-    /** @return array<string, list<string>> */
     public function getHeaders(): array
     {
         return $this->headers;

@@ -6,6 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
 
 final class ApplicationLoadBalancerEventTest extends TestCase
@@ -29,6 +30,7 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         $event = ApplicationLoadBalancerEvent::fromResponseData($data);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(InvocationHttpEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
@@ -61,6 +63,7 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         $event = ApplicationLoadBalancerEvent::fromResponseData($data);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(InvocationHttpEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=baz', $event->getQueryString());
@@ -93,6 +96,7 @@ final class ApplicationLoadBalancerEventTest extends TestCase
         $event = ApplicationLoadBalancerEvent::fromResponseData($data);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(InvocationHttpEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
