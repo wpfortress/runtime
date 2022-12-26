@@ -6,12 +6,13 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 
 final class APIGatewayVersionTwoEventTest extends TestCase
 {
     /** @test */
-    public function it_forms_event_without_multi_value_support(): void
+    public function it_forms_correct_event(): void
     {
         $data = [
             'rawPath' => '/foo',
@@ -34,6 +35,7 @@ final class APIGatewayVersionTwoEventTest extends TestCase
         $event = APIGatewayVersionTwoEvent::fromResponseData($data);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(InvocationHttpEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
@@ -71,6 +73,7 @@ final class APIGatewayVersionTwoEventTest extends TestCase
         $event = APIGatewayVersionTwoEvent::fromResponseData($data);
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(InvocationHttpEventContract::class, $event);
         self::assertSame('GET', $event->getMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
