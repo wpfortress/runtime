@@ -31,7 +31,7 @@ final class ApplicationLoadBalancerEventTest extends TestCase
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertInstanceOf(InvocationHttpEventContract::class, $event);
-        self::assertSame('GET', $event->getMethod());
+        self::assertSame('GET', $event->getRequestMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
         self::assertFalse($event->usesMultiValueHeaders());
@@ -64,7 +64,7 @@ final class ApplicationLoadBalancerEventTest extends TestCase
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertInstanceOf(InvocationHttpEventContract::class, $event);
-        self::assertSame('GET', $event->getMethod());
+        self::assertSame('GET', $event->getRequestMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=baz', $event->getQueryString());
         self::assertTrue($event->usesMultiValueHeaders());
@@ -97,7 +97,7 @@ final class ApplicationLoadBalancerEventTest extends TestCase
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertInstanceOf(InvocationHttpEventContract::class, $event);
-        self::assertSame('GET', $event->getMethod());
+        self::assertSame('GET', $event->getRequestMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
         self::assertFalse($event->usesMultiValueHeaders());

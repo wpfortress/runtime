@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Contracts;
 
 interface InvocationHttpEventContract
 {
-    public function getMethod(): string;
+    public function getRequestMethod(): string;
 
     public function getPath(): string;
 

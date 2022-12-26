@@ -124,7 +124,7 @@ final class APIGatewayVersionOneEvent implements InvocationEventContract, Invoca
     ) {
     }
 
-    public function getMethod(): string
+    public function getRequestMethod(): string
     {
         return $this->method;
     }
