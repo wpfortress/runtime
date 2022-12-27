@@ -19,6 +19,7 @@
         "symfony/process": "^6.0"
     },
     "require-dev": {
+        "php-mock/php-mock-phpunit": "^2.6",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpstan/phpstan": "^1.9",
         "phpstan/phpstan-strict-rules": "^1.4",
