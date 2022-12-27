@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
-use WPFortress\Runtime\Contracts\InvocationEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
-final class APIGatewayVersionOneEvent implements InvocationEventContract, InvocationHttpEventContract
+final class APIGatewayVersionOneEvent implements InvocationHttpEventContract
 {
     /**
      * @param array{

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
-use WPFortress\Runtime\Contracts\InvocationEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
-final class ApplicationLoadBalancerEvent implements InvocationEventContract, InvocationHttpEventContract
+final class ApplicationLoadBalancerEvent implements InvocationHttpEventContract
 {
     /**
      * @param array{
