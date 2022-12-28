@@ -8,21 +8,15 @@ use hollodotme\FastCGI\Requests\AbstractRequest;
 
 final class Request extends AbstractRequest
 {
-    public function __construct(
-        private string $method,
-        string $scriptFilename,
-        string $content
-    ) {
-        parent::__construct($scriptFilename, $content);
-    }
+    private string $requestMethod = '';
 
     public function getRequestMethod(): string
     {
-        return $this->method;
+        return $this->requestMethod;
     }
 
-    public function getServerSoftware(): string
+    public function setRequestMethod(string $requestMethod): void
     {
-        return 'WPFortress';
+        $this->requestMethod = $requestMethod;
     }
 }

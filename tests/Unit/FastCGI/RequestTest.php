@@ -11,16 +11,10 @@ use WPFortress\Runtime\FastCGI\Request;
 final class RequestTest extends TestCase
 {
     /** @test */
-    public function it_forms_correct_fastcgi_request(): void
+    public function it_forms_correct_request(): void
     {
-        $request = new Request(
-            method: $expectedMethod = 'GET',
-            scriptFilename: '',
-            content: ''
-        );
+        $request = new Request(scriptFilename: 'foo.php', content: 'foo');
 
         self::assertInstanceOf(AbstractRequest::class, $request);
-        self::assertSame($expectedMethod, $request->getRequestMethod());
-        self::assertSame('WPFortress', $request->getServerSoftware());
     }
 }

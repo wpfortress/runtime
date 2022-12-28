@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationHttpEventContract
+interface InvocationHttpEventContract extends InvocationEventContract
 {
-    public function getMethod(): string;
+    public function getRequestMethod(): string;
 
     public function getPath(): string;
 

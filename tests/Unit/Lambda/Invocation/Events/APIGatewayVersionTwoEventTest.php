@@ -36,7 +36,7 @@ final class APIGatewayVersionTwoEventTest extends TestCase
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertInstanceOf(InvocationHttpEventContract::class, $event);
-        self::assertSame('GET', $event->getMethod());
+        self::assertSame('GET', $event->getRequestMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
         self::assertSame([
@@ -74,7 +74,7 @@ final class APIGatewayVersionTwoEventTest extends TestCase
 
         self::assertInstanceOf(InvocationEventContract::class, $event);
         self::assertInstanceOf(InvocationHttpEventContract::class, $event);
-        self::assertSame('GET', $event->getMethod());
+        self::assertSame('GET', $event->getRequestMethod());
         self::assertSame('/foo', $event->getPath());
         self::assertSame('foo=bar', $event->getQueryString());
         self::assertSame([
