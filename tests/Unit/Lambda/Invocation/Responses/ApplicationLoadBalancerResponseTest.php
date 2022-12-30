@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
+use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -13,6 +14,33 @@ use WPFortress\Runtime\Lambda\Invocation\Responses\ApplicationLoadBalancerRespon
 
 final class ApplicationLoadBalancerResponseTest extends TestCase
 {
+    /** @test */
+    public function it_forms_correct_response_from_fastcgi_response(): void
+    {
+        $fastCGIResponse = $this->createMock(ProvidesResponseData::class);
+        $fastCGIResponse
+            ->expects(self::once())
+            ->method('getHeaders')
+            ->willReturn([
+                'Content-Type' => ['text/html; charset=utf-8'],
+                'Status' => ['200 OK'],
+            ]);
+        $fastCGIResponse
+            ->expects(self::once())
+            ->method('getBody')
+            ->willReturn('foo');
+
+        $response = ApplicationLoadBalancerResponse::fromFastCGIResponse($fastCGIResponse);
+        $result = $response->jsonSerialize();
+
+        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(JsonSerializable::class, $response);
+        self::assertFalse($result['isBase64Encoded']);
+        self::assertSame(HttpStatus::OK, $result['statusCode']);
+        self::assertEquals(['Content-Type' => ['text/html; charset=utf-8']], $result['multiValueHeaders']);
+        self::assertSame('foo', $result['body']);
+    }
+
     /** @test */
     public function it_forms_correct_default_response(): void
     {

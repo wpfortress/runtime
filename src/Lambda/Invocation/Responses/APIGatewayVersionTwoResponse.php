@@ -2,6 +2,7 @@
 
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
+use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
@@ -9,6 +10,28 @@ use WPFortress\Runtime\Contracts\InvocationResponseContract;
 
 final class APIGatewayVersionTwoResponse implements InvocationResponseContract, JsonSerializable
 {
+    public static function fromFastCGIResponse(ProvidesResponseData $response): self
+    {
+        $cookies = $headers = [];
+        foreach ($response->getHeaders() as $name => $values) {
+            if (strtolower($name) === 'set-cookie') {
+                $cookies[] = (string)end($values);
+            } else {
+                $headers[$name] = (string)end($values);
+            }
+        }
+
+        $status = (int)($headers['Status'] ?? HttpStatus::OK);
+        unset($headers['Status']);
+
+        return new self(
+            body: $response->getBody(),
+            cookies: $cookies,
+            headers: $headers,
+            status: $status,
+        );
+    }
+
     /**
      * @param list<string> $cookies
      * @param array<string, string> $headers

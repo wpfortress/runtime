@@ -2,6 +2,7 @@
 
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
+use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
@@ -9,6 +10,20 @@ use WPFortress\Runtime\Contracts\InvocationResponseContract;
 
 final class ApplicationLoadBalancerResponse implements InvocationResponseContract, JsonSerializable
 {
+    public static function fromFastCGIResponse(ProvidesResponseData $response): self
+    {
+        $headers = $response->getHeaders();
+
+        $status = (int)($headers['Status'][0] ?? HttpStatus::OK);
+        unset($headers['Status']);
+
+        return new self(
+            body: $response->getBody(),
+            multiValueHeaders: $headers,
+            status: $status,
+        );
+    }
+
     /** @param array<string, list<string>> $multiValueHeaders */
     public function __construct(
         private string $body,
