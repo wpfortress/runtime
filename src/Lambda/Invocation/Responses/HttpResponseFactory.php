@@ -7,6 +7,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
@@ -23,6 +24,18 @@ final class HttpResponseFactory implements InvocationHttpResponseFactoryContract
             APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromFastCGIResponse($response),
             APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromFastCGIResponse($response),
             ApplicationLoadBalancerEvent::class => ApplicationLoadBalancerResponse::fromFastCGIResponse($response),
+            default => throw new InvalidArgumentException('Unhandled Lambda event type.'),
+        };
+    }
+
+    public function makeFromHttpErrorResponse(
+        InvocationContract $invocation,
+        InvocationHttpErrorResponseContract $response
+    ): InvocationResponseContract {
+        return match (get_class($invocation->getEvent())) {
+            APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromHttpErrorResponse($response),
+            APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromHttpErrorResponse($response),
+            ApplicationLoadBalancerEvent::class => ApplicationLoadBalancerResponse::fromHttpErrorResponse($response),
             default => throw new InvalidArgumentException('Unhandled Lambda event type.'),
         };
     }

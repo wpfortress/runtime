@@ -6,6 +6,7 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
+use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 
 final class APIGatewayVersionTwoResponse implements InvocationResponseContract, JsonSerializable
@@ -29,6 +30,15 @@ final class APIGatewayVersionTwoResponse implements InvocationResponseContract, 
             cookies: $cookies,
             headers: $headers,
             status: $status,
+        );
+    }
+
+    public static function fromHttpErrorResponse(InvocationHttpErrorResponseContract $response): self
+    {
+        return new self(
+            body: $response->getBody(),
+            headers: array_map(fn(array $values): string => (string)end($values), $response->getHeaders()),
+            status: $response->getStatus(),
         );
     }
 
