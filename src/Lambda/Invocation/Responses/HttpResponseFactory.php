@@ -16,18 +16,6 @@ use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
 
 final class HttpResponseFactory implements InvocationHttpResponseFactoryContract
 {
-    public function makeFromFastCGIResponse(
-        InvocationContract $invocation,
-        ProvidesResponseData $response,
-    ): InvocationResponseContract {
-        return match (get_class($invocation->getEvent())) {
-            APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromFastCGIResponse($response),
-            APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromFastCGIResponse($response),
-            ApplicationLoadBalancerEvent::class => ApplicationLoadBalancerResponse::fromFastCGIResponse($response),
-            default => throw new InvalidArgumentException('Unhandled Lambda event type.'),
-        };
-    }
-
     public function makeFromHttpErrorResponse(
         InvocationContract $invocation,
         InvocationHttpErrorResponseContract $response
@@ -36,6 +24,18 @@ final class HttpResponseFactory implements InvocationHttpResponseFactoryContract
             APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromHttpErrorResponse($response),
             APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromHttpErrorResponse($response),
             ApplicationLoadBalancerEvent::class => ApplicationLoadBalancerResponse::fromHttpErrorResponse($response),
+            default => throw new InvalidArgumentException('Unhandled Lambda event type.'),
+        };
+    }
+
+    public function makeFromFastCGIResponse(
+        InvocationContract $invocation,
+        ProvidesResponseData $response,
+    ): InvocationResponseContract {
+        return match (get_class($invocation->getEvent())) {
+            APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromFastCGIResponse($response),
+            APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromFastCGIResponse($response),
+            ApplicationLoadBalancerEvent::class => ApplicationLoadBalancerResponse::fromFastCGIResponse($response),
             default => throw new InvalidArgumentException('Unhandled Lambda event type.'),
         };
     }

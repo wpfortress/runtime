@@ -8,6 +8,11 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 
 interface InvocationHttpResponseFactoryContract
 {
+    public function makeFromHttpErrorResponse(
+        InvocationContract $invocation,
+        InvocationHttpErrorResponseContract $response
+    ): InvocationResponseContract;
+
     public function makeFromFastCGIResponse(
         InvocationContract $invocation,
         ProvidesResponseData $response
