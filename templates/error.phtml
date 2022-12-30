@@ -1,0 +1,83 @@
+<!--
+      __   ___  __   __  ___  __   ___  __   __
+|  | |__) |__  /  \ |__)  |  |__) |__  /__` /__`
+|/\| |    |    \__/ |  \  |  |  \ |___ .__/ .__/
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><?= $status ?> | <?= $message ?></title>
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//rsms.me/">
+    <link rel="stylesheet" href="//rsms.me/inter/inter.css"/>
+
+    <!-- Styles -->
+    <style>
+        html, body {
+            font-family: 'Inter var', ui-sans-serif, system-ui, -apple-system;
+            font-weight: 300;
+            margin: 0;
+            color: #000;
+            background-color: #fff;
+        }
+
+        .full-height {
+            height: 100vh;
+        }
+
+        .flex-center {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .flex-center-column {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .status {
+            font-size: 26px;
+            padding: 0 15px 0 15px;
+            text-align: center;
+            border-right: 2px solid;
+        }
+
+        .message {
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="flex-center-column relative full-height">
+    <div>
+        <a href="https://wpfortress.io">
+            logo
+        </a>
+    </div>
+
+    <div class="flex-center">
+        <div class="status">
+            <?= $status ?>
+        </div>
+
+        <div class="message">
+            <?= $message ?>
+        </div>
+    </div>
+</div>
+</body>
+</html>

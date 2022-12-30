@@ -6,5 +6,5 @@ namespace WPFortress\Runtime\Contracts;
 
 interface InvocationResponseContract
 {
-    ///**/
+    //
 }
