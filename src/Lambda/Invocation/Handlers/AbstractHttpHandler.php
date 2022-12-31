@@ -36,9 +36,8 @@ abstract class AbstractHttpHandler
                 response: NotFoundHttpResponse::make(),
             );
         }
-        var_dump($filename,!is_dir($filename), file_exists($filename));
+
         if ($this->isStaticFile($filename)) {
-            var_dump($filename);
             return $this->httpResponseFactory->makeFromStaticResponse(
                 invocation: $invocation,
                 response: StaticFileResponse::fromFilename($filename),
