@@ -11,6 +11,7 @@ use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
 use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\ApplicationLoadBalancerResponse;
 
 final class ApplicationLoadBalancerResponseTest extends TestCase
@@ -70,6 +71,32 @@ final class ApplicationLoadBalancerResponseTest extends TestCase
         self::assertSame(HttpStatus::NOT_FOUND, $result['statusCode']);
         self::assertEquals(['Content-Type' => ['text/html; charset=utf-8']], $result['multiValueHeaders']);
         self::assertSame('foo', $result['body']);
+    }
+
+    /** @test */
+    public function it_forms_correct_response_from_static_file_response(): void
+    {
+        $staticFileResponse = $this->createMock(InvocationStaticFileResponseContract::class);
+        $staticFileResponse
+            ->expects(self::once())
+            ->method('getBody')
+            ->willReturn('foo');
+        $staticFileResponse
+            ->expects(self::once())
+            ->method('getHeaders')
+            ->willReturn([
+                'Content-Type' => ['text/plain'],
+            ]);
+
+        $response = ApplicationLoadBalancerResponse::fromStaticResponse($staticFileResponse);
+        $result = $response->jsonSerialize();
+
+        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(JsonSerializable::class, $response);
+        self::assertTrue($result['isBase64Encoded']);
+        self::assertSame(HttpStatus::OK, $result['statusCode']);
+        self::assertEquals(['Content-Type' => ['text/plain']], $result['multiValueHeaders']);
+        self::assertSame('Zm9v', $result['body']);
     }
 
     /** @test */

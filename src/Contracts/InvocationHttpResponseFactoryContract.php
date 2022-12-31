@@ -17,4 +17,9 @@ interface InvocationHttpResponseFactoryContract
         InvocationContract $invocation,
         ProvidesResponseData $response
     ): InvocationResponseContract;
+
+    public function makeFromStaticResponse(
+        InvocationContract $invocation,
+        InvocationStaticFileResponseContract $response,
+    ): InvocationResponseContract;
 }

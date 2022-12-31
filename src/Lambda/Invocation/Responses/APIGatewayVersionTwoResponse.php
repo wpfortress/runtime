@@ -8,6 +8,7 @@ use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
 use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
 
 final class APIGatewayVersionTwoResponse implements InvocationResponseContract, JsonSerializable
 {
@@ -39,6 +40,15 @@ final class APIGatewayVersionTwoResponse implements InvocationResponseContract, 
             body: $response->getBody(),
             headers: array_map(fn(array $values): string => (string)end($values), $response->getHeaders()),
             status: $response->getStatus(),
+        );
+    }
+
+    public static function fromStaticResponse(InvocationStaticFileResponseContract $response): self
+    {
+        return new self(
+            body: $response->getBody(),
+            isBase64Encoded: true,
+            headers: array_map(fn(array $values): string => (string)end($values), $response->getHeaders()),
         );
     }
 
