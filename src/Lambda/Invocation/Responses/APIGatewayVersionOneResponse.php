@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
