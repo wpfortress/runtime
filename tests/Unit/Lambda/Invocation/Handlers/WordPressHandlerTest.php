@@ -81,7 +81,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(3))
+            ->expects(self::exactly(4))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
@@ -138,7 +138,7 @@ final class WordPressHandlerTest extends TestCase
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
         $mockedInvocation = $this->createMock(InvocationContract::class);
 
-        is_dir($tmpDir . '/foo') || mkdir($tmpDir . '/foo');
+        mkdir($tmpDir . '/foo');
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
@@ -155,7 +155,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(3))
+            ->expects(self::exactly(4))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
@@ -195,6 +195,8 @@ final class WordPressHandlerTest extends TestCase
         unlink($tmpDir . '/wp-config.php');
         unlink($tmpDir . '/foo/index.php');
 
+        rmdir($tmpDir . '/foo');
+
         self::assertSame($stubbedInvocationResponse, $response);
     }
 
@@ -213,7 +215,7 @@ final class WordPressHandlerTest extends TestCase
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
         $mockedInvocation = $this->createMock(InvocationContract::class);
 
-        is_dir($tmpDir . '/wp-admin') || mkdir($tmpDir . '/wp-admin');
+        mkdir($tmpDir . '/wp-admin');
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
@@ -232,7 +234,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(3))
+            ->expects(self::exactly(4))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
@@ -272,6 +274,8 @@ final class WordPressHandlerTest extends TestCase
         unlink($tmpDir . '/wp-config.php');
         unlink($tmpDir . '/wp-admin/index.php');
 
+        rmdir($tmpDir . '/wp-admin');
+
         self::assertSame($stubbedInvocationResponse, $response);
     }
 
@@ -307,7 +311,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(3))
+            ->expects(self::exactly(4))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 

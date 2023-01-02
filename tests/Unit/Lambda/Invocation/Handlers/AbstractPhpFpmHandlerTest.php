@@ -68,7 +68,7 @@ final class AbstractPhpFpmHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(2))
+            ->expects(self::exactly(4))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 

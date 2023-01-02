@@ -28,7 +28,7 @@ abstract class AbstractHttpHandler
     {
         assert($invocation->getEvent() instanceof InvocationHttpEventContract);
 
-        $filename = $this->resolveRequestedFilenameFrom($invocation);
+        $filename = $this->resolveRequestedFilenameFrom($invocation->getEvent());
 
         if (!$this->isPubliclyAccessible($filename)) {
             return $this->httpResponseFactory->makeFromHttpErrorResponse(
@@ -47,9 +47,9 @@ abstract class AbstractHttpHandler
         return $this->createInvocationResponse($invocation);
     }
 
-    protected function resolveRequestedFilenameFrom(InvocationContract $invocation): string
+    protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
     {
-        return $this->rootDirectory . '/' . ltrim($invocation->getEvent()->getPath(), '/');
+        return $this->rootDirectory . '/' . ltrim($event->getPath(), '/');
     }
 
     protected function isPubliclyAccessible(string $filename): bool

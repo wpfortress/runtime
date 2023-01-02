@@ -6,6 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
+use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
 final class WordPressHandler extends AbstractPhpFpmHandler implements InvocationHandlerContract
 {
@@ -16,9 +17,9 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
             && file_exists($this->rootDirectory . '/index.php');
     }
 
-    protected function resolveRequestedFilenameFrom(InvocationContract $invocation): string
+    protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
     {
-        $path = $invocation->getEvent()->getPath();
+        $path = $event->getPath();
 
         if (preg_match('%^(.+\.php)%i', $path, $matches) === 1) {
             $path = $matches[1];
@@ -37,9 +38,9 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
         return $this->rootDirectory . '/' . ltrim($path, '/');
     }
 
-    protected function resolveScriptFilenameFrom(InvocationContract $invocation): string
+    protected function resolveScriptFilenameFrom(InvocationHttpEventContract $event): string
     {
-        $requestedFilename = $this->resolveRequestedFilenameFrom($invocation);
+        $requestedFilename = $this->resolveRequestedFilenameFrom($event);
 
         if (is_dir($requestedFilename)) {
             $requestedFilename = rtrim($requestedFilename, '/') . '/index.php';
