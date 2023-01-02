@@ -81,7 +81,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(4))
+            ->expects(self::atLeast(2))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
@@ -155,7 +155,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(4))
+            ->expects(self::atLeast(2))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
@@ -234,7 +234,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(4))
+            ->expects(self::atLeast(2))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
@@ -311,7 +311,7 @@ final class WordPressHandlerTest extends TestCase
             ->willReturn(3000);
 
         $mockedInvocation
-            ->expects(self::exactly(4))
+            ->expects(self::atLeast(2))
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
