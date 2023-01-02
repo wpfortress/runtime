@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'src/**.php'
+      - 'tests/**.php'
       - 'phpcs.xml.dist'
 
 jobs:

@@ -7,6 +7,7 @@ namespace WPFortress\Runtime\Lambda\Invocation;
 use WPFortress\Runtime\Contracts\InvocationContextContract;
 use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
 final class Invocation implements InvocationContract
 {
@@ -21,7 +22,7 @@ final class Invocation implements InvocationContract
         return $this->context;
     }
 
-    public function getEvent(): InvocationEventContract
+    public function getEvent(): InvocationEventContract|InvocationHttpEventContract
     {
         return $this->event;
     }
