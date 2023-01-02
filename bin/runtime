@@ -6,12 +6,27 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\SingleCommandApplication;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 $containerBuilder = new ContainerBuilder();
 
-$loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__ . '/../config'));
-$loader->load('services.yaml');
+$loader = new YamlFileLoader($containerBuilder, new FileLocator());
+$loader->load(__DIR__ . '/../config/services.yaml');
 
 $containerBuilder->compile(true);
+
+(new SingleCommandApplication())
+    ->setName('WPFortress runtime')
+    ->setVersion('1.0.0')
+    ->addArgument('runtime', InputArgument::REQUIRED, 'The runtime')
+    ->addOption('max-invocations', null, InputOption::VALUE_OPTIONAL, 'The maximum number of invocations', 250)
+    ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $output->write('Hello world!');
+    })
+    ->run();
