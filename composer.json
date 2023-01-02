@@ -41,6 +41,9 @@
             "WPFortress\\Runtime\\Tests\\": "tests"
         }
     },
+    "bin": [
+        "bin/runtime"
+    ],
     "scripts": {
         "lint": "vendor/bin/phpcs",
         "analyse": "vendor/bin/phpstan analyse",
