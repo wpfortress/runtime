@@ -3,6 +3,7 @@ name: phpcs
 on:
   push:
     paths:
+      - 'bin/runtime'
       - 'src/**.php'
       - 'tests/**.php'
       - 'phpcs.xml.dist'

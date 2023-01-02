@@ -3,6 +3,7 @@ name: phpunit
 on:
   push:
     paths:
+      - 'bin/runtime'
       - 'src/**.php'
       - 'tests/**.php'
       - 'composer.json'

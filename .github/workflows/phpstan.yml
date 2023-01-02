@@ -3,6 +3,7 @@ name: phpstan
 on:
   push:
     paths:
+      - 'bin/runtime'
       - 'src/**.php'
       - 'phpstan.neon.dist'
 

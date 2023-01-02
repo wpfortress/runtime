@@ -14,6 +14,7 @@
     <config name="testVersion" value="8.0-"/>
     <config name="installed_paths" value="vendor/phpcompatibility/php-compatibility"/>
 
+    <file>bin</file>
     <file>src</file>
     <file>tests</file>
 
