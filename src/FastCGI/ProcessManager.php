@@ -10,23 +10,21 @@ use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
 
 final class ProcessManager implements FastCGIProcessManagerContract
 {
-    private const SOCKET_PATH = '/tmp/.wpfortress/php-fpm.sock';
-
-    private const PID_PATH = '/tmp/.wpfortress/php-fpm.pid';
-
-    private const CONFIG_PATH = '/opt/wpfortress/etc/php-fpm.conf';
-
     private const SIGTERM = 15;
 
-    public static function fromConfig(string $configPath = self::CONFIG_PATH): self
+    public static function fromConfig(string $configPath, string $socketPath, string $pidPath): self
     {
         return new self(
             process: new Process(['php-fpm', '--nodaemonize', '--force-stderr', '--fpm-config', $configPath]),
+            socketPath: $socketPath,
+            pidPath: $pidPath,
         );
     }
 
     public function __construct(
         private Process $process,
+        private string $socketPath,
+        private string $pidPath,
     ) {
     }
 
@@ -41,7 +39,7 @@ final class ProcessManager implements FastCGIProcessManagerContract
             $this->killExistingProcess();
         }
 
-        $directory = dirname(self::SOCKET_PATH);
+        $directory = dirname($this->socketPath);
         if (!is_dir($directory)) {
             mkdir($directory);
         }
@@ -78,9 +76,9 @@ final class ProcessManager implements FastCGIProcessManagerContract
 
     private function isReady(): bool
     {
-        clearstatcache(false, self::SOCKET_PATH);
+        clearstatcache(false, $this->socketPath);
 
-        return file_exists(self::SOCKET_PATH);
+        return file_exists($this->socketPath);
     }
 
     private function waitUntilReady(): void
@@ -125,12 +123,12 @@ final class ProcessManager implements FastCGIProcessManagerContract
 
     private function killExistingProcess(): void
     {
-        if (!file_exists(self::PID_PATH)) {
-            unlink(self::SOCKET_PATH);
+        if (!file_exists($this->pidPath)) {
+            unlink($this->socketPath);
             return;
         }
 
-        $pid = (int)file_get_contents(self::PID_PATH);
+        $pid = (int)file_get_contents($this->pidPath);
 
         if ($pid <= 0) {
             $this->removeProcessFiles();
@@ -159,7 +157,7 @@ final class ProcessManager implements FastCGIProcessManagerContract
 
     private function removeProcessFiles(): void
     {
-        unlink(self::SOCKET_PATH);
-        unlink(self::PID_PATH);
+        unlink($this->socketPath);
+        unlink($this->pidPath);
     }
 }

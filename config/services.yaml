@@ -1,4 +1,32 @@
+parameters:
+  fastcgi.config_path: '/opt/wpfortress/etc/php-fpm.conf'
+  fastcgi.socket_path: '/tmp/.wpfortress/php-fpm.sock'
+  fastcgi.pid_path: '/tmp/.wpfortress/php-fpm.pid'
+
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
+  hollodotme\FastCGI\Client: ~
+
+  hollodotme\FastCGI\Interfaces\ConfiguresSocketConnection:
+    class: hollodotme\FastCGI\SocketConnections\UnixDomainSocket
+    arguments:
+      $socketPath: '%fastcgi.config_path%'
+      $connectTimeout: 1000
+      $readWriteTimeout: 900000
+
+  WPFortress\Runtime\Contracts\FastCGIProcessClientContract:
+    class: WPFortress\Runtime\FastCGI\ProcessClient
+    arguments:
+      - '@hollodotme\FastCGI\Client'
+      - '@hollodotme\FastCGI\Interfaces\ConfiguresSocketConnection'
+      - '@WPFortress\Runtime\Contracts\FastCGIProcessManagerContract'
+
+  WPFortress\Runtime\Contracts\FastCGIProcessManagerContract:
+    class: WPFortress\Runtime\FastCGI\ProcessManager
+    factory: [ 'WPFortress\Runtime\FastCGI\ProcessManager', 'fromConfig' ]
+    arguments:
+      - '%fastcgi.config_path%'
+      - '%fastcgi.socket_path%'
+      - '%fastcgi.pid_path%'
+
+  WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract:
+    class: WPFortress\Runtime\FastCGI\RequestFactory
