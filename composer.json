@@ -16,6 +16,7 @@
         "async-aws/lambda": "^1.8",
         "hollodotme/fast-cgi-client": "^3.0",
         "symfony/config": "^6.0",
+        "symfony/console": "^6.0",
         "symfony/dependency-injection": "^6.0",
         "symfony/http-client": "^6.0",
         "symfony/mime": "^6.0",
@@ -40,6 +41,9 @@
             "WPFortress\\Runtime\\Tests\\": "tests"
         }
     },
+    "bin": [
+        "bin/runtime"
+    ],
     "scripts": {
         "lint": "vendor/bin/phpcs",
         "analyse": "vendor/bin/phpstan analyse",
