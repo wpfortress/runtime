@@ -43,7 +43,7 @@ final class Context implements InvocationContextContract, JsonSerializable
         return $this->traceId;
     }
 
-    /** @return array<string, int|string> */
+    /** @return array<string, scalar> */
     public function jsonSerialize(): array
     {
         return [

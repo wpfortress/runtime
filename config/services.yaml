@@ -30,3 +30,6 @@ services:
 
   WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract:
     class: WPFortress\Runtime\FastCGI\RequestFactory
+
+  WPFortress\Runtime\Contracts\InvocationContextContract:
+    class: WPFortress\Runtime\Lambda\Invocation\Context\ContextFactory
