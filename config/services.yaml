@@ -38,9 +38,9 @@ services:
     class: WPFortress\Runtime\Lambda\Invocation\Events\EventFactory
     arguments:
       $events:
-        - WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent
         - WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent
         - WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent
+        - WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent
         - WPFortress\Runtime\Lambda\Invocation\Events\CliEvent
         - WPFortress\Runtime\Lambda\Invocation\Events\PingEvent
         - WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent
