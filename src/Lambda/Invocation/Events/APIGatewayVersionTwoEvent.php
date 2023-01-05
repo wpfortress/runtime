@@ -8,64 +8,49 @@ use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
 final class APIGatewayVersionTwoEvent implements InvocationHttpEventContract
 {
-    /**
-     * @param array{
-     *  rawPath: string,
-     *  rawQueryString: string,
-     *  cookies: array<string, string>,
-     *  headers: array<string, string>,
-     *  requestContext: array{
-     *   http: array{
-     *    method: string,
-     *   },
-     *  },
-     *  isBase64Encoded: bool,
-     *  body: string,
-     * } $data
-     */
+    public static function shouldHandle(array $data): bool
+    {
+        return isset($data['requestContext']) && floatval($data['version'] ?? 0.0) === 2.0;
+    }
+
     public static function fromResponseData(array $data): self
     {
         return new self(
-            method: strtoupper($data['requestContext']['http']['method']),
-            path: $data['rawPath'],
+            method: strtoupper(strval($data['requestContext']['http']['method'] ?? 'GET')),
+            path: strval($data['rawPath'] ?? '/'),
             queryString: self::resolveQueryStringFrom($data),
             headers: self::resolveHeadersFrom($data),
-            isBase64Encoded: $data['isBase64Encoded'],
+            isBase64Encoded: boolval($data['isBase64Encoded'] ?? false),
             body: self::resolveBodyFrom($data),
         );
     }
 
-    /**
-     * @param array{
-     *  rawQueryString: string,
-     * } $data
-     */
+    /** @param array<string, scalar|mixed[][]> $data */
     private static function resolveQueryStringFrom(array $data): string
     {
-        parse_str($data['rawQueryString'], $decodedQueryParameters);
+        parse_str(strval($data['rawQueryString'] ?? ''), $decodedQueryParameters);
 
         return http_build_query($decodedQueryParameters);
     }
 
     /**
-     * @param array{
-     *  cookies: array<string, string>,
-     *  headers: array<string, string>,
-     *  isBase64Encoded: bool,
-     *  body: string,
-     * } $data
+     * @param array<string, scalar|mixed[][]> $data
      * @return array<string, list<string>>
      */
     private static function resolveHeadersFrom(array $data): array
     {
-        $headers = array_map(fn(string $value): array => [$value], $data['headers']);
+        /** @var array<string, string> $headers */
+        $headers = $data['headers'] ?? [];
+        $headers = array_map(fn(string $value): array => [$value], $headers);
         $headers = array_change_key_case($headers, CASE_LOWER);
 
-        if ($data['cookies'] !== []) {
-            $headers['cookie'] = [implode('; ', $data['cookies'])];
+        /** @var list<string> $cookies */
+        $cookies = $data['cookies'] ?? [];
+        if ($cookies !== []) {
+            $headers['cookie'] = [implode('; ', $cookies)];
         }
 
-        $hasBody = $data['body'] !== '';
+        $hasBody = ($data['body'] ?? '') !== '';
 
         if ($hasBody && !isset($headers['content-type'])) {
             $headers['content-type'] = ['application/x-www-form-urlencoded'];
@@ -78,21 +63,17 @@ final class APIGatewayVersionTwoEvent implements InvocationHttpEventContract
         return $headers;
     }
 
-    /**
-     * @param array{
-     *  isBase64Encoded: bool,
-     *  body: string,
-     * } $data
-     */
+    /** @param array<string, scalar|mixed[][]> $data */
     private static function resolveBodyFrom(array $data): string
     {
-        if ($data['isBase64Encoded'] === false) {
-            return $data['body'];
+        $body = strval($data['body'] ?? '');
+
+        if (($data['isBase64Encoded'] ?? false) === true) {
+            $body = base64_decode($body, true);
+            $body = $body !== false ? $body : '';
         }
 
-        $body = base64_decode($data['body'], true);
-
-        return $body !== false ? $body : '';
+        return $body;
     }
 
     /** @param array<string, list<string>> $headers */

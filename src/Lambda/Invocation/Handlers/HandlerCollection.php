@@ -11,7 +11,7 @@ use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 
 final class HandlerCollection implements InvocationHandlerCollectionContract
 {
-    /** @param InvocationHandlerContract[] $handlers */
+    /** @param iterable<InvocationHandlerContract> $handlers */
     public function __construct(
         private iterable $handlers,
     ) {

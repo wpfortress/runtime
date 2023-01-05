@@ -12,6 +12,24 @@ use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 final class APIGatewayVersionOneEventTest extends TestCase
 {
     /** @test */
+    public function it_should_handle_given_data(): void
+    {
+        $shouldHandle = APIGatewayVersionOneEvent::shouldHandle([
+            'version' => '1.0',
+            'requestContext' => [],
+        ]);
+
+        self::assertTrue($shouldHandle);
+
+        $shouldHandle = APIGatewayVersionOneEvent::shouldHandle([
+            'version' => '2.0',
+            'requestContext' => [],
+        ]);
+
+        self::assertFalse($shouldHandle);
+    }
+
+    /** @test */
     public function it_forms_event_without_multi_value_support(): void
     {
         $data = [

@@ -8,11 +8,15 @@ use WPFortress\Runtime\Contracts\InvocationEventContract;
 
 final class WarmEvent implements InvocationEventContract
 {
-    /** @param array{warm: int} $data */
+    public static function shouldHandle(array $data): bool
+    {
+        return isset($data['warm']);
+    }
+
     public static function fromResponseData(array $data): self
     {
         return new self(
-            concurrency: $data['warm'],
+            concurrency: intval($data['warm'] ?? 0),
         );
     }
 

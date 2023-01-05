@@ -8,7 +8,11 @@ use WPFortress\Runtime\Contracts\InvocationEventContract;
 
 final class PingEvent implements InvocationEventContract
 {
-    /** @param array{ping: bool} $data */
+    public static function shouldHandle(array $data): bool
+    {
+        return isset($data['ping']);
+    }
+
     public static function fromResponseData(array $data): self
     {
         return new self();

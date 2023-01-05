@@ -11,6 +11,22 @@ use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
 final class WarmEventTest extends TestCase
 {
     /** @test */
+    public function it_should_handle_given_data(): void
+    {
+        $shouldHandle = WarmEvent::shouldHandle([
+            'warm' => 10,
+        ]);
+
+        self::assertTrue($shouldHandle);
+
+        $shouldHandle = WarmEvent::shouldHandle([
+            'requestContext' => [],
+        ]);
+
+        self::assertFalse($shouldHandle);
+    }
+
+    /** @test */
     public function it_forms_correct_event(): void
     {
         $expectedData = ['warm' => $expectedConcurrency = 10];

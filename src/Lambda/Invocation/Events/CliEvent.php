@@ -8,11 +8,15 @@ use WPFortress\Runtime\Contracts\InvocationEventContract;
 
 final class CliEvent implements InvocationEventContract
 {
-    /** @param array{cli: string} $data */
+    public static function shouldHandle(array $data): bool
+    {
+        return isset($data['cli']);
+    }
+
     public static function fromResponseData(array $data): self
     {
         return new self(
-            command: $data['cli'],
+            command: strval($data['cli'] ?? ''),
         );
     }
 
