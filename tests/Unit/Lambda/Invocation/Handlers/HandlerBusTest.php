@@ -7,18 +7,18 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerCollectionContract;
+use WPFortress\Runtime\Contracts\InvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
-use WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerCollection;
+use WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus;
 
-final class HandlerCollectionTest extends TestCase
+final class HandlerBusTest extends TestCase
 {
     /** @test */
     public function it_implements_invocation_handler_collection_contract(): void
     {
-        $handlerCollection = new HandlerCollection([]);
+        $handlerCollection = new HandlerBus([]);
 
-        self::assertInstanceOf(InvocationHandlerCollectionContract::class, $handlerCollection);
+        self::assertInstanceOf(InvocationHandlerBusContract::class, $handlerCollection);
     }
 
     /** @test */
@@ -29,8 +29,8 @@ final class HandlerCollectionTest extends TestCase
 
         $stubbedInvocation = $this->createStub(InvocationContract::class);
 
-        $handlerCollection = new HandlerCollection([]);
-        $handlerCollection->pickFor($stubbedInvocation);
+        $handlerCollection = new HandlerBus([]);
+        $handlerCollection->handle($stubbedInvocation);
     }
 
     /** @test */
@@ -45,8 +45,8 @@ final class HandlerCollectionTest extends TestCase
             ->with($stubbedInvocation)
             ->willReturn(true);
 
-        $handlerCollection = new HandlerCollection([$mockedHandler]);
-        $handler = $handlerCollection->pickFor($stubbedInvocation);
+        $handlerCollection = new HandlerBus([$mockedHandler]);
+        $handler = $handlerCollection->handle($stubbedInvocation);
 
         self::assertSame($mockedHandler, $handler);
     }
