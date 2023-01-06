@@ -12,6 +12,7 @@ services:
   _defaults:
     autowire: true
     bind:
+      $lambdaFunctionName: '%env(AWS_LAMBDA_FUNCTION_NAME)%'
       $rootDirectory: '%env(LAMBDA_TASK_ROOT)%'
 
   _instanceof:

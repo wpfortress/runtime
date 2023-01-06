@@ -7,7 +7,6 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 use AsyncAws\Core\Result;
 use AsyncAws\Lambda\Input\InvocationRequest;
 use AsyncAws\Lambda\LambdaClient;
-use RuntimeException;
 use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -18,6 +17,7 @@ final class WarmHandler implements InvocationHandlerContract
 {
     public function __construct(
         private LambdaClient $lambdaClient,
+        private string $lambdaFunctionName,
     ) {
     }
 
@@ -35,16 +35,11 @@ final class WarmHandler implements InvocationHandlerContract
             return new WarmResponse();
         }
 
-        $functionName = getenv('AWS_LAMBDA_FUNCTION_NAME');
-        if (!is_string($functionName)) {
-            throw new RuntimeException('"AWS_LAMBDA_FUNCTION_NAME" environment variable is missing.');
-        }
-
         $promises = [];
         for ($i = 0; $i < $concurrency; ++$i) {
             $promises[] = $this->lambdaClient->invoke(
                 new InvocationRequest([
-                    'FunctionName' => $functionName,
+                    'FunctionName' => $this->lambdaFunctionName,
                     'Qualifier' => 'deployed',
                     'InvocationType' => 'Event',
                     'LogType' => 'None',
