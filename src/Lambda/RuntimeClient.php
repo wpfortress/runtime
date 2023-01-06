@@ -21,34 +21,43 @@ final class RuntimeClient
     public function retrieveNextInvocation(): InvocationContract
     {
         return $this->invocationFactory->make(
-            $this->httpClient->request('GET', '/2018-06-01/runtime/invocation/next')
+            response: $this->httpClient->request(
+                method: 'GET',
+                url: '/2018-06-01/runtime/invocation/next',
+            )
         );
     }
 
     public function sendInvocationResponse(InvocationContract $invocation, InvocationResponseContract $response): void
     {
         $this->httpClient->request(
-            'POST',
-            "/2018-06-01/runtime/invocation/{$invocation->getContext()->getAwsRequestId()}/response",
-            ['json' => $response]
+            method: 'POST',
+            url: "/2018-06-01/runtime/invocation/{$invocation->getContext()->getAwsRequestId()}/response",
+            options: ['json' => $response],
         );
     }
 
     public function sendInvocationError(InvocationContract $invocation, Throwable $exception): void
     {
         $this->httpClient->request(
-            'POST',
-            "/2018-06-01/runtime/invocation/{$invocation->getContext()->getAwsRequestId()}/error",
-            ['headers' => $this->resolveErrorHeaders($exception), 'json' => $this->resolveErrorPayload($exception)]
+            method: 'POST',
+            url: "/2018-06-01/runtime/invocation/{$invocation->getContext()->getAwsRequestId()}/error",
+            options: [
+                'headers' => $this->resolveErrorHeaders($exception),
+                'json' => $this->resolveErrorPayload($exception),
+            ],
         );
     }
 
     public function sendInitialisationError(Throwable $exception): void
     {
         $this->httpClient->request(
-            'POST',
-            '/2018-06-01/runtime/init/error',
-            ['headers' => $this->resolveErrorHeaders($exception), 'json' => $this->resolveErrorPayload($exception)]
+            method: 'POST',
+            url: '/2018-06-01/runtime/init/error',
+            options: [
+                'headers' => $this->resolveErrorHeaders($exception),
+                'json' => $this->resolveErrorPayload($exception),
+            ],
         );
     }
 
