@@ -32,6 +32,14 @@ services:
       $connectTimeout: 1000
       $readWriteTimeout: 900000
 
+  Symfony\Contracts\HttpClient\HttpClientInterface:
+    factory: [ 'Symfony\Component\HttpClient\HttpClient', 'create' ]
+    arguments:
+      $defaultOptions:
+        base_uri: '%env(AWS_LAMBDA_RUNTIME_API)%'
+        headers:
+          Accept: 'application/json'
+
   WPFortress\Runtime\:
     resource: '../src'
     exclude:
@@ -64,4 +72,3 @@ services:
     class: WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus
     arguments:
       - !tagged_iterator handlers
-
