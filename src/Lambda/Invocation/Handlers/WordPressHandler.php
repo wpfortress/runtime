@@ -13,8 +13,8 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
     public function shouldHandle(InvocationContract $invocation): bool
     {
         return parent::shouldHandle($invocation)
-            && file_exists($this->rootDirectory . '/wp-config.php')
-            && file_exists($this->rootDirectory . '/index.php');
+            && file_exists($this->lambdaRootDirectory . '/wp-config.php')
+            && file_exists($this->lambdaRootDirectory . '/index.php');
     }
 
     protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
@@ -35,7 +35,7 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
             $path = $matches[2];
         }
 
-        return $this->rootDirectory . '/' . ltrim($path, '/');
+        return $this->lambdaRootDirectory . '/' . ltrim($path, '/');
     }
 
     protected function resolveScriptFilenameFrom(InvocationHttpEventContract $event): string
@@ -48,7 +48,7 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
 
         return file_exists($requestedFilename)
             ? $requestedFilename
-            : $this->rootDirectory . '/index.php';
+            : $this->lambdaRootDirectory . '/index.php';
     }
 
     protected function isPubliclyAccessible(string $filename): bool
@@ -58,7 +58,7 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
 
     protected function isMultisite(): bool
     {
-        $config = file_get_contents($this->rootDirectory . '/wp-config.php');
+        $config = file_get_contents($this->lambdaRootDirectory . '/wp-config.php');
 
         return is_string($config)
             && preg_match('/define\(\s*(\'|\")MULTISITE\1\s*,\s*true\s*\)/', $config) === 1;

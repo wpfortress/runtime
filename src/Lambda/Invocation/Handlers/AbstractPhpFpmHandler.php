@@ -17,9 +17,9 @@ abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
         protected FastCGIRequestFactoryContract $requestFactory,
         protected FastCGIProcessClientContract $processClient,
         InvocationHttpResponseFactoryContract $httpResponseFactory,
-        string $rootDirectory,
+        string $lambdaRootDirectory,
     ) {
-        parent::__construct($httpResponseFactory, $rootDirectory);
+        parent::__construct($httpResponseFactory, $lambdaRootDirectory);
     }
 
     protected function isStaticFile(string $filename): bool

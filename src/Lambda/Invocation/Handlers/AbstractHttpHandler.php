@@ -15,7 +15,7 @@ abstract class AbstractHttpHandler
 {
     public function __construct(
         protected InvocationHttpResponseFactoryContract $httpResponseFactory,
-        protected string $rootDirectory,
+        protected string $lambdaRootDirectory,
     ) {
     }
 
@@ -49,7 +49,7 @@ abstract class AbstractHttpHandler
 
     protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
     {
-        return $this->rootDirectory . '/' . ltrim($event->getPath(), '/');
+        return $this->lambdaRootDirectory . '/' . ltrim($event->getPath(), '/');
     }
 
     protected function isPubliclyAccessible(string $filename): bool
