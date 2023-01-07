@@ -10,16 +10,20 @@ use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
 
 final class EventFactory implements InvocationEventFactoryContract
 {
+    /** @param iterable<class-string<InvocationEventContract>> $events */
+    public function __construct(
+        private iterable $events,
+    ) {
+    }
+
     public function make(array $data): InvocationEventContract
     {
-        return match (true) {
-            isset($data['requestContext']['elb']) => ApplicationLoadBalancerEvent::fromResponseData($data),
-            isset($data['httpMethod']) => APIGatewayVersionOneEvent::fromResponseData($data),
-            isset($data['requestContext']['http']['method']) => APIGatewayVersionTwoEvent::fromResponseData($data),
-            isset($data['cli']) => CliEvent::fromResponseData($data),
-            isset($data['ping']) => PingEvent::fromResponseData($data),
-            isset($data['warm']) => WarmEvent::fromResponseData($data),
-            default => throw new InvalidArgumentException('Unknown Lambda event type.'),
-        };
+        foreach ($this->events as $event) {
+            if ($event::shouldHandle($data)) {
+                return $event::fromResponseData($data);
+            }
+        }
+
+        throw new InvalidArgumentException('Unknown Lambda event type.');
     }
 }

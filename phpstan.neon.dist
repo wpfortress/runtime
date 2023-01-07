@@ -7,10 +7,3 @@ parameters:
     paths:
         - bin
         - src
-
-    ignoreErrors:
-        -
-            messages:
-                - '#Parameter \#1 \$data of static method#'
-                - '#Cannot access offset#'
-            path: src/Lambda/Invocation/Events/EventFactory.php

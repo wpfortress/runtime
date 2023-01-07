@@ -12,6 +12,24 @@ use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 final class APIGatewayVersionTwoEventTest extends TestCase
 {
     /** @test */
+    public function it_should_handle_given_data(): void
+    {
+        $shouldHandle = APIGatewayVersionTwoEvent::shouldHandle([
+            'version' => '2.0',
+            'requestContext' => [],
+        ]);
+
+        self::assertTrue($shouldHandle);
+
+        $shouldHandle = APIGatewayVersionTwoEvent::shouldHandle([
+            'version' => '1.0',
+            'requestContext' => [],
+        ]);
+
+        self::assertFalse($shouldHandle);
+    }
+
+    /** @test */
     public function it_forms_correct_event(): void
     {
         $data = [

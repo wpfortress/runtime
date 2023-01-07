@@ -6,6 +6,6 @@ namespace WPFortress\Runtime\Contracts;
 
 interface InvocationContextFactoryContract
 {
-    /** @param array<string, array<array-key, string>> $headers */
+    /** @param array<string, list<string>> $headers */
     public function make(array $headers): InvocationContextContract;
 }

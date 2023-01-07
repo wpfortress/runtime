@@ -8,43 +8,32 @@ use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
 final class ApplicationLoadBalancerEvent implements InvocationHttpEventContract
 {
-    /**
-     * @param array{
-     *  requestContext: array{elb: array{targetGroupArn: string}},
-     *  httpMethod: string,
-     *  path: string,
-     *  queryStringParameters: ?array<string, string>,
-     *  multiValueQueryStringParameters: ?array<string, list<string>>,
-     *  headers: ?array<string, string>,
-     *  multiValueHeaders: ?array<string, list<string>>,
-     *  isBase64Encoded: bool,
-     *  body: string,
-     * } $data
-     */
+    public static function shouldHandle(array $data): bool
+    {
+        return isset($data['requestContext']['elb']);
+    }
+
     public static function fromResponseData(array $data): self
     {
         return new self(
-            method: strtoupper($data['httpMethod']),
-            path: $data['path'],
+            method: strtoupper(strval($data['httpMethod'])),
+            path: strval($data['path']),
             queryString: self::resolveQueryStringFrom($data),
             usesMultiValueHeaders: isset($data['multiValueHeaders']),
             headers: self::resolveHeadersFrom($data),
-            isBase64Encoded: $data['isBase64Encoded'],
+            isBase64Encoded: boolval($data['isBase64Encoded']),
             body: self::resolveBodyFrom($data),
         );
     }
 
-    /**
-     * @param array{
-     *  queryStringParameters: ?array<string, string>,
-     *  multiValueQueryStringParameters: ?array<string, list<string>>,
-     * } $data
-     */
+    /** @param array<string, scalar|mixed[][]> $data */
     private static function resolveQueryStringFrom(array $data): string
     {
         if (isset($data['multiValueQueryStringParameters'])) {
+            /** @var array<string, list<string>> $queryStringParameters */
             $queryStringParameters = $data['multiValueQueryStringParameters'];
         } else {
+            /** @var array<string, string> $queryStringParameters */
             $queryStringParameters = $data['queryStringParameters'] ?? [];
             $queryStringParameters = array_map(fn(string $value): array => [$value], $queryStringParameters);
         }
@@ -63,19 +52,16 @@ final class ApplicationLoadBalancerEvent implements InvocationHttpEventContract
     }
 
     /**
-     * @param array{
-     *  headers: ?array<string, string>,
-     *  multiValueHeaders: ?array<string, list<string>>,
-     *  isBase64Encoded: bool,
-     *  body: string,
-     * } $data
+     * @param array<string, scalar|mixed[][]> $data
      * @return array<string, list<string>>
      */
     private static function resolveHeadersFrom(array $data): array
     {
         if (isset($data['multiValueHeaders'])) {
+            /** @var array<string, list<string>> $headers */
             $headers = $data['multiValueHeaders'];
         } else {
+            /** @var array<string, string> $headers */
             $headers = $data['headers'] ?? [];
             $headers = array_map(fn(string $value): array => [$value], $headers);
         }
@@ -95,21 +81,17 @@ final class ApplicationLoadBalancerEvent implements InvocationHttpEventContract
         return $headers;
     }
 
-    /**
-     * @param array{
-     *  isBase64Encoded: bool,
-     *  body: string,
-     * } $data
-     */
+    /** @param array<string, scalar|mixed[][]> $data */
     private static function resolveBodyFrom(array $data): string
     {
-        if ($data['isBase64Encoded'] === false) {
-            return $data['body'];
+        $body = strval($data['body'] ?? '');
+
+        if (($data['isBase64Encoded'] ?? false) === true) {
+            $body = base64_decode($body, true);
+            $body = $body !== false ? $body : '';
         }
 
-        $body = base64_decode($data['body'], true);
-
-        return $body !== false ? $body : '';
+        return $body;
     }
 
     /** @param array<string, list<string>> $headers */

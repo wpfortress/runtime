@@ -8,5 +8,5 @@ interface InvocationContract
 {
     public function getContext(): InvocationContextContract;
 
-    public function getEvent(): InvocationEventContract|InvocationHttpEventContract;
+    public function getEvent(): InvocationHttpEventContract|InvocationEventContract;
 }

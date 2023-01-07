@@ -12,6 +12,23 @@ use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
 final class ApplicationLoadBalancerEventTest extends TestCase
 {
     /** @test */
+    public function it_should_handle_given_data(): void
+    {
+        $shouldHandle = ApplicationLoadBalancerEvent::shouldHandle([
+            'requestContext' => ['elb' => []],
+        ]);
+
+        self::assertTrue($shouldHandle);
+
+        $shouldHandle = ApplicationLoadBalancerEvent::shouldHandle([
+            'version' => '2.0',
+            'requestContext' => [],
+        ]);
+
+        self::assertFalse($shouldHandle);
+    }
+
+    /** @test */
     public function it_forms_event_without_multi_value_support(): void
     {
         $data = [

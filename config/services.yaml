@@ -1,4 +1,75 @@
+parameters:
+  env(AWS_REGION): 'eu-west-2'
+  env(AWS_LAMBDA_FUNCTION_NAME): ''
+  env(AWS_LAMBDA_RUNTIME_API): ''
+  env(LAMBDA_TASK_ROOT): ''
+  env(_HANDLER): 'index.php'
+  env(FASTCGI_CONFIG_PATH): '/opt/wpfortress/etc/php-fpm.conf'
+  env(FASTCGI_SOCKET_PATH): '/tmp/.wpfortress/php-fpm.sock'
+  env(FASTCGI_PID_PATH): '/tmp/.wpfortress/php-fpm.pid'
+
 services:
   _defaults:
     autowire: true
-    autoconfigure: true
+    bind:
+      string $lambdaFunctionName: '%env(AWS_LAMBDA_FUNCTION_NAME)%'
+      string $lambdaRootDirectory: '%env(LAMBDA_TASK_ROOT)%'
+
+  _instanceof:
+    WPFortress\Runtime\Contracts\InvocationHandlerContract:
+      tags: [ 'handlers' ]
+
+  AsyncAws\Lambda\LambdaClient:
+    arguments:
+      $configuration:
+        region: '%env(AWS_REGION)%'
+
+  hollodotme\FastCGI\Client: ~
+
+  hollodotme\FastCGI\Interfaces\ConfiguresSocketConnection:
+    class: hollodotme\FastCGI\SocketConnections\UnixDomainSocket
+    arguments:
+      $socketPath: '%env(FASTCGI_CONFIG_PATH)%'
+      $connectTimeout: 1000
+      $readWriteTimeout: 900000
+
+  Symfony\Contracts\HttpClient\HttpClientInterface:
+    factory: [ 'Symfony\Component\HttpClient\HttpClient', 'create' ]
+    arguments:
+      $defaultOptions:
+        base_uri: '%env(AWS_LAMBDA_RUNTIME_API)%'
+        headers:
+          Accept: 'application/json'
+
+  WPFortress\Runtime\:
+    resource: '../src'
+    exclude:
+      - '../src/FastCGI/Request.php'
+      - '../src/Lambda/Invocation/Context/Context.php'
+      - '../src/Lambda/Invocation/Events/*Event.php'
+      - '../src/Lambda/Invocation/Responses/*Response.php'
+      - '../src/Lambda/Invocation/Invocation.php'
+
+  WPFortress\Runtime\Contracts\FastCGIProcessManagerContract:
+    class: WPFortress\Runtime\FastCGI\ProcessManager
+    factory: [ 'WPFortress\Runtime\FastCGI\ProcessManager', 'fromConfig' ]
+    arguments:
+      $configPath: '%env(FASTCGI_CONFIG_PATH)%'
+      $socketPath: '%env(FASTCGI_SOCKET_PATH)%'
+      $pidPath: '%env(FASTCGI_PID_PATH)%'
+
+  WPFortress\Runtime\Contracts\InvocationEventFactoryContract:
+    class: WPFortress\Runtime\Lambda\Invocation\Events\EventFactory
+    arguments:
+      $events:
+        - WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent
+        - WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent
+        - WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent
+        - WPFortress\Runtime\Lambda\Invocation\Events\CliEvent
+        - WPFortress\Runtime\Lambda\Invocation\Events\PingEvent
+        - WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent
+
+  WPFortress\Runtime\Contracts\InvocationHandlerBusContract:
+    class: WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus
+    arguments:
+      - !tagged_iterator handlers

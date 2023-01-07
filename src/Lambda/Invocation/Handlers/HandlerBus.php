@@ -6,18 +6,18 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use InvalidArgumentException;
 use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerCollectionContract;
+use WPFortress\Runtime\Contracts\InvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 
-final class HandlerCollection implements InvocationHandlerCollectionContract
+final class HandlerBus implements InvocationHandlerBusContract
 {
-    /** @param InvocationHandlerContract[] $handlers */
+    /** @param iterable<InvocationHandlerContract> $handlers */
     public function __construct(
         private iterable $handlers,
     ) {
     }
 
-    public function pickFor(InvocationContract $invocation): InvocationHandlerContract
+    public function handle(InvocationContract $invocation): InvocationHandlerContract
     {
         foreach ($this->handlers as $handler) {
             if ($handler->shouldHandle($invocation)) {

@@ -21,8 +21,9 @@ final class WarmHandlerTest extends TestCase
     public function it_implements_invocation_handler_contract(): void
     {
         $stubbedLambdaClient = $this->createStub(LambdaClient::class);
+        $lambdaFunctionName = 'foo';
 
-        $handler = new WarmHandler($stubbedLambdaClient);
+        $handler = new WarmHandler($stubbedLambdaClient, $lambdaFunctionName);
 
         self::assertInstanceOf(InvocationHandlerContract::class, $handler);
     }
@@ -31,6 +32,7 @@ final class WarmHandlerTest extends TestCase
     public function it_should_handle_warm_events(): void
     {
         $stubbedLambdaClient = $this->createStub(LambdaClient::class);
+        $lambdaFunctionName = 'foo';
 
         $invocationEvent = new WarmEvent(concurrency: 5);
 
@@ -40,7 +42,7 @@ final class WarmHandlerTest extends TestCase
             ->method('getEvent')
             ->willReturn($invocationEvent);
 
-        $handler = new WarmHandler($stubbedLambdaClient);
+        $handler = new WarmHandler($stubbedLambdaClient, $lambdaFunctionName);
         $shouldHandle = $handler->shouldHandle($mockedInvocation);
 
         self::assertTrue($shouldHandle);
@@ -53,6 +55,8 @@ final class WarmHandlerTest extends TestCase
         $mockedLambdaClient
             ->expects(self::never())
             ->method('invoke');
+
+        $lambdaFunctionName = 'foo';
 
         $invocationEvent = new WarmEvent(concurrency: 1);
 
@@ -69,7 +73,7 @@ final class WarmHandlerTest extends TestCase
             event: $invocationEvent,
         );
 
-        $handler = new WarmHandler($mockedLambdaClient);
+        $handler = new WarmHandler($mockedLambdaClient, $lambdaFunctionName);
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
@@ -79,12 +83,12 @@ final class WarmHandlerTest extends TestCase
     /** @test */
     public function it_handles_warm_event_when_concurrency_greater_than_one(): void
     {
-        putenv('AWS_LAMBDA_FUNCTION_NAME=test-function');
-
         $mockedLambdaClient = $this->createMock(LambdaClient::class);
         $mockedLambdaClient
             ->expects(self::exactly(5))
             ->method('invoke');
+
+        $lambdaFunctionName = 'foo';
 
         $invocationEvent = new WarmEvent(concurrency: 5);
 
@@ -101,7 +105,7 @@ final class WarmHandlerTest extends TestCase
             event: $invocationEvent,
         );
 
-        $handler = new WarmHandler($mockedLambdaClient);
+        $handler = new WarmHandler($mockedLambdaClient, $lambdaFunctionName);
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);

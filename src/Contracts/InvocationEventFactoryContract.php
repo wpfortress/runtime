@@ -6,6 +6,6 @@ namespace WPFortress\Runtime\Contracts;
 
 interface InvocationEventFactoryContract
 {
-    /** @param array<string, mixed> $data */
-    public function make(array $data): InvocationEventContract;
+    /** @param array<string, scalar|mixed[][]> $data */
+    public function make(array $data): InvocationHttpEventContract|InvocationEventContract;
 }
