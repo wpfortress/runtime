@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Lambda\Invocation\Responses\NotFoundHttpResponseLambda;
+use WPFortress\Runtime\Lambda\Invocation\Responses\NotFoundHttpResponse;
 
 final class NotFoundHttpResponseTest extends TestCase
 {
@@ -22,7 +22,7 @@ final class NotFoundHttpResponseTest extends TestCase
         include $template;
         $body = (string)ob_get_clean();
 
-        $errorResponse = NotFoundHttpResponseLambda::make($template);
+        $errorResponse = NotFoundHttpResponse::make($template);
 
         self::assertSame($body, $errorResponse->getBody());
         self::assertSame(['Content-Type' => ['text/html; charset=utf-8']], $errorResponse->getHeaders());

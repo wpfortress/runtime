@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
+use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\AbstractHttpHandler;
 
 final class AbstractHttpHandlerTest extends TestCase
@@ -18,7 +18,7 @@ final class AbstractHttpHandlerTest extends TestCase
     {
         $stubbedInvocationEvent = $this->createStub(LambdaInvocationHttpEventContract::class);
 
-        $stubbedHttpResponseFactory = $this->createStub(InvocationHttpResponseFactoryContract::class);
+        $stubbedHttpResponseFactory = $this->createStub(LambdaInvocationHttpResponseFactoryContract::class);
 
         $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
@@ -50,7 +50,7 @@ final class AbstractHttpHandlerTest extends TestCase
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);
 
-        $stubbedHttpResponseFactory = $this->createStub(InvocationHttpResponseFactoryContract::class);
+        $stubbedHttpResponseFactory = $this->createStub(LambdaInvocationHttpResponseFactoryContract::class);
 
         $stubbedResponse = $this->createStub(InvocationResponseContract::class);
 

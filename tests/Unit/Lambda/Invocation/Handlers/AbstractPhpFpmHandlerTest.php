@@ -9,11 +9,11 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\AbstractPhpFpmHandler;
 
 final class AbstractPhpFpmHandlerTest extends TestCase
@@ -24,7 +24,7 @@ final class AbstractPhpFpmHandlerTest extends TestCase
         $stubbedFastCGIRequestFactory = $this->createStub(FastCGIRequestFactoryContract::class);
         $stubbedFastCGIProcessClient = $this->createStub(FastCGIProcessClientContract::class);
         $stubbedInvocationEvent = $this->createStub(LambdaInvocationHttpEventContract::class);
-        $stubbedHttpResponseFactory = $this->createStub(InvocationHttpResponseFactoryContract::class);
+        $stubbedHttpResponseFactory = $this->createStub(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         $mockedInvocation
@@ -50,7 +50,7 @@ final class AbstractPhpFpmHandlerTest extends TestCase
         $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
         $stubbedInvocationResponse = $this->createStub(InvocationResponseContract::class);
-        $mockedHttpResponseFactory = $this->createMock(InvocationHttpResponseFactoryContract::class);
+        $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);

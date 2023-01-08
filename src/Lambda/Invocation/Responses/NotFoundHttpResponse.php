@@ -7,8 +7,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 use WPFortress\Runtime\Constants\HttpStatus;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 
-final class NotFoundHttpResponseLambda extends AbstractHttpErrorResponse implements
-    LambdaInvocationHttpErrorResponseContract
+final class NotFoundHttpResponse extends AbstractHttpErrorResponse implements LambdaInvocationHttpErrorResponseContract
 {
     public static function make(string $template = '/opt/templates/error.phtml'): self
     {

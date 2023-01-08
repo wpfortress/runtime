@@ -7,11 +7,11 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
@@ -27,7 +27,7 @@ final class HttpResponseFactoryTest extends TestCase
     {
         $httpResponseFactory = new HttpResponseFactory();
 
-        self::assertInstanceOf(InvocationHttpResponseFactoryContract::class, $httpResponseFactory);
+        self::assertInstanceOf(LambdaInvocationHttpResponseFactoryContract::class, $httpResponseFactory);
     }
 
     /** @test */

@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Contracts;
 
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 
-interface InvocationHttpResponseFactoryContract
+interface LambdaInvocationHttpResponseFactoryContract
 {
     public function makeFromHttpErrorResponse(
         LambdaInvocationContract $invocation,

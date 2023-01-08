@@ -6,17 +6,17 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
+use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
 
 abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
 {
     public function __construct(
         protected FastCGIRequestFactoryContract $requestFactory,
         protected FastCGIProcessClientContract $processClient,
-        InvocationHttpResponseFactoryContract $httpResponseFactory,
+        LambdaInvocationHttpResponseFactoryContract $httpResponseFactory,
         string $lambdaRootDirectory,
     ) {
         parent::__construct($httpResponseFactory, $lambdaRootDirectory);
