@@ -5,22 +5,12 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\SingleCommandApplication;
+use WPFortress\Runtime\Console\Application;
 use WPFortress\Runtime\DependencyInjection\ContainerFactory;
 
 $containerFactory = new ContainerFactory();
 $container = $containerFactory->makeFromConfig(__DIR__ . '/../config/services.yaml');
 
-(new SingleCommandApplication())
-    ->setName('WPFortress runtime')
-    ->setVersion('1.0.0')
-    ->addArgument('runtime', InputArgument::REQUIRED, 'The runtime')
-    ->addOption('max-invocations', null, InputOption::VALUE_OPTIONAL, 'The maximum number of invocations', 250)
-    ->setCode(function (InputInterface $input, OutputInterface $output) {
-        $output->write('Hello world!');
-    })
-    ->run();
+/** @var Application $application */
+$application = $container->get(Application::class);
+$application->run();
