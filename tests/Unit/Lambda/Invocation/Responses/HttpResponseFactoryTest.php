@@ -23,7 +23,7 @@ use WPFortress\Runtime\Lambda\Invocation\Responses\HttpResponseFactory;
 final class HttpResponseFactoryTest extends TestCase
 {
     /** @test */
-    public function it_implements_invocation_http_response_factory_contract(): void
+    public function it_implements_lambda_invocation_http_response_factory_contract(): void
     {
         $httpResponseFactory = new HttpResponseFactory();
 

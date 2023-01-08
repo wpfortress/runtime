@@ -17,7 +17,7 @@ use WPFortress\Runtime\Lambda\Invocation\InvocationFactory;
 final class InvocationFactoryTest extends TestCase
 {
     /** @test */
-    public function it_implements_invocation_factory_contract(): void
+    public function it_implements_lambda_invocation_factory_contract(): void
     {
         $stubbedInvocationContextFactory = $this->createStub(LambdaInvocationContextFactoryContract::class);
         $stubbedInvocationEventFactory = $this->createStub(LambdaInvocationEventFactoryContract::class);
