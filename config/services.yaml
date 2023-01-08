@@ -16,6 +16,8 @@ services:
       string $lambdaRootDirectory: '%env(LAMBDA_TASK_ROOT)%'
 
   _instanceof:
+    Symfony\Component\Console\Command\Command:
+      tags: [ 'commands' ]
     WPFortress\Runtime\Contracts\InvocationHandlerContract:
       tags: [ 'handlers' ]
 
@@ -44,12 +46,19 @@ services:
   WPFortress\Runtime\:
     resource: '../src'
     exclude:
+      - '../src/Console'
+      - '../src/Constants'
       - '../src/DependencyInjection'
       - '../src/FastCGI/Request.php'
       - '../src/Lambda/Invocation/Context/Context.php'
       - '../src/Lambda/Invocation/Events/*Event.php'
       - '../src/Lambda/Invocation/Responses/*Response.php'
       - '../src/Lambda/Invocation/Invocation.php'
+
+  WPFortress\Runtime\Console\Application:
+    arguments:
+      - !tagged_iterator commands
+    public: true
 
   WPFortress\Runtime\Contracts\FastCGIProcessManagerContract:
     class: WPFortress\Runtime\FastCGI\ProcessManager
