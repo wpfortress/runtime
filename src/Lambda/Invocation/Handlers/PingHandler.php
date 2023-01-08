@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Lambda\Invocation\Events\PingEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
 
-final class PingHandler implements InvocationHandlerContract
+final class PingHandler implements LambdaInvocationHandlerContract
 {
-    public function shouldHandle(InvocationContract $invocation): bool
+    public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
-        return $invocation->getEvent() instanceof PingEvent;
+        return $invocation->getEvent() instanceof PingEventLambda;
     }
 
-    public function handle(InvocationContract $invocation): InvocationResponseContract
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof PingEvent);
+        assert($invocation->getEvent() instanceof PingEventLambda);
 
         usleep(10000); // 10 ms
 

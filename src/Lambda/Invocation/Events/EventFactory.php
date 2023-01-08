@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use InvalidArgumentException;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
-use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventFactoryContract;
 
-final class EventFactory implements InvocationEventFactoryContract
+final class EventFactory implements LambdaInvocationEventFactoryContract
 {
-    /** @param iterable<class-string<InvocationEventContract>> $events */
+    /** @param iterable<class-string<LambdaInvocationEventContract>> $events */
     public function __construct(
         private iterable $events,
     ) {
     }
 
-    public function make(array $data): InvocationEventContract
+    public function make(array $data): LambdaInvocationEventContract
     {
         foreach ($this->events as $event) {
             if ($event::shouldHandle($data)) {

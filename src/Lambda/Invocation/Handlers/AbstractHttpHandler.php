@@ -4,29 +4,29 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\NotFoundHttpResponse;
 use WPFortress\Runtime\Lambda\Invocation\Responses\StaticFileResponse;
 
 abstract class AbstractHttpHandler
 {
     public function __construct(
-        protected InvocationHttpResponseFactoryContract $httpResponseFactory,
+        protected LambdaInvocationHttpResponseFactoryContract $httpResponseFactory,
         protected string $lambdaRootDirectory,
     ) {
     }
 
-    public function shouldHandle(InvocationContract $invocation): bool
+    public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
-        return $invocation->getEvent() instanceof InvocationHttpEventContract;
+        return $invocation->getEvent() instanceof LambdaInvocationHttpEventContract;
     }
 
-    public function handle(InvocationContract $invocation): InvocationResponseContract
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof InvocationHttpEventContract);
+        assert($invocation->getEvent() instanceof LambdaInvocationHttpEventContract);
 
         $filename = $this->resolveRequestedFilenameFrom($invocation->getEvent());
 
@@ -47,7 +47,7 @@ abstract class AbstractHttpHandler
         return $this->createInvocationResponse($invocation);
     }
 
-    protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
+    protected function resolveRequestedFilenameFrom(LambdaInvocationHttpEventContract $event): string
     {
         return $this->lambdaRootDirectory . '/' . ltrim($event->getPath(), '/');
     }
@@ -62,5 +62,7 @@ abstract class AbstractHttpHandler
         return !is_dir($filename) && file_exists($filename);
     }
 
-    abstract protected function createInvocationResponse(InvocationContract $invocation): InvocationResponseContract;
+    abstract protected function createInvocationResponse(
+        LambdaInvocationContract $invocation
+    ): LambdaInvocationResponseContract;
 }

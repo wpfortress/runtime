@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
-use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
+use WPFortress\Runtime\Lambda\Invocation\Events\PingEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\PingHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
@@ -17,19 +17,19 @@ use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
 final class PingHandlerTest extends TestCase
 {
     /** @test */
-    public function it_implements_invocation_handler_contract(): void
+    public function it_implements_lambda_invocation_handler_contract(): void
     {
         $handler = new PingHandler();
 
-        self::assertInstanceOf(InvocationHandlerContract::class, $handler);
+        self::assertInstanceOf(LambdaInvocationHandlerContract::class, $handler);
     }
 
     /** @test */
     public function it_should_handle_cli_events(): void
     {
-        $invocationEvent = new PingEvent();
+        $invocationEvent = new PingEventLambda();
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -44,7 +44,7 @@ final class PingHandlerTest extends TestCase
     /** @test */
     public function it_handles_ping_event(): void
     {
-        $invocationEvent = new PingEvent();
+        $invocationEvent = new PingEventLambda();
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
@@ -62,7 +62,7 @@ final class PingHandlerTest extends TestCase
         $handler = new PingHandler();
         $response = $handler->handle($invocation);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(PingResponse::class, $response);
     }
 }

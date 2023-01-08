@@ -7,13 +7,13 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 use AsyncAws\Core\Result;
 use AsyncAws\Lambda\Input\InvocationRequest;
 use AsyncAws\Lambda\LambdaClient;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Lambda\Invocation\Events\WarmEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Responses\WarmResponse;
 
-final class WarmHandler implements InvocationHandlerContract
+final class WarmHandler implements LambdaInvocationHandlerContract
 {
     public function __construct(
         private LambdaClient $lambdaClient,
@@ -21,14 +21,14 @@ final class WarmHandler implements InvocationHandlerContract
     ) {
     }
 
-    public function shouldHandle(InvocationContract $invocation): bool
+    public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
-        return $invocation->getEvent() instanceof WarmEvent;
+        return $invocation->getEvent() instanceof WarmEventLambda;
     }
 
-    public function handle(InvocationContract $invocation): InvocationResponseContract
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof WarmEvent);
+        assert($invocation->getEvent() instanceof WarmEventLambda);
 
         $concurrency = $invocation->getEvent()->getConcurrency();
         if ($concurrency <= 1) {

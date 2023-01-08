@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
-use JsonSerializable;
 use Symfony\Component\Process\Process;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 
-final class CliResponse implements InvocationResponseContract, JsonSerializable
+final class CliResponse implements LambdaInvocationResponseContract
 {
     public static function fromProcess(Process $process): self
     {

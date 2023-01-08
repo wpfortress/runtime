@@ -6,17 +6,17 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
 
 abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
 {
     public function __construct(
         protected FastCGIRequestFactoryContract $requestFactory,
         protected FastCGIProcessClientContract $processClient,
-        InvocationHttpResponseFactoryContract $httpResponseFactory,
+        LambdaInvocationHttpResponseFactoryContract $httpResponseFactory,
         string $lambdaRootDirectory,
     ) {
         parent::__construct($httpResponseFactory, $lambdaRootDirectory);
@@ -27,9 +27,9 @@ abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
         return parent::isStaticFile($filename) && !str_contains($filename, '.php');
     }
 
-    protected function createInvocationResponse(InvocationContract $invocation): InvocationResponseContract
+    protected function createInvocationResponse(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof InvocationHttpEventContract);
+        assert($invocation->getEvent() instanceof LambdaInvocationHttpEventContract);
 
         $request = $this->requestFactory->make(
             invocation: $invocation,
@@ -50,5 +50,5 @@ abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
         );
     }
 
-    abstract protected function resolveScriptFilenameFrom(InvocationHttpEventContract $event): string;
+    abstract protected function resolveScriptFilenameFrom(LambdaInvocationHttpEventContract $event): string;
 }

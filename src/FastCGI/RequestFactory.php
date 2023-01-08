@@ -6,16 +6,16 @@ namespace WPFortress\Runtime\FastCGI;
 
 use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 
 final class RequestFactory implements FastCGIRequestFactoryContract
 {
-    public function make(InvocationContract $invocation, string $scriptFilename): ProvidesRequestData
+    public function make(LambdaInvocationContract $invocation, string $scriptFilename): ProvidesRequestData
     {
-        assert($invocation->getEvent() instanceof InvocationHttpEventContract);
+        assert($invocation->getEvent() instanceof LambdaInvocationHttpEventContract);
 
-        /** @var InvocationHttpEventContract $event */
+        /** @var LambdaInvocationHttpEventContract $event */
         $event = $invocation->getEvent();
 
         $path = $event->getPath();

@@ -6,11 +6,11 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use AsyncAws\Lambda\LambdaClient;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
-use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
+use WPFortress\Runtime\Lambda\Invocation\Events\WarmEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\WarmHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 use WPFortress\Runtime\Lambda\Invocation\Responses\WarmResponse;
@@ -18,14 +18,14 @@ use WPFortress\Runtime\Lambda\Invocation\Responses\WarmResponse;
 final class WarmHandlerTest extends TestCase
 {
     /** @test */
-    public function it_implements_invocation_handler_contract(): void
+    public function it_implements_lambda_invocation_handler_contract(): void
     {
         $stubbedLambdaClient = $this->createStub(LambdaClient::class);
         $lambdaFunctionName = 'foo';
 
         $handler = new WarmHandler($stubbedLambdaClient, $lambdaFunctionName);
 
-        self::assertInstanceOf(InvocationHandlerContract::class, $handler);
+        self::assertInstanceOf(LambdaInvocationHandlerContract::class, $handler);
     }
 
     /** @test */
@@ -34,9 +34,9 @@ final class WarmHandlerTest extends TestCase
         $stubbedLambdaClient = $this->createStub(LambdaClient::class);
         $lambdaFunctionName = 'foo';
 
-        $invocationEvent = new WarmEvent(concurrency: 5);
+        $invocationEvent = new WarmEventLambda(concurrency: 5);
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -58,7 +58,7 @@ final class WarmHandlerTest extends TestCase
 
         $lambdaFunctionName = 'foo';
 
-        $invocationEvent = new WarmEvent(concurrency: 1);
+        $invocationEvent = new WarmEventLambda(concurrency: 1);
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
@@ -76,7 +76,7 @@ final class WarmHandlerTest extends TestCase
         $handler = new WarmHandler($mockedLambdaClient, $lambdaFunctionName);
         $response = $handler->handle($invocation);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(WarmResponse::class, $response);
     }
 
@@ -90,7 +90,7 @@ final class WarmHandlerTest extends TestCase
 
         $lambdaFunctionName = 'foo';
 
-        $invocationEvent = new WarmEvent(concurrency: 5);
+        $invocationEvent = new WarmEventLambda(concurrency: 5);
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
@@ -108,7 +108,7 @@ final class WarmHandlerTest extends TestCase
         $handler = new WarmHandler($mockedLambdaClient, $lambdaFunctionName);
         $response = $handler->handle($invocation);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(WarmResponse::class, $response);
     }
 }

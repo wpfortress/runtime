@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 
-final class APIGatewayVersionOneEvent implements InvocationHttpEventContract
+final class APIGatewayVersionOneEvent implements LambdaInvocationHttpEventContract
 {
     public static function shouldHandle(array $data): bool
     {

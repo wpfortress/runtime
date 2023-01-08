@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use JsonSerializable;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
 
 final class PingResponseTest extends TestCase
@@ -17,7 +17,7 @@ final class PingResponseTest extends TestCase
         $response = new PingResponse();
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertSame(['Pong'], $result);
     }

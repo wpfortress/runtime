@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
-use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 
-final class APIGatewayVersionTwoResponse implements InvocationResponseContract, JsonSerializable
+final class APIGatewayVersionTwoResponse implements LambdaInvocationResponseContract
 {
     public static function fromFastCGIResponse(ProvidesResponseData $response): self
     {
@@ -36,7 +35,7 @@ final class APIGatewayVersionTwoResponse implements InvocationResponseContract, 
         );
     }
 
-    public static function fromHttpErrorResponse(InvocationHttpErrorResponseContract $response): self
+    public static function fromHttpErrorResponse(LambdaInvocationHttpErrorResponseContract $response): self
     {
         return new self(
             body: $response->getBody(),
@@ -45,7 +44,7 @@ final class APIGatewayVersionTwoResponse implements InvocationResponseContract, 
         );
     }
 
-    public static function fromStaticResponse(InvocationStaticFileResponseContract $response): self
+    public static function fromStaticResponse(LambdaInvocationStaticFileResponseContract $response): self
     {
         return new self(
             body: $response->getBody(),

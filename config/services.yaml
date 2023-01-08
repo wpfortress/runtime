@@ -18,7 +18,7 @@ services:
   _instanceof:
     Symfony\Component\Console\Command\Command:
       tags: [ 'commands' ]
-    WPFortress\Runtime\Contracts\InvocationHandlerContract:
+    WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract:
       tags: [ 'handlers' ]
 
   AsyncAws\Lambda\LambdaClient:
@@ -68,7 +68,7 @@ services:
       $socketPath: '%env(FASTCGI_SOCKET_PATH)%'
       $pidPath: '%env(FASTCGI_PID_PATH)%'
 
-  WPFortress\Runtime\Contracts\InvocationEventFactoryContract:
+  WPFortress\Runtime\Contracts\LambdaInvocationEventFactoryContract:
     class: WPFortress\Runtime\Lambda\Invocation\Events\EventFactory
     arguments:
       $events:
@@ -79,7 +79,7 @@ services:
         - WPFortress\Runtime\Lambda\Invocation\Events\PingEvent
         - WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent
 
-  WPFortress\Runtime\Contracts\InvocationHandlerBusContract:
+  WPFortress\Runtime\Contracts\LambdaInvocationHandlerBusContract:
     class: WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus
     arguments:
       - !tagged_iterator handlers

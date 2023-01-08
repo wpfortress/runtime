@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'bin/wpfortress-runtime'
+      - 'config/services.yaml'
       - 'src/**.php'
       - 'tests/**.php'
       - 'composer.json'

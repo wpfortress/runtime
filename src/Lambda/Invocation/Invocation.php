@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation;
 
-use WPFortress\Runtime\Contracts\InvocationContextContract;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 
-final class Invocation implements InvocationContract
+final class Invocation implements LambdaInvocationContract
 {
     public function __construct(
-        private InvocationContextContract $context,
-        private InvocationEventContract $event,
+        private LambdaInvocationContextContract $context,
+        private LambdaInvocationEventContract $event,
     ) {
     }
 
-    public function getContext(): InvocationContextContract
+    public function getContext(): LambdaInvocationContextContract
     {
         return $this->context;
     }
 
-    public function getEvent(): InvocationEventContract|InvocationHttpEventContract
+    public function getEvent(): LambdaInvocationEventContract|LambdaInvocationHttpEventContract
     {
         return $this->event;
     }

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Lambda;
+namespace WPFortress\Runtime\Lambda\Runtime;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use WPFortress\Runtime\Contracts\InvocationContract;
-use WPFortress\Runtime\Contracts\InvocationFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 
-final class RuntimeClient implements LambdaRuntimeClientContract
+final class Client implements LambdaRuntimeClientContract
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-        private InvocationFactoryContract $invocationFactory,
+        private LambdaInvocationFactoryContract $invocationFactory,
     ) {
     }
 
-    public function retrieveNextInvocation(): InvocationContract
+    public function retrieveNextInvocation(): LambdaInvocationContract
     {
         return $this->invocationFactory->make(
             response: $this->httpClient->request(
@@ -29,8 +29,10 @@ final class RuntimeClient implements LambdaRuntimeClientContract
         );
     }
 
-    public function sendInvocationResponse(InvocationContract $invocation, InvocationResponseContract $response): void
-    {
+    public function sendInvocationResponse(
+        LambdaInvocationContract $invocation,
+        LambdaInvocationResponseContract $response
+    ): void {
         $this->httpClient->request(
             method: 'POST',
             url: "/2018-06-01/runtime/invocation/{$invocation->getContext()->getAwsRequestId()}/response",
@@ -38,7 +40,7 @@ final class RuntimeClient implements LambdaRuntimeClientContract
         );
     }
 
-    public function sendInvocationError(InvocationContract $invocation, Throwable $exception): void
+    public function sendInvocationError(LambdaInvocationContract $invocation, Throwable $exception): void
     {
         $this->httpClient->request(
             method: 'POST',

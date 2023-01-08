@@ -9,9 +9,9 @@ use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\APIGatewayVersionTwoResponse;
 
 final class APIGatewayVersionTwoResponseTest extends TestCase
@@ -37,7 +37,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
         $response = APIGatewayVersionTwoResponse::fromFastCGIResponse($fastCGIResponse);
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
@@ -49,7 +49,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_http_error_response(): void
     {
-        $errorResponse = $this->createMock(InvocationHttpErrorResponseContract::class);
+        $errorResponse = $this->createMock(LambdaInvocationHttpErrorResponseContract::class);
         $errorResponse
             ->expects(self::once())
             ->method('getBody')
@@ -68,7 +68,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
         $response = APIGatewayVersionTwoResponse::fromHttpErrorResponse($errorResponse);
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::NOT_FOUND, $result['statusCode']);
@@ -80,7 +80,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_static_file_response(): void
     {
-        $staticFileResponse = $this->createMock(InvocationStaticFileResponseContract::class);
+        $staticFileResponse = $this->createMock(LambdaInvocationStaticFileResponseContract::class);
         $staticFileResponse
             ->expects(self::once())
             ->method('getBody')
@@ -95,7 +95,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
         $response = APIGatewayVersionTwoResponse::fromStaticResponse($staticFileResponse);
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertTrue($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
@@ -113,7 +113,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
 
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
@@ -132,7 +132,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
 
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertTrue($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
@@ -151,7 +151,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
 
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
@@ -170,7 +170,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
 
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::OK, $result['statusCode']);
@@ -189,7 +189,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
 
         $result = $response->jsonSerialize();
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(JsonSerializable::class, $response);
         self::assertFalse($result['isBase64Encoded']);
         self::assertSame(HttpStatus::ACCEPTED, $result['statusCode']);

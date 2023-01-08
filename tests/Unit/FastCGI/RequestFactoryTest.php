@@ -8,9 +8,10 @@ use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
 use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationContextContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\FastCGI\RequestFactory;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 
@@ -46,9 +47,14 @@ final class RequestFactoryTest extends TestCase
             ->expects(self::once())
             ->willReturn(1672137475.392833);
 
-        $mockedInvocationContext = $this->createMock(InvocationContextContract::class);
+        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
 
-        $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
+        $mockedInvocationContext
+            ->expects(self::once())
+            ->method('jsonSerialize')
+            ->willReturn(new stdClass());
+
+        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
 
         $mockedInvocationEvent
             ->expects(self::once())
@@ -131,9 +137,14 @@ final class RequestFactoryTest extends TestCase
             ->expects(self::once())
             ->willReturn(1672137475.392833);
 
-        $mockedInvocationContext = $this->createMock(InvocationContextContract::class);
+        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
 
-        $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
+        $mockedInvocationContext
+            ->expects(self::once())
+            ->method('jsonSerialize')
+            ->willReturn(new stdClass());
+
+        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
 
         $mockedInvocationEvent
             ->expects(self::once())

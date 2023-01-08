@@ -8,11 +8,14 @@ use Throwable;
 
 interface LambdaRuntimeClientContract
 {
-    public function retrieveNextInvocation(): InvocationContract;
+    public function retrieveNextInvocation(): LambdaInvocationContract;
 
-    public function sendInvocationResponse(InvocationContract $invocation, InvocationResponseContract $response): void;
+    public function sendInvocationResponse(
+        LambdaInvocationContract $invocation,
+        LambdaInvocationResponseContract $response
+    ): void;
 
-    public function sendInvocationError(InvocationContract $invocation, Throwable $exception): void;
+    public function sendInvocationError(LambdaInvocationContract $invocation, Throwable $exception): void;
 
     public function sendInitialisationError(Throwable $exception): void;
 }

@@ -7,7 +7,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Lambda\Invocation\Events\EventFactory;
-use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
+use WPFortress\Runtime\Lambda\Invocation\Events\PingEventLambda;
 
 final class EventFactoryTest extends TestCase
 {
@@ -28,9 +28,9 @@ final class EventFactoryTest extends TestCase
     {
         $data = ['ping' => true];
 
-        $eventFactory = new EventFactory([PingEvent::class]);
+        $eventFactory = new EventFactory([PingEventLambda::class]);
         $event = $eventFactory->make($data);
 
-        self::assertInstanceOf(PingEvent::class, $event);
+        self::assertInstanceOf(PingEventLambda::class, $event);
     }
 }
