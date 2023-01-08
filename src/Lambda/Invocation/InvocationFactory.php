@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use WPFortress\Runtime\Contracts\InvocationContextFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContextFactoryContract;
 
 final class InvocationFactory implements InvocationFactoryContract
 {
     public function __construct(
-        private InvocationContextFactoryContract $contextFactory,
+        private LambdaInvocationContextFactoryContract $contextFactory,
         private InvocationEventFactoryContract $eventFactory,
     ) {
     }
