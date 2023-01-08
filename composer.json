@@ -42,7 +42,7 @@
         }
     },
     "bin": [
-        "bin/runtime"
+        "bin/wpfortress-runtime"
     ],
     "scripts": {
         "lint": "vendor/bin/phpcs",
