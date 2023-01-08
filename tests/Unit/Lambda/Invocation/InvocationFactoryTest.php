@@ -6,12 +6,12 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
-use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\InvocationFactory;
 
 final class InvocationFactoryTest extends TestCase
@@ -20,7 +20,7 @@ final class InvocationFactoryTest extends TestCase
     public function it_implements_invocation_factory_contract(): void
     {
         $stubbedInvocationContextFactory = $this->createStub(LambdaInvocationContextFactoryContract::class);
-        $stubbedInvocationEventFactory = $this->createStub(InvocationEventFactoryContract::class);
+        $stubbedInvocationEventFactory = $this->createStub(LambdaInvocationEventFactoryContract::class);
 
         $invocationFactory = new InvocationFactory($stubbedInvocationContextFactory, $stubbedInvocationEventFactory);
 
@@ -41,7 +41,7 @@ final class InvocationFactoryTest extends TestCase
 
         $stubbedInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
 
-        $mockedInvocationEventFactory = $this->createMock(InvocationEventFactoryContract::class);
+        $mockedInvocationEventFactory = $this->createMock(LambdaInvocationEventFactoryContract::class);
         $mockedInvocationEventFactory
             ->expects(self::once())
             ->method('make')

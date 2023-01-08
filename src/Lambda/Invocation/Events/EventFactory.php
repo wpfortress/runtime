@@ -6,9 +6,9 @@ namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use InvalidArgumentException;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
-use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventFactoryContract;
 
-final class EventFactory implements InvocationEventFactoryContract
+final class EventFactory implements LambdaInvocationEventFactoryContract
 {
     /** @param iterable<class-string<LambdaInvocationEventContract>> $events */
     public function __construct(
