@@ -8,14 +8,27 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use WPFortress\Runtime\Contracts\InvocationContextContract;
 use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 use WPFortress\Runtime\Lambda\RuntimeClient;
 
 final class RuntimeClientTest extends TestCase
 {
+    /** @test */
+    public function it_implements_lambda_runtime_client_contract(): void
+    {
+        $stubbedHttpClient = $this->createStub(HttpClientInterface::class);
+        $stubbedInvocationFactory = $this->createStub(InvocationFactoryContract::class);
+
+        $runtimeClient = new RuntimeClient($stubbedHttpClient, $stubbedInvocationFactory);
+
+        self::assertInstanceOf(LambdaRuntimeClientContract::class, $runtimeClient);
+    }
+
     /** @test */
     public function it_retrieves_next_invocation(): void
     {
