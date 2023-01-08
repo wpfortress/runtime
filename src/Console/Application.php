@@ -12,12 +12,14 @@ final class Application extends BaseApplication
 {
     public const NAME = 'WPFortress Runtime';
 
+    public const DEFAULT_COMMAND = 'process';
+
     /** @param iterable<Command> $commands */
     public function __construct(iterable $commands)
     {
         parent::__construct(name: self::NAME);
 
         $this->addCommands(commands: $commands instanceof Traversable ? iterator_to_array($commands) : $commands);
-        $this->setDefaultCommand(commandName: 'process', isSingleCommand: true);
+        $this->setDefaultCommand(commandName: self::DEFAULT_COMMAND, isSingleCommand: true);
     }
 }
