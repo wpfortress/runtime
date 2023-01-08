@@ -6,9 +6,9 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerBusContract;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus;
 
 final class HandlerBusTest extends TestCase
@@ -18,7 +18,7 @@ final class HandlerBusTest extends TestCase
     {
         $handlerCollection = new HandlerBus([]);
 
-        self::assertInstanceOf(InvocationHandlerBusContract::class, $handlerCollection);
+        self::assertInstanceOf(LambdaInvocationHandlerBusContract::class, $handlerCollection);
     }
 
     /** @test */

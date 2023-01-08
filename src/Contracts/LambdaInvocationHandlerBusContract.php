@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationHandlerBusContract
+interface LambdaInvocationHandlerBusContract
 {
     public function handle(LambdaInvocationContract $invocation): InvocationHandlerContract;
 }
