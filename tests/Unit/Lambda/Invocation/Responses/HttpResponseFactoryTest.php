@@ -7,11 +7,11 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
-use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
@@ -44,7 +44,7 @@ final class HttpResponseFactoryTest extends TestCase
             ->method('getEvent')
             ->willReturn($stubbedEvent);
 
-        $stubbedHttpErrorResponse = $this->createStub(InvocationHttpErrorResponseContract::class);
+        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
         $httpResponseFactory = new HttpResponseFactory();
         $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
@@ -69,7 +69,7 @@ final class HttpResponseFactoryTest extends TestCase
             ->method('getEvent')
             ->willReturn($event);
 
-        $stubbedHttpErrorResponse = $this->createStub(InvocationHttpErrorResponseContract::class);
+        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
@@ -96,7 +96,7 @@ final class HttpResponseFactoryTest extends TestCase
             ->method('getEvent')
             ->willReturn($event);
 
-        $stubbedHttpErrorResponse = $this->createStub(InvocationHttpErrorResponseContract::class);
+        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
@@ -124,7 +124,7 @@ final class HttpResponseFactoryTest extends TestCase
             ->method('getEvent')
             ->willReturn($event);
 
-        $stubbedHttpErrorResponse = $this->createStub(InvocationHttpErrorResponseContract::class);
+        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);

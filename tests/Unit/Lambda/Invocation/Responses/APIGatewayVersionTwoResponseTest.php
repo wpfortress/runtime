@@ -9,9 +9,9 @@ use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\APIGatewayVersionTwoResponse;
 
 final class APIGatewayVersionTwoResponseTest extends TestCase
@@ -49,7 +49,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_http_error_response(): void
     {
-        $errorResponse = $this->createMock(InvocationHttpErrorResponseContract::class);
+        $errorResponse = $this->createMock(LambdaInvocationHttpErrorResponseContract::class);
         $errorResponse
             ->expects(self::once())
             ->method('getBody')

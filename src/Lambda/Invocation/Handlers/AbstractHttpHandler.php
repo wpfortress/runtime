@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Lambda\Invocation\Responses\NotFoundHttpResponse;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
+use WPFortress\Runtime\Lambda\Invocation\Responses\NotFoundHttpResponseLambda;
 use WPFortress\Runtime\Lambda\Invocation\Responses\StaticFileResponse;
 
 abstract class AbstractHttpHandler
@@ -33,7 +33,7 @@ abstract class AbstractHttpHandler
         if (!$this->isPubliclyAccessible($filename)) {
             return $this->httpResponseFactory->makeFromHttpErrorResponse(
                 invocation: $invocation,
-                response: NotFoundHttpResponse::make(),
+                response: NotFoundHttpResponseLambda::make(),
             );
         }
 

@@ -10,7 +10,7 @@ interface InvocationHttpResponseFactoryContract
 {
     public function makeFromHttpErrorResponse(
         LambdaInvocationContract $invocation,
-        InvocationHttpErrorResponseContract $response
+        LambdaInvocationHttpErrorResponseContract $response
     ): InvocationResponseContract;
 
     public function makeFromFastCGIResponse(

@@ -8,9 +8,9 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 
 final class ApplicationLoadBalancerResponse implements InvocationResponseContract, JsonSerializable
 {
@@ -28,7 +28,7 @@ final class ApplicationLoadBalancerResponse implements InvocationResponseContrac
         );
     }
 
-    public static function fromHttpErrorResponse(InvocationHttpErrorResponseContract $response): self
+    public static function fromHttpErrorResponse(LambdaInvocationHttpErrorResponseContract $response): self
     {
         return new self(
             body: $response->getBody(),
