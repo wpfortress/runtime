@@ -9,7 +9,7 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -27,7 +27,7 @@ final class WordPressHandlerTest extends TestCase
         $stubbedFastCGIProcessClient = $this->createStub(FastCGIProcessClientContract::class);
         $stubbedInvocationEvent = $this->createStub(InvocationHttpEventContract::class);
         $stubbedHttpResponseFactory = $this->createStub(InvocationHttpResponseFactoryContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
@@ -65,7 +65,7 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
@@ -136,7 +136,7 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         mkdir($tmpDir . '/foo');
 
@@ -213,7 +213,7 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         mkdir($tmpDir . '/wp-admin');
 
@@ -292,7 +292,7 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');

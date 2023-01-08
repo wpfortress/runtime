@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\NotFoundHttpResponse;
 use WPFortress\Runtime\Lambda\Invocation\Responses\StaticFileResponse;
 
@@ -19,12 +19,12 @@ abstract class AbstractHttpHandler
     ) {
     }
 
-    public function shouldHandle(InvocationContract $invocation): bool
+    public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
         return $invocation->getEvent() instanceof InvocationHttpEventContract;
     }
 
-    public function handle(InvocationContract $invocation): InvocationResponseContract
+    public function handle(LambdaInvocationContract $invocation): InvocationResponseContract
     {
         assert($invocation->getEvent() instanceof InvocationHttpEventContract);
 
@@ -62,5 +62,7 @@ abstract class AbstractHttpHandler
         return !is_dir($filename) && file_exists($filename);
     }
 
-    abstract protected function createInvocationResponse(InvocationContract $invocation): InvocationResponseContract;
+    abstract protected function createInvocationResponse(
+        LambdaInvocationContract $invocation
+    ): InvocationResponseContract;
 }

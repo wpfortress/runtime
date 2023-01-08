@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 
 final class WordPressHandler extends AbstractPhpFpmHandler implements InvocationHandlerContract
 {
-    public function shouldHandle(InvocationContract $invocation): bool
+    public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
         return parent::shouldHandle($invocation)
             && file_exists($this->lambdaRootDirectory . '/wp-config.php')

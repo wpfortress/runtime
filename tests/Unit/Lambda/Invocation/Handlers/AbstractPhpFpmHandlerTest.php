@@ -9,7 +9,7 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -25,7 +25,7 @@ final class AbstractPhpFpmHandlerTest extends TestCase
         $stubbedFastCGIProcessClient = $this->createStub(FastCGIProcessClientContract::class);
         $stubbedInvocationEvent = $this->createStub(InvocationHttpEventContract::class);
         $stubbedHttpResponseFactory = $this->createStub(InvocationHttpResponseFactoryContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         $mockedInvocation
             ->expects(self::once())
@@ -55,7 +55,7 @@ final class AbstractPhpFpmHandlerTest extends TestCase
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
         $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
 
         $mockedInvocation
             ->expects(self::once())

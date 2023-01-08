@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
@@ -35,7 +35,7 @@ final class RuntimeClientTest extends TestCase
         $mockedResponse = new MockResponse('', ['http_code' => 200]);
         $mockedHttpClient = new MockHttpClient($mockedResponse);
 
-        $stubbedInvocation = $this->createStub(InvocationContract::class);
+        $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
 
         $mockedInvocationFactory = $this->createMock(InvocationFactoryContract::class);
         $mockedInvocationFactory
@@ -63,7 +63,7 @@ final class RuntimeClientTest extends TestCase
             ->method('getAwsRequestId')
             ->willReturn('8476a536-e9f4-11e8-9739-2dfe598c3fcd');
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getContext')
@@ -97,7 +97,7 @@ final class RuntimeClientTest extends TestCase
             ->method('getAwsRequestId')
             ->willReturn('8476a536-e9f4-11e8-9739-2dfe598c3fcd');
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getContext')

@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -18,7 +18,7 @@ use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
 final class HttpResponseFactory implements InvocationHttpResponseFactoryContract
 {
     public function makeFromHttpErrorResponse(
-        InvocationContract $invocation,
+        LambdaInvocationContract $invocation,
         InvocationHttpErrorResponseContract $response
     ): InvocationResponseContract {
         return match (get_class($invocation->getEvent())) {
@@ -30,7 +30,7 @@ final class HttpResponseFactory implements InvocationHttpResponseFactoryContract
     }
 
     public function makeFromFastCGIResponse(
-        InvocationContract $invocation,
+        LambdaInvocationContract $invocation,
         ProvidesResponseData $response,
     ): InvocationResponseContract {
         return match (get_class($invocation->getEvent())) {
@@ -42,7 +42,7 @@ final class HttpResponseFactory implements InvocationHttpResponseFactoryContract
     }
 
     public function makeFromStaticResponse(
-        InvocationContract $invocation,
+        LambdaInvocationContract $invocation,
         InvocationStaticFileResponseContract $response,
     ): InvocationResponseContract {
         return match (get_class($invocation->getEvent())) {

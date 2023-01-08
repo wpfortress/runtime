@@ -8,5 +8,5 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 interface InvocationFactoryContract
 {
-    public function make(ResponseInterface $response): InvocationContract;
+    public function make(ResponseInterface $response): LambdaInvocationContract;
 }

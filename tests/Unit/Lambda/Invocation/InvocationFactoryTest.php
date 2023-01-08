@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationEventContract;
 use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
@@ -61,7 +61,7 @@ final class InvocationFactoryTest extends TestCase
         $invocationFactory = new InvocationFactory($mockedInvocationContextFactory, $mockedInvocationEventFactory);
         $invocation = $invocationFactory->make($mockedResponse);
 
-        self::assertInstanceOf(InvocationContract::class, $invocation);
+        self::assertInstanceOf(LambdaInvocationContract::class, $invocation);
         self::assertSame($stubbedInvocationContext, $invocation->getContext());
         self::assertSame($stubbedInvocationEvent, $invocation->getEvent());
     }

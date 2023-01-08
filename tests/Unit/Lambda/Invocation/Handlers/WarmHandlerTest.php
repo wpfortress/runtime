@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use AsyncAws\Lambda\LambdaClient;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
@@ -36,7 +36,7 @@ final class WarmHandlerTest extends TestCase
 
         $invocationEvent = new WarmEvent(concurrency: 5);
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')

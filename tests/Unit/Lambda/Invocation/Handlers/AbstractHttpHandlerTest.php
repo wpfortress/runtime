@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -20,7 +20,7 @@ final class AbstractHttpHandlerTest extends TestCase
 
         $stubbedHttpResponseFactory = $this->createStub(InvocationHttpResponseFactoryContract::class);
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -45,7 +45,7 @@ final class AbstractHttpHandlerTest extends TestCase
             ->method('getPath')
             ->willReturn('/tmp');
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->method('getEvent')
             ->willReturn($mockedInvocationEvent);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationContract
+interface LambdaInvocationContract
 {
     public function getContext(): LambdaInvocationContextContract;
 

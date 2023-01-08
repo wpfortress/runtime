@@ -9,17 +9,17 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 interface InvocationHttpResponseFactoryContract
 {
     public function makeFromHttpErrorResponse(
-        InvocationContract $invocation,
+        LambdaInvocationContract $invocation,
         InvocationHttpErrorResponseContract $response
     ): InvocationResponseContract;
 
     public function makeFromFastCGIResponse(
-        InvocationContract $invocation,
+        LambdaInvocationContract $invocation,
         ProvidesResponseData $response
     ): InvocationResponseContract;
 
     public function makeFromStaticResponse(
-        InvocationContract $invocation,
+        LambdaInvocationContract $invocation,
         InvocationStaticFileResponseContract $response,
     ): InvocationResponseContract;
 }

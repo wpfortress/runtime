@@ -8,5 +8,5 @@ use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
 
 interface FastCGIRequestFactoryContract
 {
-    public function make(InvocationContract $invocation, string $scriptFilename): ProvidesRequestData;
+    public function make(LambdaInvocationContract $invocation, string $scriptFilename): ProvidesRequestData;
 }

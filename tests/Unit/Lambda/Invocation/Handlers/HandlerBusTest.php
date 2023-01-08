@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus;
@@ -27,7 +27,7 @@ final class HandlerBusTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unhandled Lambda invocation.');
 
-        $stubbedInvocation = $this->createStub(InvocationContract::class);
+        $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
 
         $handlerCollection = new HandlerBus([]);
         $handlerCollection->handle($stubbedInvocation);
@@ -36,7 +36,7 @@ final class HandlerBusTest extends TestCase
     /** @test */
     public function it_picks_handler_for_given_invocation(): void
     {
-        $stubbedInvocation = $this->createStub(InvocationContract::class);
+        $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
         $mockedHandler = $this->createMock(InvocationHandlerContract::class);
 
         $mockedHandler

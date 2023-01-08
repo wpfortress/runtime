@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -27,7 +27,7 @@ abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
         return parent::isStaticFile($filename) && !str_contains($filename, '.php');
     }
 
-    protected function createInvocationResponse(InvocationContract $invocation): InvocationResponseContract
+    protected function createInvocationResponse(LambdaInvocationContract $invocation): InvocationResponseContract
     {
         assert($invocation->getEvent() instanceof InvocationHttpEventContract);
 

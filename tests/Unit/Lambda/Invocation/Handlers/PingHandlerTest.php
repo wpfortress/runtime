@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
@@ -29,7 +29,7 @@ final class PingHandlerTest extends TestCase
     {
         $invocationEvent = new PingEvent();
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')

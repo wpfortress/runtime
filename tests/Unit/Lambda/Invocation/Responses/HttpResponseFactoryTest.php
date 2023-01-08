@@ -7,7 +7,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
@@ -38,7 +38,7 @@ final class HttpResponseFactoryTest extends TestCase
 
         $stubbedEvent = $this->createStub(InvocationEventContract::class);
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -63,7 +63,7 @@ final class HttpResponseFactoryTest extends TestCase
             body: '',
         );
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -90,7 +90,7 @@ final class HttpResponseFactoryTest extends TestCase
             body: '',
         );
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -118,7 +118,7 @@ final class HttpResponseFactoryTest extends TestCase
             body: '',
         );
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -141,7 +141,7 @@ final class HttpResponseFactoryTest extends TestCase
 
         $stubbedEvent = $this->createStub(InvocationEventContract::class);
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -166,7 +166,7 @@ final class HttpResponseFactoryTest extends TestCase
             body: '',
         );
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -193,7 +193,7 @@ final class HttpResponseFactoryTest extends TestCase
             body: '',
         );
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
@@ -221,7 +221,7 @@ final class HttpResponseFactoryTest extends TestCase
             body: '',
         );
 
-        $mockedInvocation = $this->createMock(InvocationContract::class);
+        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
             ->expects(self::once())
             ->method('getEvent')
