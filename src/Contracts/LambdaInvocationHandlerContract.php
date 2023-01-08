@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationHandlerContract
+interface LambdaInvocationHandlerContract
 {
     public function shouldHandle(LambdaInvocationContract $invocation): bool;
 

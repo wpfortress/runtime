@@ -6,5 +6,5 @@ namespace WPFortress\Runtime\Contracts;
 
 interface LambdaInvocationHandlerBusContract
 {
-    public function handle(LambdaInvocationContract $invocation): InvocationHandlerContract;
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationHandlerContract;
 }

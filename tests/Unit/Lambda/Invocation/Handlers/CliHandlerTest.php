@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEventLambda;
-use WPFortress\Runtime\Lambda\Invocation\Handlers\CliHandler;
+use WPFortress\Runtime\Lambda\Invocation\Handlers\CliHandlerLambda;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 use WPFortress\Runtime\Lambda\Invocation\Responses\CliResponse;
 
 final class CliHandlerTest extends TestCase
 {
     /** @test */
-    public function it_implements_invocation_handler_contract(): void
+    public function it_implements_lambda_invocation_handler_contract(): void
     {
-        $handler = new CliHandler();
+        $handler = new CliHandlerLambda();
 
-        self::assertInstanceOf(InvocationHandlerContract::class, $handler);
+        self::assertInstanceOf(LambdaInvocationHandlerContract::class, $handler);
     }
 
     /** @test */
@@ -35,7 +35,7 @@ final class CliHandlerTest extends TestCase
             ->method('getEvent')
             ->willReturn($invocationEvent);
 
-        $handler = new CliHandler();
+        $handler = new CliHandlerLambda();
         $shouldHandle = $handler->shouldHandle($mockedInvocation);
 
         self::assertTrue($shouldHandle);
@@ -59,7 +59,7 @@ final class CliHandlerTest extends TestCase
             event: $invocationEvent,
         );
 
-        $handler = new CliHandler();
+        $handler = new CliHandlerLambda();
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);
@@ -84,7 +84,7 @@ final class CliHandlerTest extends TestCase
             event: $invocationEvent,
         );
 
-        $handler = new CliHandler();
+        $handler = new CliHandlerLambda();
         $response = $handler->handle($invocation);
 
         self::assertInstanceOf(InvocationResponseContract::class, $response);

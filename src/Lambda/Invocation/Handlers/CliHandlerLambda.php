@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use Symfony\Component\Process\Process;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Responses\CliResponse;
 
-final class CliHandler implements InvocationHandlerContract
+final class CliHandlerLambda implements LambdaInvocationHandlerContract
 {
     public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
