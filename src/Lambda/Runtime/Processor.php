@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Lambda;
+namespace WPFortress\Runtime\Lambda\Runtime;
 
 use Throwable;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
@@ -10,7 +10,7 @@ use WPFortress\Runtime\Contracts\LambdaInvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 use WPFortress\Runtime\Contracts\LambdaRuntimeProcessorContract;
 
-final class RuntimeProcessor implements LambdaRuntimeProcessorContract
+final class Processor implements LambdaRuntimeProcessorContract
 {
     public function __construct(
         private FastCGIProcessManagerContract $processManager,
