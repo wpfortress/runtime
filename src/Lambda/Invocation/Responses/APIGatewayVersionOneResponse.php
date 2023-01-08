@@ -9,8 +9,8 @@ use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 
 final class APIGatewayVersionOneResponse implements InvocationResponseContract, JsonSerializable
 {
@@ -37,7 +37,7 @@ final class APIGatewayVersionOneResponse implements InvocationResponseContract, 
         );
     }
 
-    public static function fromStaticResponse(InvocationStaticFileResponseContract $response): self
+    public static function fromStaticResponse(LambdaInvocationStaticFileResponseContract $response): self
     {
         return new self(
             body: $response->getBody(),

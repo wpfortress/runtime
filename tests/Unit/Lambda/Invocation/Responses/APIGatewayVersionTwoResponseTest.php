@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\APIGatewayVersionTwoResponse;
 
 final class APIGatewayVersionTwoResponseTest extends TestCase
@@ -80,7 +80,7 @@ final class APIGatewayVersionTwoResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_static_file_response(): void
     {
-        $staticFileResponse = $this->createMock(InvocationStaticFileResponseContract::class);
+        $staticFileResponse = $this->createMock(LambdaInvocationStaticFileResponseContract::class);
         $staticFileResponse
             ->expects(self::once())
             ->method('getBody')

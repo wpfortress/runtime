@@ -7,10 +7,10 @@ namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
@@ -43,7 +43,7 @@ final class HttpResponseFactory implements LambdaInvocationHttpResponseFactoryCo
 
     public function makeFromStaticResponse(
         LambdaInvocationContract $invocation,
-        InvocationStaticFileResponseContract $response,
+        LambdaInvocationStaticFileResponseContract $response,
     ): InvocationResponseContract {
         return match (get_class($invocation->getEvent())) {
             APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromStaticResponse($response),

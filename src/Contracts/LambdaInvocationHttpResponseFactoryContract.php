@@ -20,6 +20,6 @@ interface LambdaInvocationHttpResponseFactoryContract
 
     public function makeFromStaticResponse(
         LambdaInvocationContract $invocation,
-        InvocationStaticFileResponseContract $response,
+        LambdaInvocationStaticFileResponseContract $response,
     ): InvocationResponseContract;
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
 use Symfony\Component\Mime\MimeTypes;
-use WPFortress\Runtime\Contracts\InvocationStaticFileResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 
-final class StaticFileResponse implements InvocationStaticFileResponseContract
+final class StaticFileResponse implements LambdaInvocationStaticFileResponseContract
 {
     public static function fromFilename(string $filename): self
     {
