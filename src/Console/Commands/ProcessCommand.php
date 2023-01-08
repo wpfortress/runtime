@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Console\Commands;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -28,7 +27,11 @@ final class ProcessCommand extends Command
     {
         $this
             ->setName(name: 'process')
-            ->addArgument(name: 'runtime', mode: InputArgument::REQUIRED, description: 'The runtime (fpm or cli)')
+            ->addOption(
+                name: 'with-fastcgi',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to kickstart FastCGI',
+            )
             ->addOption(
                 name: 'max-invocations',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -39,7 +42,7 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getArgument(name: 'runtime') === 'fpm') {
+        if ($input->getOption(name: 'with-fastcgi') === true) {
             try {
                 $this->processManager->start();
             } catch (Throwable $exception) {
