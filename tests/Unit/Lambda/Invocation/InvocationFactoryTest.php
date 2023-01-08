@@ -6,12 +6,12 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationFactoryContract;
 use WPFortress\Runtime\Lambda\Invocation\InvocationFactory;
 
 final class InvocationFactoryTest extends TestCase
@@ -24,7 +24,7 @@ final class InvocationFactoryTest extends TestCase
 
         $invocationFactory = new InvocationFactory($stubbedInvocationContextFactory, $stubbedInvocationEventFactory);
 
-        self::assertInstanceOf(InvocationFactoryContract::class, $invocationFactory);
+        self::assertInstanceOf(LambdaInvocationFactoryContract::class, $invocationFactory);
     }
 
     /** @test */

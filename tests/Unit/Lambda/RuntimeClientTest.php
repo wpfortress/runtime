@@ -9,10 +9,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 use WPFortress\Runtime\Lambda\RuntimeClient;
 
@@ -22,7 +22,7 @@ final class RuntimeClientTest extends TestCase
     public function it_implements_lambda_runtime_client_contract(): void
     {
         $stubbedHttpClient = $this->createStub(HttpClientInterface::class);
-        $stubbedInvocationFactory = $this->createStub(InvocationFactoryContract::class);
+        $stubbedInvocationFactory = $this->createStub(LambdaInvocationFactoryContract::class);
 
         $runtimeClient = new RuntimeClient($stubbedHttpClient, $stubbedInvocationFactory);
 
@@ -37,7 +37,7 @@ final class RuntimeClientTest extends TestCase
 
         $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
 
-        $mockedInvocationFactory = $this->createMock(InvocationFactoryContract::class);
+        $mockedInvocationFactory = $this->createMock(LambdaInvocationFactoryContract::class);
         $mockedInvocationFactory
             ->expects(self::once())
             ->method('make')
@@ -71,7 +71,7 @@ final class RuntimeClientTest extends TestCase
 
         $mockedInvocationResponse = $this->createStub(InvocationResponseContract::class);
 
-        $stubbedInvocationFactoryContract = $this->createStub(InvocationFactoryContract::class);
+        $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
 
         $runtimeClient = new RuntimeClient($mockedHttpClient, $stubbedInvocationFactoryContract);
         $runtimeClient->sendInvocationResponse($mockedInvocation, $mockedInvocationResponse);
@@ -105,7 +105,7 @@ final class RuntimeClientTest extends TestCase
 
         $exception = new Exception('Test error');
 
-        $stubbedInvocationFactoryContract = $this->createStub(InvocationFactoryContract::class);
+        $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
 
         $runtimeClient = new RuntimeClient($mockedHttpClient, $stubbedInvocationFactoryContract);
         $runtimeClient->sendInvocationError($mockedInvocation, $exception);
@@ -134,7 +134,7 @@ final class RuntimeClientTest extends TestCase
 
         $exception = new Exception('Test error');
 
-        $stubbedInvocationFactoryContract = $this->createStub(InvocationFactoryContract::class);
+        $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
 
         $runtimeClient = new RuntimeClient($mockedHttpClient, $stubbedInvocationFactoryContract);
         $runtimeClient->sendInitialisationError($exception);

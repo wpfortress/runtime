@@ -6,16 +6,16 @@ namespace WPFortress\Runtime\Lambda;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 
 final class RuntimeClient implements LambdaRuntimeClientContract
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-        private InvocationFactoryContract $invocationFactory,
+        private LambdaInvocationFactoryContract $invocationFactory,
     ) {
     }
 
