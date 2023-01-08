@@ -3,7 +3,7 @@ name: phpunit
 on:
   push:
     paths:
-      - 'bin/runtime'
+      - 'bin/wpfortress-runtime'
       - 'src/**.php'
       - 'tests/**.php'
       - 'composer.json'
