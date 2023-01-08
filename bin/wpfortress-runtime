@@ -9,8 +9,8 @@ use WPFortress\Runtime\Console\Application;
 use WPFortress\Runtime\DependencyInjection\ContainerFactory;
 
 $containerFactory = new ContainerFactory();
-$container = $containerFactory->makeFromConfig(__DIR__ . '/../config/services.yaml');
+$container = $containerFactory->makeFromConfig(path: __DIR__ . '/../config/services.yaml');
 
 /** @var Application $application */
-$application = $container->get(Application::class);
+$application = $container->get(id: Application::class);
 $application->run();
