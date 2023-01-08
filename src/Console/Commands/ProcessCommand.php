@@ -11,13 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerBusContract;
-use WPFortress\Runtime\Lambda\RuntimeClient;
+use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 
 final class ProcessCommand extends Command
 {
     public function __construct(
         private FastCGIProcessManagerContract $processManager,
-        private RuntimeClient $runtimeClient,
+        private LambdaRuntimeClientContract $runtimeClient,
         private InvocationHandlerBusContract $handlerBus,
     ) {
         parent::__construct();
