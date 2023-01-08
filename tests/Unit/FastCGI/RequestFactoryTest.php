@@ -8,9 +8,10 @@ use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
 use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\FastCGI\RequestFactory;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 
@@ -47,6 +48,11 @@ final class RequestFactoryTest extends TestCase
             ->willReturn(1672137475.392833);
 
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+
+        $mockedInvocationContext
+            ->expects(self::once())
+            ->method('jsonSerialize')
+            ->willReturn(new stdClass());
 
         $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
 
@@ -132,6 +138,11 @@ final class RequestFactoryTest extends TestCase
             ->willReturn(1672137475.392833);
 
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+
+        $mockedInvocationContext
+            ->expects(self::once())
+            ->method('jsonSerialize')
+            ->willReturn(new stdClass());
 
         $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
 
