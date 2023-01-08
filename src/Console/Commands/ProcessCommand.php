@@ -9,11 +9,18 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
+use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
+use WPFortress\Runtime\Contracts\InvocationHandlerBusContract;
+use WPFortress\Runtime\Lambda\RuntimeClient;
 
 final class ProcessCommand extends Command
 {
-    public function __construct()
-    {
+    public function __construct(
+        private FastCGIProcessManagerContract $processManager,
+        private RuntimeClient $runtimeClient,
+        private InvocationHandlerBusContract $handlerBus,
+    ) {
         parent::__construct();
     }
 
@@ -32,6 +39,36 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return self::SUCCESS;
+        if ($input->getArgument(name: 'runtime') === 'fpm') {
+            try {
+                $this->processManager->start();
+            } catch (Throwable $exception) {
+                $this->runtimeClient->sendInitialisationError($exception);
+
+                return self::FAILURE;
+            }
+        }
+
+        $invocations = 0;
+        $maxInvocations = $input->getOption(name: 'max-invocations');
+
+        while (true) {
+            $invocation = $this->runtimeClient->retrieveNextInvocation();
+
+            try {
+                $this->runtimeClient->sendInvocationResponse(
+                    invocation: $invocation,
+                    response: $this->handlerBus->handle(invocation: $invocation)->handle(invocation: $invocation),
+                );
+
+                ++$invocations;
+            } catch (Throwable $exception) {
+                $this->runtimeClient->sendInvocationError($invocation, $exception);
+            }
+
+            if ($invocation >= $maxInvocations) {
+                return self::SUCCESS;
+            }
+        }
     }
 }
