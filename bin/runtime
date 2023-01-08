@@ -5,21 +5,15 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\SingleCommandApplication;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use WPFortress\Runtime\DependencyInjection\ContainerFactory;
 
-$containerBuilder = new ContainerBuilder();
-
-$loader = new YamlFileLoader($containerBuilder, new FileLocator());
-$loader->load(__DIR__ . '/../config/services.yaml');
-
-$containerBuilder->compile(true);
+$containerFactory = new ContainerFactory();
+$container = $containerFactory->makeFromConfig(__DIR__ . '/../config/services.yaml');
 
 (new SingleCommandApplication())
     ->setName('WPFortress runtime')

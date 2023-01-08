@@ -44,6 +44,7 @@ services:
   WPFortress\Runtime\:
     resource: '../src'
     exclude:
+      - '../src/DependencyInjection'
       - '../src/FastCGI/Request.php'
       - '../src/Lambda/Invocation/Context/Context.php'
       - '../src/Lambda/Invocation/Events/*Event.php'
