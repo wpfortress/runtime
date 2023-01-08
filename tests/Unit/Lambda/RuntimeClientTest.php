@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationFactoryContract;
@@ -69,7 +69,7 @@ final class RuntimeClientTest extends TestCase
             ->method('getContext')
             ->willReturn($mockedInvocationContext);
 
-        $mockedInvocationResponse = $this->createStub(InvocationResponseContract::class);
+        $mockedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
 
         $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
 

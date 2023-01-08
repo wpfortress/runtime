@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
 use WPFortress\Runtime\Lambda\Invocation\Events\PingEventLambda;
-use WPFortress\Runtime\Lambda\Invocation\Handlers\PingHandlerLambda;
+use WPFortress\Runtime\Lambda\Invocation\Handlers\PingHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
 
@@ -19,7 +19,7 @@ final class PingHandlerTest extends TestCase
     /** @test */
     public function it_implements_lambda_invocation_handler_contract(): void
     {
-        $handler = new PingHandlerLambda();
+        $handler = new PingHandler();
 
         self::assertInstanceOf(LambdaInvocationHandlerContract::class, $handler);
     }
@@ -35,7 +35,7 @@ final class PingHandlerTest extends TestCase
             ->method('getEvent')
             ->willReturn($invocationEvent);
 
-        $handler = new PingHandlerLambda();
+        $handler = new PingHandler();
         $shouldHandle = $handler->shouldHandle($mockedInvocation);
 
         self::assertTrue($shouldHandle);
@@ -59,10 +59,10 @@ final class PingHandlerTest extends TestCase
             event: $invocationEvent,
         );
 
-        $handler = new PingHandlerLambda();
+        $handler = new PingHandler();
         $response = $handler->handle($invocation);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(PingResponse::class, $response);
     }
 }

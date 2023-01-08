@@ -8,7 +8,7 @@ use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 
-final class WordPressHandlerLambda extends AbstractPhpFpmHandler implements LambdaInvocationHandlerContract
+final class WordPressHandler extends AbstractPhpFpmHandler implements LambdaInvocationHandlerContract
 {
     public function shouldHandle(LambdaInvocationContract $invocation): bool
     {

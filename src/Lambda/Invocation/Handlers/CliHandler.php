@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use Symfony\Component\Process\Process;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\CliEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Responses\CliResponse;
 
-final class CliHandlerLambda implements LambdaInvocationHandlerContract
+final class CliHandler implements LambdaInvocationHandlerContract
 {
     public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
         return $invocation->getEvent() instanceof CliEventLambda;
     }
 
-    public function handle(LambdaInvocationContract $invocation): InvocationResponseContract
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
         assert($invocation->getEvent() instanceof CliEventLambda);
 

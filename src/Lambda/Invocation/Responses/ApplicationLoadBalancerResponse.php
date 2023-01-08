@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
-use JsonSerializable;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 
-final class ApplicationLoadBalancerResponse implements InvocationResponseContract, JsonSerializable
+final class ApplicationLoadBalancerResponse implements LambdaInvocationResponseContract
 {
     public static function fromFastCGIResponse(ProvidesResponseData $response): self
     {

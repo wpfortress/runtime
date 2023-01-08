@@ -11,15 +11,15 @@ interface LambdaInvocationHttpResponseFactoryContract
     public function makeFromHttpErrorResponse(
         LambdaInvocationContract $invocation,
         LambdaInvocationHttpErrorResponseContract $response
-    ): InvocationResponseContract;
+    ): LambdaInvocationResponseContract;
 
     public function makeFromFastCGIResponse(
         LambdaInvocationContract $invocation,
         ProvidesResponseData $response
-    ): InvocationResponseContract;
+    ): LambdaInvocationResponseContract;
 
     public function makeFromStaticResponse(
         LambdaInvocationContract $invocation,
         LambdaInvocationStaticFileResponseContract $response,
-    ): InvocationResponseContract;
+    ): LambdaInvocationResponseContract;
 }

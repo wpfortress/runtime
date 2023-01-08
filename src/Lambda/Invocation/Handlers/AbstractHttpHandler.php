@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
@@ -24,7 +24,7 @@ abstract class AbstractHttpHandler
         return $invocation->getEvent() instanceof LambdaInvocationHttpEventContract;
     }
 
-    public function handle(LambdaInvocationContract $invocation): InvocationResponseContract
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
         assert($invocation->getEvent() instanceof LambdaInvocationHttpEventContract);
 
@@ -64,5 +64,5 @@ abstract class AbstractHttpHandler
 
     abstract protected function createInvocationResponse(
         LambdaInvocationContract $invocation
-    ): InvocationResponseContract;
+    ): LambdaInvocationResponseContract;
 }

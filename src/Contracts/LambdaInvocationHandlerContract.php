@@ -8,5 +8,5 @@ interface LambdaInvocationHandlerContract
 {
     public function shouldHandle(LambdaInvocationContract $invocation): bool;
 
-    public function handle(LambdaInvocationContract $invocation): InvocationResponseContract;
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract;
 }

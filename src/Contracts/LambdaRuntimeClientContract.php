@@ -12,7 +12,7 @@ interface LambdaRuntimeClientContract
 
     public function sendInvocationResponse(
         LambdaInvocationContract $invocation,
-        InvocationResponseContract $response
+        LambdaInvocationResponseContract $response
     ): void;
 
     public function sendInvocationError(LambdaInvocationContract $invocation, Throwable $exception): void;

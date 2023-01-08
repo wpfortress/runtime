@@ -6,10 +6,10 @@ namespace WPFortress\Runtime\Lambda\Invocation\Responses;
 
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
@@ -20,7 +20,7 @@ final class HttpResponseFactory implements LambdaInvocationHttpResponseFactoryCo
     public function makeFromHttpErrorResponse(
         LambdaInvocationContract $invocation,
         LambdaInvocationHttpErrorResponseContract $response
-    ): InvocationResponseContract {
+    ): LambdaInvocationResponseContract {
         return match (get_class($invocation->getEvent())) {
             APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromHttpErrorResponse($response),
             APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromHttpErrorResponse($response),
@@ -32,7 +32,7 @@ final class HttpResponseFactory implements LambdaInvocationHttpResponseFactoryCo
     public function makeFromFastCGIResponse(
         LambdaInvocationContract $invocation,
         ProvidesResponseData $response,
-    ): InvocationResponseContract {
+    ): LambdaInvocationResponseContract {
         return match (get_class($invocation->getEvent())) {
             APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromFastCGIResponse($response),
             APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromFastCGIResponse($response),
@@ -44,7 +44,7 @@ final class HttpResponseFactory implements LambdaInvocationHttpResponseFactoryCo
     public function makeFromStaticResponse(
         LambdaInvocationContract $invocation,
         LambdaInvocationStaticFileResponseContract $response,
-    ): InvocationResponseContract {
+    ): LambdaInvocationResponseContract {
         return match (get_class($invocation->getEvent())) {
             APIGatewayVersionOneEvent::class => APIGatewayVersionOneResponse::fromStaticResponse($response),
             APIGatewayVersionTwoEvent::class => APIGatewayVersionTwoResponse::fromStaticResponse($response),

@@ -9,12 +9,12 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
-use WPFortress\Runtime\Lambda\Invocation\Handlers\WordPressHandlerLambda;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
+use WPFortress\Runtime\Lambda\Invocation\Handlers\WordPressHandler;
 
 final class WordPressHandlerTest extends TestCase
 {
@@ -37,7 +37,7 @@ final class WordPressHandlerTest extends TestCase
             ->method('getEvent')
             ->willReturn($stubbedInvocationEvent);
 
-        $handler = new WordPressHandlerLambda(
+        $handler = new WordPressHandler(
             $stubbedFastCGIRequestFactory,
             $stubbedFastCGIProcessClient,
             $stubbedHttpResponseFactory,
@@ -59,7 +59,7 @@ final class WordPressHandlerTest extends TestCase
 
         $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
-        $stubbedInvocationResponse = $this->createStub(InvocationResponseContract::class);
+        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
@@ -108,7 +108,7 @@ final class WordPressHandlerTest extends TestCase
             ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
-        $handler = new WordPressHandlerLambda(
+        $handler = new WordPressHandler(
             $mockedFastCGIRequestFactory,
             $mockedFastCGIProcessClient,
             $mockedHttpResponseFactory,
@@ -130,7 +130,7 @@ final class WordPressHandlerTest extends TestCase
 
         $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
-        $stubbedInvocationResponse = $this->createStub(InvocationResponseContract::class);
+        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
@@ -182,7 +182,7 @@ final class WordPressHandlerTest extends TestCase
             ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
-        $handler = new WordPressHandlerLambda(
+        $handler = new WordPressHandler(
             $mockedFastCGIRequestFactory,
             $mockedFastCGIProcessClient,
             $mockedHttpResponseFactory,
@@ -207,7 +207,7 @@ final class WordPressHandlerTest extends TestCase
 
         $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
-        $stubbedInvocationResponse = $this->createStub(InvocationResponseContract::class);
+        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
@@ -261,7 +261,7 @@ final class WordPressHandlerTest extends TestCase
             ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
-        $handler = new WordPressHandlerLambda(
+        $handler = new WordPressHandler(
             $mockedFastCGIRequestFactory,
             $mockedFastCGIProcessClient,
             $mockedHttpResponseFactory,
@@ -286,7 +286,7 @@ final class WordPressHandlerTest extends TestCase
 
         $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
-        $stubbedInvocationResponse = $this->createStub(InvocationResponseContract::class);
+        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
@@ -338,7 +338,7 @@ final class WordPressHandlerTest extends TestCase
             ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
-        $handler = new WordPressHandlerLambda(
+        $handler = new WordPressHandler(
             $mockedFastCGIRequestFactory,
             $mockedFastCGIProcessClient,
             $mockedHttpResponseFactory,

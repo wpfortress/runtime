@@ -7,11 +7,11 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
 use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionTwoEvent;
 use WPFortress\Runtime\Lambda\Invocation\Events\ApplicationLoadBalancerEvent;
@@ -74,7 +74,7 @@ final class HttpResponseFactoryTest extends TestCase
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionOneResponse::class, $response);
     }
 
@@ -101,7 +101,7 @@ final class HttpResponseFactoryTest extends TestCase
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionTwoResponse::class, $response);
     }
 
@@ -129,7 +129,7 @@ final class HttpResponseFactoryTest extends TestCase
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(ApplicationLoadBalancerResponse::class, $response);
     }
 
@@ -177,7 +177,7 @@ final class HttpResponseFactoryTest extends TestCase
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionOneResponse::class, $response);
     }
 
@@ -204,7 +204,7 @@ final class HttpResponseFactoryTest extends TestCase
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionTwoResponse::class, $response);
     }
 
@@ -232,7 +232,7 @@ final class HttpResponseFactoryTest extends TestCase
         $httpResponseFactory = new HttpResponseFactory();
         $response = $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
 
-        self::assertInstanceOf(InvocationResponseContract::class, $response);
+        self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(ApplicationLoadBalancerResponse::class, $response);
     }
 }
