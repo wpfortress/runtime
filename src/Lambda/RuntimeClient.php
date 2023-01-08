@@ -9,8 +9,9 @@ use Throwable;
 use WPFortress\Runtime\Contracts\InvocationContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
+use WPFortress\Runtime\Contracts\LambdaRuntimeClientContract;
 
-final class RuntimeClient
+final class RuntimeClient implements LambdaRuntimeClientContract
 {
     public function __construct(
         private HttpClientInterface $httpClient,
