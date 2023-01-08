@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Context;
 
-use JsonSerializable;
-use WPFortress\Runtime\Contracts\InvocationContextContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 
-final class Context implements InvocationContextContract, JsonSerializable
+final class Context implements LambdaInvocationContextContract
 {
     public function __construct(
         private string $awsRequestId,

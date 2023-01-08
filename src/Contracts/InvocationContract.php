@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Contracts;
 
 interface InvocationContract
 {
-    public function getContext(): InvocationContextContract;
+    public function getContext(): LambdaInvocationContextContract;
 
     public function getEvent(): InvocationHttpEventContract|InvocationEventContract;
 }

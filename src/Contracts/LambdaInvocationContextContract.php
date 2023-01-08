@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationContextContract
+use JsonSerializable;
+
+interface LambdaInvocationContextContract extends JsonSerializable
 {
     public function getAwsRequestId(): string;
 

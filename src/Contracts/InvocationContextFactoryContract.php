@@ -7,5 +7,5 @@ namespace WPFortress\Runtime\Contracts;
 interface InvocationContextFactoryContract
 {
     /** @param array<string, list<string>> $headers */
-    public function make(array $headers): InvocationContextContract;
+    public function make(array $headers): LambdaInvocationContextContract;
 }
