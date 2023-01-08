@@ -8,19 +8,19 @@ use Symfony\Component\Process\Process;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
+use WPFortress\Runtime\Lambda\Invocation\Events\CliEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Responses\CliResponse;
 
 final class CliHandler implements InvocationHandlerContract
 {
     public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
-        return $invocation->getEvent() instanceof CliEvent;
+        return $invocation->getEvent() instanceof CliEventLambda;
     }
 
     public function handle(LambdaInvocationContract $invocation): InvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof CliEvent);
+        assert($invocation->getEvent() instanceof CliEventLambda);
 
         $command = "{$invocation->getEvent()->getCommand()} 2>&1";
         $timeout = max(1, $invocation->getContext()->getRemainingTimeInMs() / 1000 - 1);

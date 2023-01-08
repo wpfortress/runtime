@@ -7,5 +7,5 @@ namespace WPFortress\Runtime\Contracts;
 interface InvocationEventFactoryContract
 {
     /** @param array<string, scalar|mixed[][]> $data */
-    public function make(array $data): InvocationHttpEventContract|InvocationEventContract;
+    public function make(array $data): LambdaInvocationHttpEventContract|LambdaInvocationEventContract;
 }

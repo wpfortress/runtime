@@ -7,7 +7,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 
@@ -29,7 +29,7 @@ abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
 
     protected function createInvocationResponse(LambdaInvocationContract $invocation): InvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof InvocationHttpEventContract);
+        assert($invocation->getEvent() instanceof LambdaInvocationHttpEventContract);
 
         $request = $this->requestFactory->make(
             invocation: $invocation,
@@ -50,5 +50,5 @@ abstract class AbstractPhpFpmHandler extends AbstractHttpHandler
         );
     }
 
-    abstract protected function resolveScriptFilenameFrom(InvocationHttpEventContract $event): string;
+    abstract protected function resolveScriptFilenameFrom(LambdaInvocationHttpEventContract $event): string;
 }

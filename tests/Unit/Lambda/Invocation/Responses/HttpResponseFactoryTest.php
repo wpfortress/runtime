@@ -8,7 +8,7 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpErrorResponseContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
@@ -36,7 +36,7 @@ final class HttpResponseFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unhandled Lambda event type.');
 
-        $stubbedEvent = $this->createStub(InvocationEventContract::class);
+        $stubbedEvent = $this->createStub(LambdaInvocationEventContract::class);
 
         $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
@@ -139,7 +139,7 @@ final class HttpResponseFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unhandled Lambda event type.');
 
-        $stubbedEvent = $this->createStub(InvocationEventContract::class);
+        $stubbedEvent = $this->createStub(LambdaInvocationEventContract::class);
 
         $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation

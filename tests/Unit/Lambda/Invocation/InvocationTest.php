@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 
@@ -16,7 +16,7 @@ final class InvocationTest extends TestCase
     public function it_forms_correct_invocation(): void
     {
         $stubbedInvocationContext = $this->createStub(LambdaInvocationContextContract::class);
-        $stubbedInvocationEvent = $this->createStub(InvocationEventContract::class);
+        $stubbedInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
 
         $invocation = new Invocation(
             context: $stubbedInvocationContext,

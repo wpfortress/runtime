@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationHttpEventContract extends InvocationEventContract
+interface LambdaInvocationHttpEventContract extends LambdaInvocationEventContract
 {
     public function getRequestMethod(): string;
 

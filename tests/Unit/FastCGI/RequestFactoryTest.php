@@ -9,7 +9,7 @@ use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\FastCGI\RequestFactory;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
@@ -48,7 +48,7 @@ final class RequestFactoryTest extends TestCase
 
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
 
-        $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
+        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
 
         $mockedInvocationEvent
             ->expects(self::once())
@@ -133,7 +133,7 @@ final class RequestFactoryTest extends TestCase
 
         $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
 
-        $mockedInvocationEvent = $this->createMock(InvocationHttpEventContract::class);
+        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
 
         $mockedInvocationEvent
             ->expects(self::once())

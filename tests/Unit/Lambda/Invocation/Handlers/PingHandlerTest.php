@@ -9,7 +9,7 @@ use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
-use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
+use WPFortress\Runtime\Lambda\Invocation\Events\PingEventLambda;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\PingHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 use WPFortress\Runtime\Lambda\Invocation\Responses\PingResponse;
@@ -27,7 +27,7 @@ final class PingHandlerTest extends TestCase
     /** @test */
     public function it_should_handle_cli_events(): void
     {
-        $invocationEvent = new PingEvent();
+        $invocationEvent = new PingEventLambda();
 
         $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
@@ -44,7 +44,7 @@ final class PingHandlerTest extends TestCase
     /** @test */
     public function it_handles_ping_event(): void
     {
-        $invocationEvent = new PingEvent();
+        $invocationEvent = new PingEventLambda();
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',

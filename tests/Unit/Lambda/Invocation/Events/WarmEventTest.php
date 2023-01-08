@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
+use WPFortress\Runtime\Lambda\Invocation\Events\WarmEventLambda;
 
 final class WarmEventTest extends TestCase
 {
     /** @test */
     public function it_should_handle_given_data(): void
     {
-        $shouldHandle = WarmEvent::shouldHandle([
+        $shouldHandle = WarmEventLambda::shouldHandle([
             'warm' => 10,
         ]);
 
         self::assertTrue($shouldHandle);
 
-        $shouldHandle = WarmEvent::shouldHandle([
+        $shouldHandle = WarmEventLambda::shouldHandle([
             'requestContext' => [],
         ]);
 
@@ -31,9 +31,9 @@ final class WarmEventTest extends TestCase
     {
         $expectedData = ['warm' => $expectedConcurrency = 10];
 
-        $event = WarmEvent::fromResponseData($expectedData);
+        $event = WarmEventLambda::fromResponseData($expectedData);
 
-        self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(LambdaInvocationEventContract::class, $event);
         self::assertSame($expectedConcurrency, $event->getConcurrency());
     }
 }

@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\CliEvent;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
+use WPFortress\Runtime\Lambda\Invocation\Events\CliEventLambda;
 
 final class CliEventTest extends TestCase
 {
     /** @test */
     public function it_should_handle_given_data(): void
     {
-        $shouldHandle = CliEvent::shouldHandle([
+        $shouldHandle = CliEventLambda::shouldHandle([
             'cli' => 'foo',
         ]);
 
         self::assertTrue($shouldHandle);
 
-        $shouldHandle = CliEvent::shouldHandle([
+        $shouldHandle = CliEventLambda::shouldHandle([
             'requestContext' => [],
         ]);
 
@@ -31,9 +31,9 @@ final class CliEventTest extends TestCase
     {
         $expectedData = ['cli' => $expectedCommand = 'foo'];
 
-        $event = CliEvent::fromResponseData($expectedData);
+        $event = CliEventLambda::fromResponseData($expectedData);
 
-        self::assertInstanceOf(InvocationEventContract::class, $event);
+        self::assertInstanceOf(LambdaInvocationEventContract::class, $event);
         self::assertSame($expectedCommand, $event->getCommand());
     }
 }

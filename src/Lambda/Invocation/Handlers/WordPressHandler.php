@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\InvocationHandlerContract;
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 
 final class WordPressHandler extends AbstractPhpFpmHandler implements InvocationHandlerContract
 {
@@ -17,7 +17,7 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
             && file_exists($this->lambdaRootDirectory . '/index.php');
     }
 
-    protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
+    protected function resolveRequestedFilenameFrom(LambdaInvocationHttpEventContract $event): string
     {
         $path = $event->getPath();
 
@@ -38,7 +38,7 @@ final class WordPressHandler extends AbstractPhpFpmHandler implements Invocation
         return $this->lambdaRootDirectory . '/' . ltrim($path, '/');
     }
 
-    protected function resolveScriptFilenameFrom(InvocationHttpEventContract $event): string
+    protected function resolveScriptFilenameFrom(LambdaInvocationHttpEventContract $event): string
     {
         $requestedFilename = $this->resolveRequestedFilenameFrom($event);
 

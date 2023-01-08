@@ -7,7 +7,7 @@ namespace WPFortress\Runtime\Tests\Lambda\Invocation;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
-use WPFortress\Runtime\Contracts\InvocationEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 use WPFortress\Runtime\Contracts\InvocationEventFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
@@ -39,7 +39,7 @@ final class InvocationFactoryTest extends TestCase
             ->with([])
             ->willReturn($stubbedInvocationContext);
 
-        $stubbedInvocationEvent = $this->createStub(InvocationEventContract::class);
+        $stubbedInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
 
         $mockedInvocationEventFactory = $this->createMock(InvocationEventFactoryContract::class);
         $mockedInvocationEventFactory

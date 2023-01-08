@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Contracts;
 
-interface InvocationEventContract
+interface LambdaInvocationEventContract
 {
     /** @param array<string, scalar|mixed[][]> $data */
     public static function shouldHandle(array $data): bool;

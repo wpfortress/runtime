@@ -8,5 +8,5 @@ interface LambdaInvocationContract
 {
     public function getContext(): LambdaInvocationContextContract;
 
-    public function getEvent(): InvocationHttpEventContract|InvocationEventContract;
+    public function getEvent(): LambdaInvocationHttpEventContract|LambdaInvocationEventContract;
 }

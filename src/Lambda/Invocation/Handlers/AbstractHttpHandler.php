@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\Lambda\Invocation\Handlers;
 
-use WPFortress\Runtime\Contracts\InvocationHttpEventContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\InvocationHttpResponseFactoryContract;
 use WPFortress\Runtime\Contracts\InvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
@@ -21,12 +21,12 @@ abstract class AbstractHttpHandler
 
     public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
-        return $invocation->getEvent() instanceof InvocationHttpEventContract;
+        return $invocation->getEvent() instanceof LambdaInvocationHttpEventContract;
     }
 
     public function handle(LambdaInvocationContract $invocation): InvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof InvocationHttpEventContract);
+        assert($invocation->getEvent() instanceof LambdaInvocationHttpEventContract);
 
         $filename = $this->resolveRequestedFilenameFrom($invocation->getEvent());
 
@@ -47,7 +47,7 @@ abstract class AbstractHttpHandler
         return $this->createInvocationResponse($invocation);
     }
 
-    protected function resolveRequestedFilenameFrom(InvocationHttpEventContract $event): string
+    protected function resolveRequestedFilenameFrom(LambdaInvocationHttpEventContract $event): string
     {
         return $this->lambdaRootDirectory . '/' . ltrim($event->getPath(), '/');
     }
