@@ -46,7 +46,7 @@ services:
   WPFortress\Runtime\:
     resource: '../src'
     exclude:
-      - '../src/Console'
+      - '../src/Console/Application.php'
       - '../src/Constants'
       - '../src/DependencyInjection'
       - '../src/FastCGI/Request.php'

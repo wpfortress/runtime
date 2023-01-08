@@ -15,9 +15,9 @@ final class Application extends BaseApplication
     /** @param iterable<Command> $commands */
     public function __construct(iterable $commands)
     {
-        parent::__construct(self::NAME);
+        parent::__construct(name: self::NAME);
 
-        $this->addCommands($commands instanceof Traversable ? iterator_to_array($commands) : $commands);
-        $this->setDefaultCommand('process');
+        $this->addCommands(commands: $commands instanceof Traversable ? iterator_to_array($commands) : $commands);
+        $this->setDefaultCommand(commandName: 'process', isSingleCommand: true);
     }
 }
