@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\FastCGI;
+namespace WPFortress\Runtime\FastCGI\Process;
 
 use Exception;
-use hollodotme\FastCGI\Client;
 use hollodotme\FastCGI\Exceptions\TimedoutException;
 use hollodotme\FastCGI\Interfaces\ConfiguresSocketConnection;
 use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
@@ -14,10 +13,10 @@ use Throwable;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
 
-final class ProcessClient implements FastCGIProcessClientContract
+final class Client implements FastCGIProcessClientContract
 {
     public function __construct(
-        private Client $client,
+        private \hollodotme\FastCGI\Client $client,
         private ConfiguresSocketConnection $connection,
         private FastCGIProcessManagerContract $processManager,
     ) {

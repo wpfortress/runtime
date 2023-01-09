@@ -49,7 +49,7 @@ services:
       - '../src/Console/Application.php'
       - '../src/Constants'
       - '../src/DependencyInjection'
-      - '../src/FastCGI/Request.php'
+      - '../src/FastCGI/Request/Request.php'
       - '../src/Lambda/Invocation/Context/Context.php'
       - '../src/Lambda/Invocation/Events/*Event.php'
       - '../src/Lambda/Invocation/Responses/*Response.php'
@@ -61,8 +61,8 @@ services:
     public: true
 
   WPFortress\Runtime\Contracts\FastCGIProcessManagerContract:
-    class: WPFortress\Runtime\FastCGI\ProcessManager
-    factory: [ 'WPFortress\Runtime\FastCGI\ProcessManager', 'fromConfig' ]
+    class: WPFortress\Runtime\FastCGI\Process\Manager
+    factory: [ 'WPFortress\Runtime\FastCGI\Process\Manager', 'fromConfig' ]
     arguments:
       $configPath: '%env(FASTCGI_CONFIG_PATH)%'
       $socketPath: '%env(FASTCGI_SOCKET_PATH)%'

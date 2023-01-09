@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\FastCGI;
+namespace WPFortress\Runtime\Tests\FastCGI\Process;
 
 use Exception;
-use hollodotme\FastCGI\Client;
 use hollodotme\FastCGI\Exceptions\TimedoutException;
 use hollodotme\FastCGI\Interfaces\ConfiguresSocketConnection;
 use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
@@ -13,18 +12,18 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
-use WPFortress\Runtime\FastCGI\ProcessClient;
+use WPFortress\Runtime\FastCGI\Process\Client;
 
-final class ProcessClientTest extends TestCase
+final class ClientTest extends TestCase
 {
     /** @test */
     public function it_implements_fast_cgi_process_client_contract(): void
     {
-        $stubbedClient = $this->createStub(Client::class);
+        $stubbedClient = $this->createStub(\hollodotme\FastCGI\Client::class);
         $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
         $stubbedProcessManager = $this->createStub(FastCGIProcessManagerContract::class);
 
-        $processClient = new ProcessClient(
+        $processClient = new Client(
             client: $stubbedClient,
             connection: $stubbedConnection,
             processManager: $stubbedProcessManager,
@@ -34,14 +33,14 @@ final class ProcessClientTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_given_request(): void
+    public function it_sends_given_request(): void
     {
         $stubbedRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedResponse = $this->createStub(ProvidesResponseData::class);
 
         $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
 
-        $mockedClient = $this->createMock(Client::class);
+        $mockedClient = $this->createMock(\hollodotme\FastCGI\Client::class);
         $mockedClient
             ->expects(self::once())
             ->method('sendAsyncRequest')
@@ -58,7 +57,7 @@ final class ProcessClientTest extends TestCase
             ->expects(self::once())
             ->method('ensureStillRunning');
 
-        $processClient = new ProcessClient(
+        $processClient = new Client(
             client: $mockedClient,
             connection: $stubbedConnection,
             processManager: $mockedProcessManager,
@@ -78,7 +77,7 @@ final class ProcessClientTest extends TestCase
 
         $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
 
-        $mockedClient = $this->createMock(Client::class);
+        $mockedClient = $this->createMock(\hollodotme\FastCGI\Client::class);
         $mockedClient
             ->expects(self::once())
             ->method('sendAsyncRequest')
@@ -94,7 +93,7 @@ final class ProcessClientTest extends TestCase
         $mockedProcessManager->expects(self::once())->method('stop');
         $mockedProcessManager->expects(self::once())->method('start');
 
-        $processClient = new ProcessClient(
+        $processClient = new Client(
             client: $mockedClient,
             connection: $stubbedConnection,
             processManager: $mockedProcessManager,
@@ -112,7 +111,7 @@ final class ProcessClientTest extends TestCase
 
         $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
 
-        $mockedClient = $this->createMock(Client::class);
+        $mockedClient = $this->createMock(\hollodotme\FastCGI\Client::class);
         $mockedClient
             ->expects(self::once())
             ->method('sendAsyncRequest')
@@ -128,7 +127,7 @@ final class ProcessClientTest extends TestCase
         $mockedProcessManager->expects(self::once())->method('stop');
         $mockedProcessManager->expects(self::once())->method('start');
 
-        $processClient = new ProcessClient(
+        $processClient = new Client(
             client: $mockedClient,
             connection: $stubbedConnection,
             processManager: $mockedProcessManager,
