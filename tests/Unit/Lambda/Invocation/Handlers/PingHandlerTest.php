@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
+namespace WPFortress\Runtime\Tests\Unit\Lambda\Invocation\Responses;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;

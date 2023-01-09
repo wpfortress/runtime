@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\Lambda\Runtime;
+namespace WPFortress\Runtime\Tests\Unit\Lambda\Runtime;
 
 use Exception;
 use PHPUnit\Framework\TestCase;

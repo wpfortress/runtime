@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\FastCGI\Process;
+namespace WPFortress\Runtime\Tests\Unit\FastCGI\Process;
 
 use Exception;
 use hollodotme\FastCGI\Exceptions\TimedoutException;

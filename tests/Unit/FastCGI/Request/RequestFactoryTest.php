@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\FastCGI\Request;
+namespace WPFortress\Runtime\Tests\Unit\FastCGI\Request;
 
 use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
 use phpmock\phpunit\PHPMock;
