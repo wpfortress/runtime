@@ -49,7 +49,7 @@ services:
       - '../src/Console/Application.php'
       - '../src/Constants'
       - '../src/DependencyInjection'
-      - '../src/FastCGI/Request.php'
+      - '../src/FastCGI/Request/Request.php'
       - '../src/Lambda/Invocation/Context/Context.php'
       - '../src/Lambda/Invocation/Events/*Event.php'
       - '../src/Lambda/Invocation/Responses/*Response.php'

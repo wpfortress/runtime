@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\FastCGI;
+namespace WPFortress\Runtime\Tests\FastCGI\Request;
 
 use hollodotme\FastCGI\Requests\AbstractRequest;
 use PHPUnit\Framework\TestCase;
-use WPFortress\Runtime\FastCGI\Request;
+use WPFortress\Runtime\FastCGI\Request\Request;
 
 final class RequestTest extends TestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\FastCGI;
+namespace WPFortress\Runtime\Tests\FastCGI\Request;
 
 use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
 use phpmock\phpunit\PHPMock;
@@ -12,7 +12,7 @@ use stdClass;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
-use WPFortress\Runtime\FastCGI\RequestFactory;
+use WPFortress\Runtime\FastCGI\Request\RequestFactory;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 
 final class RequestFactoryTest extends TestCase
