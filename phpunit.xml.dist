@@ -39,4 +39,8 @@
     <logging>
         <junit outputFile="build/report.junit.xml"/>
     </logging>
+
+    <php>
+        <env name="AWS_LAMBDA_RUNTIME_API" value="http://localhost:8080"/>
+    </php>
 </phpunit>
