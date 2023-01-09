@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 
-final class CliEventLambda implements LambdaInvocationEventContract
+final class CliEvent implements LambdaInvocationEventContract
 {
     public static function shouldHandle(array $data): bool
     {

@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 
-final class WarmEventLambda implements LambdaInvocationEventContract
+final class WarmEvent implements LambdaInvocationEventContract
 {
     public static function shouldHandle(array $data): bool
     {
