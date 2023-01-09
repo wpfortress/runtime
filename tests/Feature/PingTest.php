@@ -13,12 +13,22 @@ use WPFortress\Runtime\DependencyInjection\ContainerFactory;
 
 final class PingTest extends TestCase
 {
+    private MockWebServer $mockWebServer;
+
+    protected function setUp(): void
+    {
+        $this->mockWebServer = new MockWebServer(port: 8080);
+        $this->mockWebServer->start();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->mockWebServer->stop();
+    }
+
     /** @test */
     public function it_processes_ping_invocation(): void
     {
-        $server = new MockWebServer(port: 8080);
-        $server->start();
-
         $response = new Response(
             body: json_encode(['ping' => true]),
             headers: [
@@ -29,7 +39,7 @@ final class PingTest extends TestCase
             ],
         );
 
-        $server->setResponseOfPath(
+        $this->mockWebServer->setResponseOfPath(
             path: '/2018-06-01/runtime/invocation/next',
             response: $response,
         );
@@ -47,7 +57,7 @@ final class PingTest extends TestCase
 
         $commandTester->assertCommandIsSuccessful();
 
-        $lastRequest = $server->getLastRequest();
+        $lastRequest = $this->mockWebServer->getLastRequest();
 
         self::assertNotNull(actual: $lastRequest);
         self::assertStringContainsString(
