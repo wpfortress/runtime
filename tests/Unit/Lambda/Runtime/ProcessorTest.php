@@ -24,9 +24,9 @@ final class ProcessorTest extends TestCase
         $stubbedLambdaInvocationHandlerBus = $this->createStub(LambdaInvocationHandlerBusContract::class);
 
         $processor = new Processor(
-            processManager: $stubbedFastCGIProcessManager,
-            runtimeClient: $stubbedLambdaRuntimeClient,
-            handlerBus: $stubbedLambdaInvocationHandlerBus,
+            fastCGIProcessManager: $stubbedFastCGIProcessManager,
+            lambdaRuntimeClient: $stubbedLambdaRuntimeClient,
+            lambdaInvocationHandlerBus: $stubbedLambdaInvocationHandlerBus,
         );
 
         self::assertInstanceOf(LambdaRuntimeProcessorContract::class, $processor);
@@ -52,9 +52,9 @@ final class ProcessorTest extends TestCase
             ->with(self::equalTo($exception));
 
         $processor = new Processor(
-            processManager: $mockedFastCGIProcessManager,
-            runtimeClient: $mockedLambdaRuntimeClient,
-            handlerBus: $stubbedLambdaInvocationHandlerBus,
+            fastCGIProcessManager: $mockedFastCGIProcessManager,
+            lambdaRuntimeClient: $mockedLambdaRuntimeClient,
+            lambdaInvocationHandlerBus: $stubbedLambdaInvocationHandlerBus,
         );
         $processor->startFastCGIProcess();
     }
@@ -71,9 +71,9 @@ final class ProcessorTest extends TestCase
             ->method('start');
 
         $processor = new Processor(
-            processManager: $mockedFastCGIProcessManager,
-            runtimeClient: $stubbedLambdaRuntimeClient,
-            handlerBus: $stubbedLambdaInvocationHandlerBus,
+            fastCGIProcessManager: $mockedFastCGIProcessManager,
+            lambdaRuntimeClient: $stubbedLambdaRuntimeClient,
+            lambdaInvocationHandlerBus: $stubbedLambdaInvocationHandlerBus,
         );
         $processor->startFastCGIProcess();
     }
@@ -105,9 +105,9 @@ final class ProcessorTest extends TestCase
             ->willThrowException(new Exception());
 
         $processor = new Processor(
-            processManager: $stubbedFastCGIProcessManager,
-            runtimeClient: $mockedLambdaRuntimeClient,
-            handlerBus: $mockedLambdaInvocationHandlerBus,
+            fastCGIProcessManager: $stubbedFastCGIProcessManager,
+            lambdaRuntimeClient: $mockedLambdaRuntimeClient,
+            lambdaInvocationHandlerBus: $mockedLambdaInvocationHandlerBus,
         );
         $processor->processNextInvocation();
     }
@@ -138,9 +138,9 @@ final class ProcessorTest extends TestCase
             ->willReturn($stubbedLambdaInvocationResponse);
 
         $processor = new Processor(
-            processManager: $stubbedFastCGIProcessManager,
-            runtimeClient: $mockedLambdaRuntimeClient,
-            handlerBus: $mockedLambdaInvocationHandlerBus,
+            fastCGIProcessManager: $stubbedFastCGIProcessManager,
+            lambdaRuntimeClient: $mockedLambdaRuntimeClient,
+            lambdaInvocationHandlerBus: $mockedLambdaInvocationHandlerBus,
         );
         $processor->processNextInvocation();
     }
