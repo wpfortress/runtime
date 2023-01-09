@@ -6,7 +6,7 @@ namespace WPFortress\Runtime\Lambda\Invocation\Events;
 
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
 
-final class PingEventLambda implements LambdaInvocationEventContract
+final class PingEvent implements LambdaInvocationEventContract
 {
     public static function shouldHandle(array $data): bool
     {

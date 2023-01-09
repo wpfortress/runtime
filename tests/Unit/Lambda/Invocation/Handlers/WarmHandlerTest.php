@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\Lambda\Invocation\Responses;
+namespace WPFortress\Runtime\Tests\Unit\Lambda\Invocation\Responses;
 
 use AsyncAws\Lambda\LambdaClient;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,7 @@ use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Context\Context;
-use WPFortress\Runtime\Lambda\Invocation\Events\WarmEventLambda;
+use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\WarmHandler;
 use WPFortress\Runtime\Lambda\Invocation\Invocation;
 use WPFortress\Runtime\Lambda\Invocation\Responses\WarmResponse;
@@ -34,7 +34,7 @@ final class WarmHandlerTest extends TestCase
         $stubbedLambdaClient = $this->createStub(LambdaClient::class);
         $lambdaFunctionName = 'foo';
 
-        $invocationEvent = new WarmEventLambda(concurrency: 5);
+        $invocationEvent = new WarmEvent(concurrency: 5);
 
         $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
         $mockedInvocation
@@ -58,7 +58,7 @@ final class WarmHandlerTest extends TestCase
 
         $lambdaFunctionName = 'foo';
 
-        $invocationEvent = new WarmEventLambda(concurrency: 1);
+        $invocationEvent = new WarmEvent(concurrency: 1);
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',
@@ -90,7 +90,7 @@ final class WarmHandlerTest extends TestCase
 
         $lambdaFunctionName = 'foo';
 
-        $invocationEvent = new WarmEventLambda(concurrency: 5);
+        $invocationEvent = new WarmEvent(concurrency: 5);
 
         $invocationContext = new Context(
             awsRequestId: '8476a536-e9f4-11e8-9739-2dfe598c3fcd',

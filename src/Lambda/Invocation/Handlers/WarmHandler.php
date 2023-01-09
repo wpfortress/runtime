@@ -10,7 +10,7 @@ use AsyncAws\Lambda\LambdaClient;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\WarmEventLambda;
+use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
 use WPFortress\Runtime\Lambda\Invocation\Responses\WarmResponse;
 
 final class WarmHandler implements LambdaInvocationHandlerContract
@@ -23,12 +23,12 @@ final class WarmHandler implements LambdaInvocationHandlerContract
 
     public function shouldHandle(LambdaInvocationContract $invocation): bool
     {
-        return $invocation->getEvent() instanceof WarmEventLambda;
+        return $invocation->getEvent() instanceof WarmEvent;
     }
 
     public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
-        assert($invocation->getEvent() instanceof WarmEventLambda);
+        assert($invocation->getEvent() instanceof WarmEvent);
 
         $concurrency = $invocation->getEvent()->getConcurrency();
         if ($concurrency <= 1) {

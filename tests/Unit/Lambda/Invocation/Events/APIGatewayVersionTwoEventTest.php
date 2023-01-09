@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
+namespace WPFortress\Runtime\Tests\Unit\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;

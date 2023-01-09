@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\Console\Commands;
+namespace WPFortress\Runtime\Tests\Unit\Console\Commands;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\Tests\Lambda\Invocation\Events;
+namespace WPFortress\Runtime\Tests\Unit\Lambda\Invocation\Events;
 
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\LambdaInvocationEventContract;
-use WPFortress\Runtime\Lambda\Invocation\Events\PingEventLambda;
+use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
 
 final class PingEventTest extends TestCase
 {
     /** @test */
     public function it_should_handle_given_data(): void
     {
-        $shouldHandle = PingEventLambda::shouldHandle([
+        $shouldHandle = PingEvent::shouldHandle([
             'ping' => true,
         ]);
 
         self::assertTrue($shouldHandle);
 
-        $shouldHandle = PingEventLambda::shouldHandle([
+        $shouldHandle = PingEvent::shouldHandle([
             'requestContext' => [],
         ]);
 
@@ -31,7 +31,7 @@ final class PingEventTest extends TestCase
     {
         $expectedData = ['ping' => true];
 
-        $event = PingEventLambda::fromResponseData($expectedData);
+        $event = PingEvent::fromResponseData($expectedData);
 
         self::assertInstanceOf(LambdaInvocationEventContract::class, $event);
     }
