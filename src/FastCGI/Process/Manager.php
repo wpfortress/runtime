@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace WPFortress\Runtime\FastCGI;
+namespace WPFortress\Runtime\FastCGI\Process;
 
 use Exception;
 use Symfony\Component\Process\Process;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
 
-final class ProcessManager implements FastCGIProcessManagerContract
+final class Manager implements FastCGIProcessManagerContract
 {
     private const SIGTERM = 15;
 
