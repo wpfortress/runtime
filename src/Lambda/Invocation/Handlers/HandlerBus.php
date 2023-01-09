@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 
 final class HandlerBus implements LambdaInvocationHandlerBusContract
 {
@@ -17,11 +18,11 @@ final class HandlerBus implements LambdaInvocationHandlerBusContract
     ) {
     }
 
-    public function handle(LambdaInvocationContract $invocation): LambdaInvocationHandlerContract
+    public function handle(LambdaInvocationContract $invocation): LambdaInvocationResponseContract
     {
         foreach ($this->handlers as $handler) {
             if ($handler->shouldHandle($invocation)) {
-                return $handler;
+                return $handler->handle($invocation);
             }
         }
 

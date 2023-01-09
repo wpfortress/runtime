@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerBusContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHandlerContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\HandlerBus;
 
 final class HandlerBusTest extends TestCase
@@ -16,9 +17,9 @@ final class HandlerBusTest extends TestCase
     /** @test */
     public function it_implements_lambda_invocation_handler_collection_contract(): void
     {
-        $handlerCollection = new HandlerBus([]);
+        $handlerBus = new HandlerBus([]);
 
-        self::assertInstanceOf(LambdaInvocationHandlerBusContract::class, $handlerCollection);
+        self::assertInstanceOf(LambdaInvocationHandlerBusContract::class, $handlerBus);
     }
 
     /** @test */
@@ -29,25 +30,32 @@ final class HandlerBusTest extends TestCase
 
         $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
 
-        $handlerCollection = new HandlerBus([]);
-        $handlerCollection->handle($stubbedInvocation);
+        $handlerBus = new HandlerBus([]);
+        $handlerBus->handle($stubbedInvocation);
     }
 
     /** @test */
-    public function it_picks_handler_for_given_invocation(): void
+    public function it_handles_given_invocation(): void
     {
         $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
         $mockedHandler = $this->createMock(LambdaInvocationHandlerContract::class);
+        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
 
         $mockedHandler
             ->expects(self::once())
             ->method('shouldHandle')
-            ->with($stubbedInvocation)
+            ->with(self::equalTo($stubbedInvocation))
             ->willReturn(true);
 
-        $handlerCollection = new HandlerBus([$mockedHandler]);
-        $handler = $handlerCollection->handle($stubbedInvocation);
+        $mockedHandler
+            ->expects(self::once())
+            ->method('handle')
+            ->with(self::equalTo($stubbedInvocation))
+            ->willReturn($stubbedInvocationResponse);
 
-        self::assertSame($mockedHandler, $handler);
+        $handlerBus = new HandlerBus([$mockedHandler]);
+        $invocationResponse = $handlerBus->handle($stubbedInvocation);
+
+        self::assertSame($stubbedInvocationResponse, $invocationResponse);
     }
 }

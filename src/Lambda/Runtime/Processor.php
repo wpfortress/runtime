@@ -13,32 +13,34 @@ use WPFortress\Runtime\Contracts\LambdaRuntimeProcessorContract;
 final class Processor implements LambdaRuntimeProcessorContract
 {
     public function __construct(
-        private FastCGIProcessManagerContract $processManager,
-        private LambdaRuntimeClientContract $runtimeClient,
-        private LambdaInvocationHandlerBusContract $handlerBus,
+        private FastCGIProcessManagerContract $fastCGIProcessManager,
+        private LambdaRuntimeClientContract $lambdaRuntimeClient,
+        private LambdaInvocationHandlerBusContract $lambdaInvocationHandlerBus,
     ) {
     }
 
     public function startFastCGIProcess(): void
     {
         try {
-            $this->processManager->start();
+            $this->fastCGIProcessManager->start();
         } catch (Throwable $exception) {
-            $this->runtimeClient->sendInitialisationError(exception: $exception);
+            $this->lambdaRuntimeClient->sendInitialisationError(exception: $exception);
         }
     }
 
     public function processNextInvocation(): void
     {
-        $invocation = $this->runtimeClient->retrieveNextInvocation();
+        $invocation = $this->lambdaRuntimeClient->retrieveNextInvocation();
 
         try {
-            $this->runtimeClient->sendInvocationResponse(
+            $response = $this->lambdaInvocationHandlerBus->handle(invocation: $invocation);
+
+            $this->lambdaRuntimeClient->sendInvocationResponse(
                 invocation: $invocation,
-                response: $this->handlerBus->handle(invocation: $invocation)->handle(invocation: $invocation),
+                response: $response,
             );
         } catch (Throwable $exception) {
-            $this->runtimeClient->sendInvocationError(
+            $this->lambdaRuntimeClient->sendInvocationError(
                 invocation: $invocation,
                 exception: $exception,
             );
