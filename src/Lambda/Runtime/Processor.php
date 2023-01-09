@@ -33,9 +33,11 @@ final class Processor implements LambdaRuntimeProcessorContract
         $invocation = $this->runtimeClient->retrieveNextInvocation();
 
         try {
+            $response = $this->handlerBus->handle(invocation: $invocation);
+
             $this->runtimeClient->sendInvocationResponse(
                 invocation: $invocation,
-                response: $this->handlerBus->handle(invocation: $invocation)->handle(invocation: $invocation),
+                response: $response,
             );
         } catch (Throwable $exception) {
             $this->runtimeClient->sendInvocationError(
