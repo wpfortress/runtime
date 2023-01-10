@@ -9,11 +9,11 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
-use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpResponseFactoryContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Handlers\AbstractPhpFpmHandler;
 
 final class AbstractPhpFpmHandlerTest extends TestCase
@@ -23,23 +23,25 @@ final class AbstractPhpFpmHandlerTest extends TestCase
     {
         $stubbedFastCGIRequestFactory = $this->createStub(FastCGIRequestFactoryContract::class);
         $stubbedFastCGIProcessClient = $this->createStub(FastCGIProcessClientContract::class);
-        $stubbedInvocationEvent = $this->createStub(LambdaInvocationHttpEventContract::class);
-        $stubbedHttpResponseFactory = $this->createStub(LambdaInvocationHttpResponseFactoryContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationHttpResponseFactory = $this->createStub(
+            LambdaInvocationHttpResponseFactoryContract::class
+        );
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationEvent = $this->createStub(LambdaInvocationHttpEventContract::class);
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getEvent')
-            ->willReturn($stubbedInvocationEvent);
+            ->willReturn($stubbedLambdaInvocationEvent);
 
         $handler = $this->getMockForAbstractClass(AbstractPhpFpmHandler::class, [
             $stubbedFastCGIRequestFactory,
             $stubbedFastCGIProcessClient,
-            $stubbedHttpResponseFactory,
+            $stubbedLambdaInvocationHttpResponseFactory,
             '/tmp',
         ]);
 
-        $shouldHandle = $handler->shouldHandle($mockedInvocation);
+        $shouldHandle = $handler->shouldHandle($mockedLambdaInvocation);
 
         self::assertTrue($shouldHandle);
     }
@@ -47,32 +49,33 @@ final class AbstractPhpFpmHandlerTest extends TestCase
     /** @test */
     public function it_creates_invocation_response(): void
     {
+        $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
+        $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
+        $mockedLambdaInvocationHttpResponseFactory = $this->createMock(
+            LambdaInvocationHttpResponseFactoryContract::class
+        );
         $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
-        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
-        $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
-        $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
-        $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationHttpEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::atLeast(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationHttpEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getRemainingTimeInMs')
             ->willReturn(3000);
 
-        $mockedInvocation
-            ->expects(self::atLeast(2))
-            ->method('getEvent')
-            ->willReturn($mockedInvocationEvent);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getPath')
             ->willReturn('foo');
@@ -80,30 +83,30 @@ final class AbstractPhpFpmHandlerTest extends TestCase
         $mockedFastCGIRequestFactory
             ->expects(self::once())
             ->method('make')
-            ->with(self::identicalTo($mockedInvocation))
+            ->with(self::equalTo($mockedLambdaInvocation))
             ->willReturn($stubbedFastCGIRequest);
 
         $mockedFastCGIProcessClient
             ->expects(self::once())
             ->method('sendRequest')
-            ->with(self::identicalTo($stubbedFastCGIRequest), 2000)
+            ->with(self::equalTo($stubbedFastCGIRequest), self::equalTo(2000))
             ->willReturn($stubbedFastCGIResponse);
 
-        $mockedHttpResponseFactory
+        $mockedLambdaInvocationHttpResponseFactory
             ->expects(self::once())
             ->method('makeFromFastCGIResponse')
-            ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
-            ->willReturn($stubbedInvocationResponse);
+            ->with(self::equalTo($mockedLambdaInvocation), self::equalTo($stubbedFastCGIResponse))
+            ->willReturn($stubbedLambdaInvocationResponse);
 
         $handler = $this->getMockForAbstractClass(AbstractPhpFpmHandler::class, [
             $mockedFastCGIRequestFactory,
             $mockedFastCGIProcessClient,
-            $mockedHttpResponseFactory,
+            $mockedLambdaInvocationHttpResponseFactory,
             '/',
         ]);
 
-        $response = $handler->handle($mockedInvocation);
+        $response = $handler->handle($mockedLambdaInvocation);
 
-        self::assertSame($stubbedInvocationResponse, $response);
+        self::assertSame($stubbedLambdaInvocationResponse, $response);
     }
 }

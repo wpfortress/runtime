@@ -23,9 +23,9 @@ final class ClientTest extends TestCase
     public function it_implements_lambda_runtime_client_contract(): void
     {
         $stubbedHttpClient = $this->createStub(HttpClientInterface::class);
-        $stubbedInvocationFactory = $this->createStub(LambdaInvocationFactoryContract::class);
+        $stubbedLambdaInvocationFactory = $this->createStub(LambdaInvocationFactoryContract::class);
 
-        $client = new Client($stubbedHttpClient, $stubbedInvocationFactory);
+        $client = new Client($stubbedHttpClient, $stubbedLambdaInvocationFactory);
 
         self::assertInstanceOf(LambdaRuntimeClientContract::class, $client);
     }
@@ -35,21 +35,20 @@ final class ClientTest extends TestCase
     {
         $mockedResponse = new MockResponse('', ['http_code' => 200]);
         $mockedHttpClient = new MockHttpClient($mockedResponse);
-
-        $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
-
         $mockedInvocationFactory = $this->createMock(LambdaInvocationFactoryContract::class);
+        $stubbedLambdaInvocation = $this->createStub(LambdaInvocationContract::class);
+
         $mockedInvocationFactory
             ->expects(self::once())
             ->method('make')
-            ->willReturn($stubbedInvocation);
+            ->willReturn($stubbedLambdaInvocation);
 
         $client = new Client($mockedHttpClient, $mockedInvocationFactory);
         $invocation = $client->retrieveNextInvocation();
 
         self::assertSame('GET', $mockedResponse->getRequestMethod());
         self::assertStringEndsWith('/2018-06-01/runtime/invocation/next', $mockedResponse->getRequestUrl());
-        self::assertSame($stubbedInvocation, $invocation);
+        self::assertSame($stubbedLambdaInvocation, $invocation);
     }
 
     /** @test */
@@ -57,29 +56,28 @@ final class ClientTest extends TestCase
     {
         $mockedResponse = new MockResponse('', ['http_code' => 202]);
         $mockedHttpClient = new MockHttpClient($mockedResponse);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationResponse = $this->createMock(LambdaInvocationResponseContract::class);
+        $stubbedLambdaInvocationFactory = $this->createStub(LambdaInvocationFactoryContract::class);
 
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getAwsRequestId')
             ->willReturn('8476a536-e9f4-11e8-9739-2dfe598c3fcd');
 
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
 
-        $mockedInvocationResponse = $this->createMock(LambdaInvocationResponseContract::class);
-        $mockedInvocationResponse
+        $mockedLambdaInvocationResponse
             ->expects(self::once())
             ->method('jsonSerialize')
             ->willReturn(new stdClass());
 
-        $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
-
-        $client = new Client($mockedHttpClient, $stubbedInvocationFactoryContract);
-        $client->sendInvocationResponse($mockedInvocation, $mockedInvocationResponse);
+        $client = new Client($mockedHttpClient, $stubbedLambdaInvocationFactory);
+        $client->sendInvocationResponse($mockedLambdaInvocation, $mockedLambdaInvocationResponse);
 
         self::assertSame('POST', $mockedResponse->getRequestMethod());
         self::assertStringEndsWith(
@@ -95,25 +93,24 @@ final class ClientTest extends TestCase
     {
         $mockedResponse = new MockResponse('', ['http_code' => 202]);
         $mockedHttpClient = new MockHttpClient($mockedResponse);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationFactory = $this->createStub(LambdaInvocationFactoryContract::class);
 
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getAwsRequestId')
             ->willReturn('8476a536-e9f4-11e8-9739-2dfe598c3fcd');
 
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
 
         $exception = new Exception('Test error');
 
-        $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
-
-        $client = new Client($mockedHttpClient, $stubbedInvocationFactoryContract);
-        $client->sendInvocationError($mockedInvocation, $exception);
+        $client = new Client($mockedHttpClient, $stubbedLambdaInvocationFactory);
+        $client->sendInvocationError($mockedLambdaInvocation, $exception);
 
         self::assertSame('POST', $mockedResponse->getRequestMethod());
         self::assertStringEndsWith(
@@ -136,12 +133,10 @@ final class ClientTest extends TestCase
     {
         $mockedResponse = new MockResponse('', ['http_code' => 202]);
         $mockedHttpClient = new MockHttpClient($mockedResponse);
-
         $exception = new Exception('Test error');
+        $stubbedLambdaInvocationFactory = $this->createStub(LambdaInvocationFactoryContract::class);
 
-        $stubbedInvocationFactoryContract = $this->createStub(LambdaInvocationFactoryContract::class);
-
-        $client = new Client($mockedHttpClient, $stubbedInvocationFactoryContract);
+        $client = new Client($mockedHttpClient, $stubbedLambdaInvocationFactory);
         $client->sendInitialisationError($exception);
 
         self::assertSame('POST', $mockedResponse->getRequestMethod());

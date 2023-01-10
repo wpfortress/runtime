@@ -11,9 +11,9 @@ use ReflectionClass;
 use stdClass;
 use WPFortress\Runtime\Contracts\FastCGIRequestFactoryContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationContextContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpEventContract;
 use WPFortress\Runtime\FastCGI\Request\RequestFactory;
-use WPFortress\Runtime\Lambda\Invocation\Invocation;
 
 final class RequestFactoryTest extends TestCase
 {
@@ -33,61 +33,61 @@ final class RequestFactoryTest extends TestCase
         $namespace = (new ReflectionClass(RequestFactory::class))->getNamespaceName();
 
         $mockedGetcwd = $this->getFunctionMock($namespace, 'getcwd');
+        $mockedTime = $this->getFunctionMock($namespace, 'time');
+        $mockedMicrotime = $this->getFunctionMock($namespace, 'microtime');
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationHttpEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+
         $mockedGetcwd
             ->expects(self::once())
             ->willReturn('/tmp');
 
-        $mockedTime = $this->getFunctionMock($namespace, 'time');
         $mockedTime
             ->expects(self::once())
             ->willReturn(1672137475);
 
-        $mockedMicrotime = $this->getFunctionMock($namespace, 'microtime');
         $mockedMicrotime
             ->expects(self::once())
             ->willReturn(1672137475.392833);
 
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocation
+            ->expects(self::once())
+            ->method('getContext')
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::exactly(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationHttpEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('jsonSerialize')
             ->willReturn(new stdClass());
 
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getRequestMethod')
             ->willReturn('GET');
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getPath')
             ->willReturn('/');
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getQueryString')
             ->willReturn('');
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getHeaders')
             ->willReturn([]);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getBody')
             ->willReturn('');
 
-        $invocation = new Invocation(
-            context: $mockedInvocationContext,
-            event: $mockedInvocationEvent,
-        );
-
         $requestFactory = new RequestFactory();
-        $request = $requestFactory->make($invocation, '/tmp/foo.php');
+        $request = $requestFactory->make($mockedLambdaInvocation, '/tmp/foo.php');
 
         self::assertInstanceOf(ProvidesRequestData::class, $request);
         self::assertSame('', $request->getContent());
@@ -123,45 +123,51 @@ final class RequestFactoryTest extends TestCase
         $namespace = (new ReflectionClass(RequestFactory::class))->getNamespaceName();
 
         $mockedGetcwd = $this->getFunctionMock($namespace, 'getcwd');
+        $mockedTime = $this->getFunctionMock($namespace, 'time');
+        $mockedMicrotime = $this->getFunctionMock($namespace, 'microtime');
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationHttpEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+
         $mockedGetcwd
             ->expects(self::once())
             ->willReturn('/tmp');
 
-        $mockedTime = $this->getFunctionMock($namespace, 'time');
         $mockedTime
             ->expects(self::once())
             ->willReturn(1672137475);
 
-        $mockedMicrotime = $this->getFunctionMock($namespace, 'microtime');
         $mockedMicrotime
             ->expects(self::once())
             ->willReturn(1672137475.392833);
 
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocation
+            ->expects(self::once())
+            ->method('getContext')
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::exactly(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationHttpEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('jsonSerialize')
             ->willReturn(new stdClass());
 
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getRequestMethod')
             ->willReturn('GET');
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getPath')
             ->willReturn('/foo');
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getQueryString')
             ->willReturn('foo=bar');
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getHeaders')
             ->willReturn([
@@ -173,19 +179,13 @@ final class RequestFactoryTest extends TestCase
                 'x-forwarded-for' => ['127.0.0.2'],
                 'x-forwarded-proto' => ['https'],
             ]);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationHttpEvent
             ->expects(self::once())
             ->method('getBody')
             ->willReturn('foo');
 
-        $invocation = new Invocation(
-            context: $mockedInvocationContext,
-            event: $mockedInvocationEvent,
-        );
-
         $requestFactory = new RequestFactory();
-        $request = $requestFactory->make($invocation, '/tmp/foo.php');
+        $request = $requestFactory->make($mockedLambdaInvocation, '/tmp/foo.php');
 
         self::assertInstanceOf(ProvidesRequestData::class, $request);
         self::assertSame('foo', $request->getContent());

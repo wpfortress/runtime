@@ -28,34 +28,34 @@ final class HandlerBusTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unhandled Lambda invocation.');
 
-        $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
+        $stubbedLambdaInvocation = $this->createStub(LambdaInvocationContract::class);
 
         $handlerBus = new HandlerBus([]);
-        $handlerBus->handle($stubbedInvocation);
+        $handlerBus->handle($stubbedLambdaInvocation);
     }
 
     /** @test */
     public function it_handles_given_invocation(): void
     {
         $stubbedInvocation = $this->createStub(LambdaInvocationContract::class);
-        $mockedHandler = $this->createMock(LambdaInvocationHandlerContract::class);
-        $stubbedInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
+        $mockedLambdaInvocationHandler = $this->createMock(LambdaInvocationHandlerContract::class);
+        $stubbedLambdaInvocationResponse = $this->createStub(LambdaInvocationResponseContract::class);
 
-        $mockedHandler
+        $mockedLambdaInvocationHandler
             ->expects(self::once())
             ->method('shouldHandle')
             ->with(self::equalTo($stubbedInvocation))
             ->willReturn(true);
 
-        $mockedHandler
+        $mockedLambdaInvocationHandler
             ->expects(self::once())
             ->method('handle')
             ->with(self::equalTo($stubbedInvocation))
-            ->willReturn($stubbedInvocationResponse);
+            ->willReturn($stubbedLambdaInvocationResponse);
 
-        $handlerBus = new HandlerBus([$mockedHandler]);
+        $handlerBus = new HandlerBus([$mockedLambdaInvocationHandler]);
         $invocationResponse = $handlerBus->handle($stubbedInvocation);
 
-        self::assertSame($stubbedInvocationResponse, $invocationResponse);
+        self::assertSame($stubbedLambdaInvocationResponse, $invocationResponse);
     }
 }

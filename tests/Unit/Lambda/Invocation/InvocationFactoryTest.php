@@ -19,10 +19,13 @@ final class InvocationFactoryTest extends TestCase
     /** @test */
     public function it_implements_lambda_invocation_factory_contract(): void
     {
-        $stubbedInvocationContextFactory = $this->createStub(LambdaInvocationContextFactoryContract::class);
-        $stubbedInvocationEventFactory = $this->createStub(LambdaInvocationEventFactoryContract::class);
+        $stubbedLambdaInvocationContextFactory = $this->createStub(LambdaInvocationContextFactoryContract::class);
+        $stubbedLambdaInvocationEventFactory = $this->createStub(LambdaInvocationEventFactoryContract::class);
 
-        $invocationFactory = new InvocationFactory($stubbedInvocationContextFactory, $stubbedInvocationEventFactory);
+        $invocationFactory = new InvocationFactory(
+            $stubbedLambdaInvocationContextFactory,
+            $stubbedLambdaInvocationEventFactory
+        );
 
         self::assertInstanceOf(LambdaInvocationFactoryContract::class, $invocationFactory);
     }
@@ -30,25 +33,24 @@ final class InvocationFactoryTest extends TestCase
     /** @test */
     public function it_makes_invocation_from_response(): void
     {
-        $stubbedInvocationContext = $this->createStub(LambdaInvocationContextContract::class);
-
-        $mockedInvocationContextFactory = $this->createMock(LambdaInvocationContextFactoryContract::class);
-        $mockedInvocationContextFactory
-            ->expects(self::once())
-            ->method('make')
-            ->with([])
-            ->willReturn($stubbedInvocationContext);
-
-        $stubbedInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
-
-        $mockedInvocationEventFactory = $this->createMock(LambdaInvocationEventFactoryContract::class);
-        $mockedInvocationEventFactory
-            ->expects(self::once())
-            ->method('make')
-            ->with([])
-            ->willReturn($stubbedInvocationEvent);
-
+        $mockedLambdaInvocationContextFactory = $this->createMock(LambdaInvocationContextFactoryContract::class);
+        $stubbedLambdaInvocationContext = $this->createStub(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationEventFactory = $this->createMock(LambdaInvocationEventFactoryContract::class);
+        $stubbedLambdaInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
         $mockedResponse = $this->createMock(ResponseInterface::class);
+
+        $mockedLambdaInvocationContextFactory
+            ->expects(self::once())
+            ->method('make')
+            ->with([])
+            ->willReturn($stubbedLambdaInvocationContext);
+
+        $mockedLambdaInvocationEventFactory
+            ->expects(self::once())
+            ->method('make')
+            ->with([])
+            ->willReturn($stubbedLambdaInvocationEvent);
+
         $mockedResponse
             ->expects(self::once())
             ->method('getHeaders')
@@ -58,11 +60,14 @@ final class InvocationFactoryTest extends TestCase
             ->method('toArray')
             ->willReturn([]);
 
-        $invocationFactory = new InvocationFactory($mockedInvocationContextFactory, $mockedInvocationEventFactory);
+        $invocationFactory = new InvocationFactory(
+            $mockedLambdaInvocationContextFactory,
+            $mockedLambdaInvocationEventFactory
+        );
         $invocation = $invocationFactory->make($mockedResponse);
 
         self::assertInstanceOf(LambdaInvocationContract::class, $invocation);
-        self::assertSame($stubbedInvocationContext, $invocation->getContext());
-        self::assertSame($stubbedInvocationEvent, $invocation->getEvent());
+        self::assertSame($stubbedLambdaInvocationContext, $invocation->getContext());
+        self::assertSame($stubbedLambdaInvocationEvent, $invocation->getEvent());
     }
 }
