@@ -11,7 +11,7 @@ use WPFortress\Runtime\Lambda\Invocation\Events\PingEvent;
 final class PingEventTest extends TestCase
 {
     /** @test */
-    public function it_should_handle_given_data(): void
+    public function it_should_handle_given_response_data(): void
     {
         $shouldHandle = PingEvent::shouldHandle([
             'ping' => true,

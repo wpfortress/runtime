@@ -11,7 +11,7 @@ use WPFortress\Runtime\Lambda\Invocation\Events\WarmEvent;
 final class WarmEventTest extends TestCase
 {
     /** @test */
-    public function it_should_handle_given_data(): void
+    public function it_should_handle_given_response_data(): void
     {
         $shouldHandle = WarmEvent::shouldHandle([
             'warm' => 10,
