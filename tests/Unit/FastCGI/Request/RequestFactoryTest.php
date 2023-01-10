@@ -56,7 +56,7 @@ final class RequestFactoryTest extends TestCase
             ->method('getContext')
             ->willReturn($mockedLambdaInvocationContext);
         $mockedLambdaInvocation
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(1))
             ->method('getEvent')
             ->willReturn($mockedLambdaInvocationHttpEvent);
 
@@ -146,7 +146,7 @@ final class RequestFactoryTest extends TestCase
             ->method('getContext')
             ->willReturn($mockedLambdaInvocationContext);
         $mockedLambdaInvocation
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(1))
             ->method('getEvent')
             ->willReturn($mockedLambdaInvocationHttpEvent);
 

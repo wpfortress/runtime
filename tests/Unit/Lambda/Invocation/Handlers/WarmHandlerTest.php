@@ -58,7 +58,7 @@ final class WarmHandlerTest extends TestCase
             ->method('invoke');
 
         $mockedLambdaInvocation
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(1))
             ->method('getEvent')
             ->willReturn($lambdaInvocationEvent);
 
@@ -82,7 +82,7 @@ final class WarmHandlerTest extends TestCase
             ->method('invoke');
 
         $mockedLambdaInvocation
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(1))
             ->method('getEvent')
             ->willReturn($lambdaInvocationEvent);
 

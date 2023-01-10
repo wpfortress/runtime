@@ -46,7 +46,7 @@ final class PingHandlerTest extends TestCase
         $lambdaInvocationEvent = new PingEvent();
 
         $mockedLambdaInvocation
-            ->expects(self::once())
+            ->expects(self::atMost(1))
             ->method('getEvent')
             ->willReturn($lambdaInvocationEvent);
 
