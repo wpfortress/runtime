@@ -25,26 +25,28 @@ final class WordPressHandlerTest extends TestCase
 
         $stubbedFastCGIRequestFactory = $this->createStub(FastCGIRequestFactoryContract::class);
         $stubbedFastCGIProcessClient = $this->createStub(FastCGIProcessClientContract::class);
-        $stubbedInvocationEvent = $this->createStub(LambdaInvocationHttpEventContract::class);
-        $stubbedHttpResponseFactory = $this->createStub(LambdaInvocationHttpResponseFactoryContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationHttpEvent = $this->createStub(LambdaInvocationHttpEventContract::class);
+        $stubbedLambdaInvocationHttpResponseFactory = $this->createStub(
+            LambdaInvocationHttpResponseFactoryContract::class
+        );
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getEvent')
-            ->willReturn($stubbedInvocationEvent);
+            ->willReturn($stubbedLambdaInvocationHttpEvent);
 
         $handler = new WordPressHandler(
             $stubbedFastCGIRequestFactory,
             $stubbedFastCGIProcessClient,
-            $stubbedHttpResponseFactory,
+            $stubbedLambdaInvocationHttpResponseFactory,
             $tmpDir,
         );
 
-        $shouldHandle = $handler->shouldHandle($mockedInvocation);
+        $shouldHandle = $handler->shouldHandle($mockedLambdaInvocation);
 
         unlink($tmpDir . '/index.php');
         unlink($tmpDir . '/wp-config.php');
@@ -63,29 +65,28 @@ final class WordPressHandlerTest extends TestCase
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::atLeast(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getRemainingTimeInMs')
             ->willReturn(3000);
 
-        $mockedInvocation
-            ->expects(self::atLeast(2))
-            ->method('getEvent')
-            ->willReturn($mockedInvocationEvent);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationEvent
             ->expects(self::exactly(2))
             ->method('getPath')
             ->willReturn('foo');
@@ -93,19 +94,19 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory
             ->expects(self::once())
             ->method('make')
-            ->with(self::identicalTo($mockedInvocation), $tmpDir . '/index.php')
+            ->with(self::equalTo($mockedLambdaInvocation), $tmpDir . '/index.php')
             ->willReturn($stubbedFastCGIRequest);
 
         $mockedFastCGIProcessClient
             ->expects(self::once())
             ->method('sendRequest')
-            ->with(self::identicalTo($stubbedFastCGIRequest), 2000)
+            ->with(self::equalTo($stubbedFastCGIRequest), 2000)
             ->willReturn($stubbedFastCGIResponse);
 
         $mockedHttpResponseFactory
             ->expects(self::once())
             ->method('makeFromFastCGIResponse')
-            ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
+            ->with(self::equalTo($mockedLambdaInvocation), self::equalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
         $handler = new WordPressHandler(
@@ -115,7 +116,7 @@ final class WordPressHandlerTest extends TestCase
             $tmpDir,
         );
 
-        $response = $handler->handle($mockedInvocation);
+        $response = $handler->handle($mockedLambdaInvocation);
 
         unlink($tmpDir . '/index.php');
         unlink($tmpDir . '/wp-config.php');
@@ -134,9 +135,9 @@ final class WordPressHandlerTest extends TestCase
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
 
         mkdir($tmpDir . '/foo');
 
@@ -144,22 +145,21 @@ final class WordPressHandlerTest extends TestCase
         touch($tmpDir . '/wp-config.php');
         touch($tmpDir . '/foo/index.php');
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::atLeast(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getRemainingTimeInMs')
             ->willReturn(3000);
 
-        $mockedInvocation
-            ->expects(self::atLeast(2))
-            ->method('getEvent')
-            ->willReturn($mockedInvocationEvent);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationEvent
             ->expects(self::exactly(2))
             ->method('getPath')
             ->willReturn('foo/');
@@ -167,19 +167,19 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory
             ->expects(self::once())
             ->method('make')
-            ->with(self::identicalTo($mockedInvocation), $tmpDir . '/foo/index.php')
+            ->with(self::equalTo($mockedLambdaInvocation), $tmpDir . '/foo/index.php')
             ->willReturn($stubbedFastCGIRequest);
 
         $mockedFastCGIProcessClient
             ->expects(self::once())
             ->method('sendRequest')
-            ->with(self::identicalTo($stubbedFastCGIRequest), 2000)
+            ->with(self::equalTo($stubbedFastCGIRequest), 2000)
             ->willReturn($stubbedFastCGIResponse);
 
         $mockedHttpResponseFactory
             ->expects(self::once())
             ->method('makeFromFastCGIResponse')
-            ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
+            ->with(self::equalTo($mockedLambdaInvocation), self::equalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
         $handler = new WordPressHandler(
@@ -189,7 +189,7 @@ final class WordPressHandlerTest extends TestCase
             $tmpDir,
         );
 
-        $response = $handler->handle($mockedInvocation);
+        $response = $handler->handle($mockedLambdaInvocation);
 
         unlink($tmpDir . '/index.php');
         unlink($tmpDir . '/wp-config.php');
@@ -211,9 +211,9 @@ final class WordPressHandlerTest extends TestCase
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
 
         mkdir($tmpDir . '/wp-admin');
 
@@ -223,22 +223,21 @@ final class WordPressHandlerTest extends TestCase
 
         file_put_contents($tmpDir . '/wp-config.php', 'define(\'MULTISITE\', true);');
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::atLeast(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getRemainingTimeInMs')
             ->willReturn(3000);
 
-        $mockedInvocation
-            ->expects(self::atLeast(2))
-            ->method('getEvent')
-            ->willReturn($mockedInvocationEvent);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationEvent
             ->expects(self::exactly(2))
             ->method('getPath')
             ->willReturn('foo/wp-admin/');
@@ -246,19 +245,19 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory
             ->expects(self::once())
             ->method('make')
-            ->with(self::identicalTo($mockedInvocation), $tmpDir . '/wp-admin/index.php')
+            ->with(self::equalTo($mockedLambdaInvocation), $tmpDir . '/wp-admin/index.php')
             ->willReturn($stubbedFastCGIRequest);
 
         $mockedFastCGIProcessClient
             ->expects(self::once())
             ->method('sendRequest')
-            ->with(self::identicalTo($stubbedFastCGIRequest), 2000)
+            ->with(self::equalTo($stubbedFastCGIRequest), 2000)
             ->willReturn($stubbedFastCGIResponse);
 
         $mockedHttpResponseFactory
             ->expects(self::once())
             ->method('makeFromFastCGIResponse')
-            ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
+            ->with(self::equalTo($mockedLambdaInvocation), self::equalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
         $handler = new WordPressHandler(
@@ -268,7 +267,7 @@ final class WordPressHandlerTest extends TestCase
             $tmpDir,
         );
 
-        $response = $handler->handle($mockedInvocation);
+        $response = $handler->handle($mockedLambdaInvocation);
 
         unlink($tmpDir . '/index.php');
         unlink($tmpDir . '/wp-config.php');
@@ -290,9 +289,9 @@ final class WordPressHandlerTest extends TestCase
         $mockedHttpResponseFactory = $this->createMock(LambdaInvocationHttpResponseFactoryContract::class);
         $mockedFastCGIProcessClient = $this->createMock(FastCGIProcessClientContract::class);
         $mockedFastCGIRequestFactory = $this->createMock(FastCGIRequestFactoryContract::class);
-        $mockedInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
-        $mockedInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
+        $mockedLambdaInvocationContext = $this->createMock(LambdaInvocationContextContract::class);
+        $mockedLambdaInvocationEvent = $this->createMock(LambdaInvocationHttpEventContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
 
         touch($tmpDir . '/index.php');
         touch($tmpDir . '/wp-config.php');
@@ -300,22 +299,21 @@ final class WordPressHandlerTest extends TestCase
 
         file_put_contents($tmpDir . '/wp-config.php', 'define(\'MULTISITE\', true);');
 
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getContext')
-            ->willReturn($mockedInvocationContext);
+            ->willReturn($mockedLambdaInvocationContext);
+        $mockedLambdaInvocation
+            ->expects(self::atLeast(2))
+            ->method('getEvent')
+            ->willReturn($mockedLambdaInvocationEvent);
 
-        $mockedInvocationContext
+        $mockedLambdaInvocationContext
             ->expects(self::once())
             ->method('getRemainingTimeInMs')
             ->willReturn(3000);
 
-        $mockedInvocation
-            ->expects(self::atLeast(2))
-            ->method('getEvent')
-            ->willReturn($mockedInvocationEvent);
-
-        $mockedInvocationEvent
+        $mockedLambdaInvocationEvent
             ->expects(self::exactly(2))
             ->method('getPath')
             ->willReturn('foo/wp-login.php');
@@ -323,19 +321,19 @@ final class WordPressHandlerTest extends TestCase
         $mockedFastCGIRequestFactory
             ->expects(self::once())
             ->method('make')
-            ->with(self::identicalTo($mockedInvocation), $tmpDir . '/wp-login.php')
+            ->with(self::equalTo($mockedLambdaInvocation), $tmpDir . '/wp-login.php')
             ->willReturn($stubbedFastCGIRequest);
 
         $mockedFastCGIProcessClient
             ->expects(self::once())
             ->method('sendRequest')
-            ->with(self::identicalTo($stubbedFastCGIRequest), 2000)
+            ->with(self::equalTo($stubbedFastCGIRequest), 2000)
             ->willReturn($stubbedFastCGIResponse);
 
         $mockedHttpResponseFactory
             ->expects(self::once())
             ->method('makeFromFastCGIResponse')
-            ->with(self::identicalTo($mockedInvocation), self::identicalTo($stubbedFastCGIResponse))
+            ->with(self::equalTo($mockedLambdaInvocation), self::equalTo($stubbedFastCGIResponse))
             ->willReturn($stubbedInvocationResponse);
 
         $handler = new WordPressHandler(
@@ -345,7 +343,7 @@ final class WordPressHandlerTest extends TestCase
             $tmpDir,
         );
 
-        $response = $handler->handle($mockedInvocation);
+        $response = $handler->handle($mockedLambdaInvocation);
 
         unlink($tmpDir . '/index.php');
         unlink($tmpDir . '/wp-config.php');

@@ -44,7 +44,7 @@ final class WarmTest extends TestCase
             response: $response,
         );
 
-        $container = (new ContainerFactory())->makeFromConfig(path: __DIR__ . '/../../config/services.yaml');
+        $container = ContainerFactory::makeFromConfig(path: __DIR__ . '/../../config/services.yaml');
 
         /** @var Application $application */
         $application = $container->get(id: Application::class);

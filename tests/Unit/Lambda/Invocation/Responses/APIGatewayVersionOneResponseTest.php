@@ -9,8 +9,8 @@ use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use WPFortress\Runtime\Constants\HttpStatus;
-use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationHttpErrorResponseContract;
+use WPFortress\Runtime\Contracts\LambdaInvocationResponseContract;
 use WPFortress\Runtime\Contracts\LambdaInvocationStaticFileResponseContract;
 use WPFortress\Runtime\Lambda\Invocation\Responses\APIGatewayVersionOneResponse;
 
@@ -19,20 +19,21 @@ final class APIGatewayVersionOneResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_fastcgi_response(): void
     {
-        $fastCGIResponse = $this->createMock(ProvidesResponseData::class);
-        $fastCGIResponse
+        $mockedFastCGIResponse = $this->createMock(ProvidesResponseData::class);
+
+        $mockedFastCGIResponse
             ->expects(self::once())
             ->method('getHeaders')
             ->willReturn([
                 'Content-Type' => ['text/html; charset=utf-8'],
                 'Status' => ['200 OK'],
             ]);
-        $fastCGIResponse
+        $mockedFastCGIResponse
             ->expects(self::once())
             ->method('getBody')
             ->willReturn('foo');
 
-        $response = APIGatewayVersionOneResponse::fromFastCGIResponse($fastCGIResponse);
+        $response = APIGatewayVersionOneResponse::fromFastCGIResponse($mockedFastCGIResponse);
         $result = $response->jsonSerialize();
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
@@ -46,23 +47,24 @@ final class APIGatewayVersionOneResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_http_error_response(): void
     {
-        $errorResponse = $this->createMock(LambdaInvocationHttpErrorResponseContract::class);
-        $errorResponse
+        $mockedLambdaInvocationHttpErrorResponse = $this->createMock(LambdaInvocationHttpErrorResponseContract::class);
+
+        $mockedLambdaInvocationHttpErrorResponse
             ->expects(self::once())
             ->method('getBody')
             ->willReturn('foo');
-        $errorResponse
+        $mockedLambdaInvocationHttpErrorResponse
             ->expects(self::once())
             ->method('getHeaders')
             ->willReturn([
                 'Content-Type' => ['text/html; charset=utf-8'],
             ]);
-        $errorResponse
+        $mockedLambdaInvocationHttpErrorResponse
             ->expects(self::once())
             ->method('getStatus')
             ->willReturn(HttpStatus::NOT_FOUND);
 
-        $response = APIGatewayVersionOneResponse::fromHttpErrorResponse($errorResponse);
+        $response = APIGatewayVersionOneResponse::fromHttpErrorResponse($mockedLambdaInvocationHttpErrorResponse);
         $result = $response->jsonSerialize();
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
@@ -76,19 +78,22 @@ final class APIGatewayVersionOneResponseTest extends TestCase
     /** @test */
     public function it_forms_correct_response_from_static_file_response(): void
     {
-        $staticFileResponse = $this->createMock(LambdaInvocationStaticFileResponseContract::class);
-        $staticFileResponse
+        $mockedLambdaInvocationStaticFileResponse = $this->createMock(
+            LambdaInvocationStaticFileResponseContract::class
+        );
+
+        $mockedLambdaInvocationStaticFileResponse
             ->expects(self::once())
             ->method('getBody')
             ->willReturn('foo');
-        $staticFileResponse
+        $mockedLambdaInvocationStaticFileResponse
             ->expects(self::once())
             ->method('getHeaders')
             ->willReturn([
                 'Content-Type' => ['text/plain'],
             ]);
 
-        $response = APIGatewayVersionOneResponse::fromStaticResponse($staticFileResponse);
+        $response = APIGatewayVersionOneResponse::fromStaticResponse($mockedLambdaInvocationStaticFileResponse);
         $result = $response->jsonSerialize();
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);

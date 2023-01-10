@@ -12,7 +12,7 @@ use WPFortress\Runtime\Lambda\Invocation\Events\APIGatewayVersionOneEvent;
 final class APIGatewayVersionOneEventTest extends TestCase
 {
     /** @test */
-    public function it_should_handle_given_data(): void
+    public function it_should_handle_given_response_data(): void
     {
         $shouldHandle = APIGatewayVersionOneEvent::shouldHandle([
             'version' => '1.0',

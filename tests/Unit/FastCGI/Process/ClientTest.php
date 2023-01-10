@@ -19,86 +19,88 @@ final class ClientTest extends TestCase
     /** @test */
     public function it_implements_fast_cgi_process_client_contract(): void
     {
-        $stubbedClient = $this->createStub(\hollodotme\FastCGI\Client::class);
-        $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
-        $stubbedProcessManager = $this->createStub(FastCGIProcessManagerContract::class);
+        $stubbedFastCGIClient = $this->createStub(\hollodotme\FastCGI\Client::class);
+        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
+        $stubbedFastCGIProcessManager = $this->createStub(FastCGIProcessManagerContract::class);
 
-        $processClient = new Client(
-            client: $stubbedClient,
-            connection: $stubbedConnection,
-            processManager: $stubbedProcessManager,
+        $client = new Client(
+            client: $stubbedFastCGIClient,
+            connection: $stubbedFastCGIConnection,
+            processManager: $stubbedFastCGIProcessManager,
         );
 
-        self::assertInstanceOf(FastCGIProcessClientContract::class, $processClient);
+        self::assertInstanceOf(FastCGIProcessClientContract::class, $client);
     }
 
     /** @test */
-    public function it_sends_given_request(): void
+    public function it_sends_given_fastcgi_request(): void
     {
-        $stubbedRequest = $this->createStub(ProvidesRequestData::class);
-        $stubbedResponse = $this->createStub(ProvidesResponseData::class);
+        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
+        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
+        $mockedProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
+        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
+        $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
 
-        $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
-
-        $mockedClient = $this->createMock(\hollodotme\FastCGI\Client::class);
-        $mockedClient
+        $mockedFastCGIClient
             ->expects(self::once())
             ->method('sendAsyncRequest')
-            ->with($stubbedConnection, $stubbedRequest)
+            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
             ->willReturn(100);
-        $mockedClient
+        $mockedFastCGIClient
             ->expects(self::once())
             ->method('readResponse')
-            ->with(100, null)
-            ->willReturn($stubbedResponse);
+            ->with(self::equalTo(100), self::equalTo(null))
+            ->willReturn($stubbedFastCGIResponse);
 
-        $mockedProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
         $mockedProcessManager
             ->expects(self::once())
             ->method('ensureStillRunning');
 
-        $processClient = new Client(
-            client: $mockedClient,
-            connection: $stubbedConnection,
+        $client = new Client(
+            client: $mockedFastCGIClient,
+            connection: $stubbedFastCGIConnection,
             processManager: $mockedProcessManager,
         );
-        $response = $processClient->sendRequest($stubbedRequest);
+        $response = $client->sendRequest($stubbedFastCGIRequest);
 
         self::assertInstanceOf(ProvidesResponseData::class, $response);
     }
 
     /** @test */
-    public function it_throws_timedout_exception(): void
+    public function it_throws_timeout_exception(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('PHP script timed out.');
 
-        $stubbedRequest = $this->createStub(ProvidesRequestData::class);
+        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
+        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
+        $mockedFastCGIProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
+        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
 
-        $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
-
-        $mockedClient = $this->createMock(\hollodotme\FastCGI\Client::class);
-        $mockedClient
+        $mockedFastCGIClient
             ->expects(self::once())
             ->method('sendAsyncRequest')
-            ->with($stubbedConnection, $stubbedRequest)
+            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
             ->willReturn(100);
-        $mockedClient
+        $mockedFastCGIClient
             ->expects(self::once())
             ->method('readResponse')
-            ->with(100, null)
+            ->with(self::equalTo(100), self::equalTo(null))
             ->willThrowException(new TimedoutException('foo'));
 
-        $mockedProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
-        $mockedProcessManager->expects(self::once())->method('stop');
-        $mockedProcessManager->expects(self::once())->method('start');
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('stop');
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('start');
 
-        $processClient = new Client(
-            client: $mockedClient,
-            connection: $stubbedConnection,
-            processManager: $mockedProcessManager,
+        $client = new Client(
+            client: $mockedFastCGIClient,
+            connection: $stubbedFastCGIConnection,
+            processManager: $mockedFastCGIProcessManager,
         );
-        $processClient->sendRequest($stubbedRequest);
+        $client->sendRequest($stubbedFastCGIRequest);
     }
 
     /** @test */
@@ -107,31 +109,34 @@ final class ClientTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to read a response from PHP-FPM.');
 
-        $stubbedRequest = $this->createStub(ProvidesRequestData::class);
+        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
+        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
+        $mockedFastCGIProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
+        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
 
-        $stubbedConnection = $this->createStub(ConfiguresSocketConnection::class);
-
-        $mockedClient = $this->createMock(\hollodotme\FastCGI\Client::class);
-        $mockedClient
+        $mockedFastCGIClient
             ->expects(self::once())
             ->method('sendAsyncRequest')
-            ->with($stubbedConnection, $stubbedRequest)
+            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
             ->willReturn(100);
-        $mockedClient
+        $mockedFastCGIClient
             ->expects(self::once())
             ->method('readResponse')
-            ->with(100, null)
+            ->with(self::equalTo(100), self::equalTo(null))
             ->willThrowException(new Exception('foo'));
 
-        $mockedProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
-        $mockedProcessManager->expects(self::once())->method('stop');
-        $mockedProcessManager->expects(self::once())->method('start');
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('stop');
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('start');
 
-        $processClient = new Client(
-            client: $mockedClient,
-            connection: $stubbedConnection,
-            processManager: $mockedProcessManager,
+        $client = new Client(
+            client: $mockedFastCGIClient,
+            connection: $stubbedFastCGIConnection,
+            processManager: $mockedFastCGIProcessManager,
         );
-        $processClient->sendRequest($stubbedRequest);
+        $client->sendRequest($stubbedFastCGIRequest);
     }
 }

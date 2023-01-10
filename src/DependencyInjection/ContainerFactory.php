@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class ContainerFactory
 {
-    public function makeFromConfig(string $path): ContainerInterface
+    public static function makeFromConfig(string $path): ContainerInterface
     {
         $containerBuilder = new ContainerBuilder();
 

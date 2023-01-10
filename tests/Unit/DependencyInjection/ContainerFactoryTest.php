@@ -13,8 +13,7 @@ final class ContainerFactoryTest extends TestCase
     /** @test */
     public function it_makes_container_from_given_config(): void
     {
-        $containerFactory = new ContainerFactory();
-        $container = $containerFactory->makeFromConfig(__DIR__ . '/../../../config/services.yaml');
+        $container = ContainerFactory::makeFromConfig(__DIR__ . '/../../../config/services.yaml');
 
         self::assertInstanceOf(ContainerInterface::class, $container);
     }

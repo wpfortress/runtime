@@ -36,24 +36,27 @@ final class HttpResponseFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unhandled Lambda event type.');
 
-        $stubbedEvent = $this->createStub(LambdaInvocationEventContract::class);
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
+        $stubbedLambdaInvocationHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getEvent')
-            ->willReturn($stubbedEvent);
-
-        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
+            ->willReturn($stubbedLambdaInvocationEvent);
 
         $httpResponseFactory = new HttpResponseFactory();
-        $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
+        $httpResponseFactory->makeFromHttpErrorResponse(
+            $mockedLambdaInvocation,
+            $stubbedLambdaInvocationHttpErrorResponse
+        );
     }
 
     /** @test */
     public function it_makes_api_gateway_version_one_response_from_http_error_response(): void
     {
-        $event = new APIGatewayVersionOneEvent(
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $lambdaInvocationEvent = new APIGatewayVersionOneEvent(
             method: 'GET',
             path: '/',
             queryString: '',
@@ -62,17 +65,18 @@ final class HttpResponseFactoryTest extends TestCase
             isBase64Encoded: true,
             body: '',
         );
+        $stubbedLambdaInvocationHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getEvent')
-            ->willReturn($event);
-
-        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
+            ->willReturn($lambdaInvocationEvent);
 
         $httpResponseFactory = new HttpResponseFactory();
-        $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
+        $response = $httpResponseFactory->makeFromHttpErrorResponse(
+            $mockedLambdaInvocation,
+            $stubbedLambdaInvocationHttpErrorResponse
+        );
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionOneResponse::class, $response);
@@ -81,7 +85,8 @@ final class HttpResponseFactoryTest extends TestCase
     /** @test */
     public function it_makes_api_gateway_version_two_response_from_http_error_response(): void
     {
-        $event = new APIGatewayVersionTwoEvent(
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $lambdaInvocationEvent = new APIGatewayVersionTwoEvent(
             method: 'GET',
             path: '/',
             queryString: '',
@@ -89,17 +94,18 @@ final class HttpResponseFactoryTest extends TestCase
             isBase64Encoded: true,
             body: '',
         );
+        $stubbedLambdaInvocationHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getEvent')
-            ->willReturn($event);
-
-        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
+            ->willReturn($lambdaInvocationEvent);
 
         $httpResponseFactory = new HttpResponseFactory();
-        $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
+        $response = $httpResponseFactory->makeFromHttpErrorResponse(
+            $mockedLambdaInvocation,
+            $stubbedLambdaInvocationHttpErrorResponse
+        );
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionTwoResponse::class, $response);
@@ -108,7 +114,8 @@ final class HttpResponseFactoryTest extends TestCase
     /** @test */
     public function it_makes_application_load_balancer_response_from_http_error_response(): void
     {
-        $event = new ApplicationLoadBalancerEvent(
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $lambdaInvocationEvent = new ApplicationLoadBalancerEvent(
             method: 'GET',
             path: '/',
             queryString: '',
@@ -117,17 +124,18 @@ final class HttpResponseFactoryTest extends TestCase
             isBase64Encoded: true,
             body: '',
         );
+        $stubbedLambdaInvocationHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
 
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
+        $mockedLambdaInvocation
             ->expects(self::once())
             ->method('getEvent')
-            ->willReturn($event);
-
-        $stubbedHttpErrorResponse = $this->createStub(LambdaInvocationHttpErrorResponseContract::class);
+            ->willReturn($lambdaInvocationEvent);
 
         $httpResponseFactory = new HttpResponseFactory();
-        $response = $httpResponseFactory->makeFromHttpErrorResponse($mockedInvocation, $stubbedHttpErrorResponse);
+        $response = $httpResponseFactory->makeFromHttpErrorResponse(
+            $mockedLambdaInvocation,
+            $stubbedLambdaInvocationHttpErrorResponse
+        );
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(ApplicationLoadBalancerResponse::class, $response);
@@ -139,24 +147,24 @@ final class HttpResponseFactoryTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unhandled Lambda event type.');
 
-        $stubbedEvent = $this->createStub(LambdaInvocationEventContract::class);
-
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
-            ->expects(self::once())
-            ->method('getEvent')
-            ->willReturn($stubbedEvent);
-
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $stubbedLambdaInvocationEvent = $this->createStub(LambdaInvocationEventContract::class);
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
 
+        $mockedLambdaInvocation
+            ->expects(self::once())
+            ->method('getEvent')
+            ->willReturn($stubbedLambdaInvocationEvent);
+
         $httpResponseFactory = new HttpResponseFactory();
-        $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
+        $httpResponseFactory->makeFromFastCGIResponse($mockedLambdaInvocation, $stubbedFastCGIResponse);
     }
 
     /** @test */
     public function it_makes_api_gateway_version_one_response_from_fastcgi_response(): void
     {
-        $event = new APIGatewayVersionOneEvent(
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $lambdaInvocationEvent = new APIGatewayVersionOneEvent(
             method: 'GET',
             path: '/',
             queryString: '',
@@ -165,17 +173,15 @@ final class HttpResponseFactoryTest extends TestCase
             isBase64Encoded: true,
             body: '',
         );
-
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
-            ->expects(self::once())
-            ->method('getEvent')
-            ->willReturn($event);
-
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
 
+        $mockedLambdaInvocation
+            ->expects(self::once())
+            ->method('getEvent')
+            ->willReturn($lambdaInvocationEvent);
+
         $httpResponseFactory = new HttpResponseFactory();
-        $response = $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
+        $response = $httpResponseFactory->makeFromFastCGIResponse($mockedLambdaInvocation, $stubbedFastCGIResponse);
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionOneResponse::class, $response);
@@ -184,7 +190,8 @@ final class HttpResponseFactoryTest extends TestCase
     /** @test */
     public function it_makes_api_gateway_version_two_response_from_fastcgi_response(): void
     {
-        $event = new APIGatewayVersionTwoEvent(
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $lambdaInvocationEvent = new APIGatewayVersionTwoEvent(
             method: 'GET',
             path: '/',
             queryString: '',
@@ -192,17 +199,15 @@ final class HttpResponseFactoryTest extends TestCase
             isBase64Encoded: true,
             body: '',
         );
-
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
-            ->expects(self::once())
-            ->method('getEvent')
-            ->willReturn($event);
-
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
 
+        $mockedLambdaInvocation
+            ->expects(self::once())
+            ->method('getEvent')
+            ->willReturn($lambdaInvocationEvent);
+
         $httpResponseFactory = new HttpResponseFactory();
-        $response = $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
+        $response = $httpResponseFactory->makeFromFastCGIResponse($mockedLambdaInvocation, $stubbedFastCGIResponse);
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(APIGatewayVersionTwoResponse::class, $response);
@@ -211,7 +216,8 @@ final class HttpResponseFactoryTest extends TestCase
     /** @test */
     public function it_makes_application_load_balancer_response_from_fastcgi_response(): void
     {
-        $event = new ApplicationLoadBalancerEvent(
+        $mockedLambdaInvocation = $this->createMock(LambdaInvocationContract::class);
+        $lambdaInvocationEvent = new ApplicationLoadBalancerEvent(
             method: 'GET',
             path: '/',
             queryString: '',
@@ -220,17 +226,15 @@ final class HttpResponseFactoryTest extends TestCase
             isBase64Encoded: true,
             body: '',
         );
-
-        $mockedInvocation = $this->createMock(LambdaInvocationContract::class);
-        $mockedInvocation
-            ->expects(self::once())
-            ->method('getEvent')
-            ->willReturn($event);
-
         $stubbedFastCGIResponse = $this->createStub(ProvidesResponseData::class);
 
+        $mockedLambdaInvocation
+            ->expects(self::once())
+            ->method('getEvent')
+            ->willReturn($lambdaInvocationEvent);
+
         $httpResponseFactory = new HttpResponseFactory();
-        $response = $httpResponseFactory->makeFromFastCGIResponse($mockedInvocation, $stubbedFastCGIResponse);
+        $response = $httpResponseFactory->makeFromFastCGIResponse($mockedLambdaInvocation, $stubbedFastCGIResponse);
 
         self::assertInstanceOf(LambdaInvocationResponseContract::class, $response);
         self::assertInstanceOf(ApplicationLoadBalancerResponse::class, $response);

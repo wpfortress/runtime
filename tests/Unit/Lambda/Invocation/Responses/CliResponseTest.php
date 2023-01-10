@@ -16,6 +16,7 @@ final class CliResponseTest extends TestCase
     public function it_forms_correct_response(): void
     {
         $mockedProcess = $this->createMock(Process::class);
+
         $mockedProcess
             ->expects(self::once())
             ->method('getExitCode')
