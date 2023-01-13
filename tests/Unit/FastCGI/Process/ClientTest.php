@@ -12,6 +12,7 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use PHPUnit\Framework\TestCase;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
+use WPFortress\Runtime\Exceptions\FastCGIProcessClientException;
 use WPFortress\Runtime\FastCGI\Process\Client;
 
 final class ClientTest extends TestCase
@@ -30,6 +31,80 @@ final class ClientTest extends TestCase
         );
 
         self::assertInstanceOf(FastCGIProcessClientContract::class, $client);
+    }
+
+    /** @test */
+    public function it_throws_timed_out_exception(): void
+    {
+        $this->expectException(FastCGIProcessClientException::class);
+        $this->expectExceptionMessageMatches('/timed out/');
+
+        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
+        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
+        $mockedFastCGIProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
+        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
+
+        $mockedFastCGIClient
+            ->expects(self::once())
+            ->method('sendAsyncRequest')
+            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
+            ->willReturn(100);
+        $mockedFastCGIClient
+            ->expects(self::once())
+            ->method('readResponse')
+            ->with(self::equalTo(100), self::equalTo(null))
+            ->willThrowException(new TimedoutException('foo'));
+
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('stop');
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('start');
+
+        $client = new Client(
+            client: $mockedFastCGIClient,
+            connection: $stubbedFastCGIConnection,
+            processManager: $mockedFastCGIProcessManager,
+        );
+        $client->sendRequest($stubbedFastCGIRequest);
+    }
+
+    /** @test */
+    public function it_throws_communication_failed_exception(): void
+    {
+        $this->expectException(FastCGIProcessClientException::class);
+        $this->expectExceptionMessageMatches('/response/');
+
+        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
+        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
+        $mockedFastCGIProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
+        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
+
+        $mockedFastCGIClient
+            ->expects(self::once())
+            ->method('sendAsyncRequest')
+            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
+            ->willReturn(100);
+        $mockedFastCGIClient
+            ->expects(self::once())
+            ->method('readResponse')
+            ->with(self::equalTo(100), self::equalTo(null))
+            ->willThrowException(new Exception('foo'));
+
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('stop');
+        $mockedFastCGIProcessManager
+            ->expects(self::once())
+            ->method('start');
+
+        $client = new Client(
+            client: $mockedFastCGIClient,
+            connection: $stubbedFastCGIConnection,
+            processManager: $mockedFastCGIProcessManager,
+        );
+        $client->sendRequest($stubbedFastCGIRequest);
     }
 
     /** @test */
@@ -64,79 +139,5 @@ final class ClientTest extends TestCase
         $response = $client->sendRequest($stubbedFastCGIRequest);
 
         self::assertInstanceOf(ProvidesResponseData::class, $response);
-    }
-
-    /** @test */
-    public function it_throws_timeout_exception(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('PHP script timed out.');
-
-        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
-        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
-        $mockedFastCGIProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
-        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
-
-        $mockedFastCGIClient
-            ->expects(self::once())
-            ->method('sendAsyncRequest')
-            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
-            ->willReturn(100);
-        $mockedFastCGIClient
-            ->expects(self::once())
-            ->method('readResponse')
-            ->with(self::equalTo(100), self::equalTo(null))
-            ->willThrowException(new TimedoutException('foo'));
-
-        $mockedFastCGIProcessManager
-            ->expects(self::once())
-            ->method('stop');
-        $mockedFastCGIProcessManager
-            ->expects(self::once())
-            ->method('start');
-
-        $client = new Client(
-            client: $mockedFastCGIClient,
-            connection: $stubbedFastCGIConnection,
-            processManager: $mockedFastCGIProcessManager,
-        );
-        $client->sendRequest($stubbedFastCGIRequest);
-    }
-
-    /** @test */
-    public function it_throws_custom_exception(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to read a response from PHP-FPM.');
-
-        $mockedFastCGIClient = $this->createMock(\hollodotme\FastCGI\Client::class);
-        $stubbedFastCGIConnection = $this->createStub(ConfiguresSocketConnection::class);
-        $mockedFastCGIProcessManager = $this->createMock(FastCGIProcessManagerContract::class);
-        $stubbedFastCGIRequest = $this->createStub(ProvidesRequestData::class);
-
-        $mockedFastCGIClient
-            ->expects(self::once())
-            ->method('sendAsyncRequest')
-            ->with(self::equalTo($stubbedFastCGIConnection), self::equalTo($stubbedFastCGIRequest))
-            ->willReturn(100);
-        $mockedFastCGIClient
-            ->expects(self::once())
-            ->method('readResponse')
-            ->with(self::equalTo(100), self::equalTo(null))
-            ->willThrowException(new Exception('foo'));
-
-        $mockedFastCGIProcessManager
-            ->expects(self::once())
-            ->method('stop');
-        $mockedFastCGIProcessManager
-            ->expects(self::once())
-            ->method('start');
-
-        $client = new Client(
-            client: $mockedFastCGIClient,
-            connection: $stubbedFastCGIConnection,
-            processManager: $mockedFastCGIProcessManager,
-        );
-        $client->sendRequest($stubbedFastCGIRequest);
     }
 }

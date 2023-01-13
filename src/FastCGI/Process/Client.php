@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\FastCGI\Process;
 
-use Exception;
 use hollodotme\FastCGI\Exceptions\TimedoutException;
 use hollodotme\FastCGI\Interfaces\ConfiguresSocketConnection;
 use hollodotme\FastCGI\Interfaces\ProvidesRequestData;
@@ -12,6 +11,7 @@ use hollodotme\FastCGI\Interfaces\ProvidesResponseData;
 use Throwable;
 use WPFortress\Runtime\Contracts\FastCGIProcessClientContract;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
+use WPFortress\Runtime\Exceptions\FastCGIProcessClientException;
 
 final class Client implements FastCGIProcessClientContract
 {
@@ -37,11 +37,11 @@ final class Client implements FastCGIProcessClientContract
         } catch (TimedoutException) {
             $this->restartFastCGIProcess();
 
-            throw new Exception('PHP script timed out.');
-        } catch (Throwable) {
+            throw FastCGIProcessClientException::timedOut($timeoutMs);
+        } catch (Throwable $exception) {
             $this->restartFastCGIProcess();
 
-            throw new Exception('Unable to read a response from PHP-FPM.');
+            throw FastCGIProcessClientException::communicationFailed($exception);
         }
 
         $this->processManager->ensureStillRunning();
