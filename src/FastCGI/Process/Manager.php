@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WPFortress\Runtime\FastCGI\Process;
 
-use Exception;
 use Symfony\Component\Process\Process;
 use WPFortress\Runtime\Contracts\FastCGIProcessManagerContract;
+use WPFortress\Runtime\Exceptions\FastCGIProcessManagerException;
 
 final class Manager implements FastCGIProcessManagerContract
 {
@@ -61,7 +61,7 @@ final class Manager implements FastCGIProcessManagerContract
         $this->process->stop(0.5);
 
         if ($this->isReady()) {
-            throw new Exception('PHP-FPM cannot be stopped.');
+            throw FastCGIProcessManagerException::cannotBeStopped();
         }
     }
 
@@ -71,7 +71,7 @@ final class Manager implements FastCGIProcessManagerContract
             return;
         }
 
-        throw new Exception('PHP-FPM has stopped for an unknown reason.');
+        throw FastCGIProcessManagerException::unknownStop();
     }
 
     private function isReady(): bool
@@ -92,15 +92,11 @@ final class Manager implements FastCGIProcessManagerContract
 
             $elapsed += $wait;
             if ($elapsed > $timeout) {
-                throw new Exception('Timeout while waiting for PHP-FPM to start.');
+                throw FastCGIProcessManagerException::startTimeout();
             }
 
             if (!$this->process->isRunning()) {
-                throw new Exception(
-                    'PHP-FPM failed to start: ' . PHP_EOL .
-                    $this->process->getOutput() . PHP_EOL .
-                    $this->process->getErrorOutput()
-                );
+                throw FastCGIProcessManagerException::startFailure($this->process);
             }
         }
     }
@@ -116,7 +112,7 @@ final class Manager implements FastCGIProcessManagerContract
 
             $elapsed += $wait;
             if ($elapsed > $timeout) {
-                throw new Exception('Timeout while waiting for PHP-FPM to stop.');
+                throw FastCGIProcessManagerException::stopTimeout();
             }
         }
     }
